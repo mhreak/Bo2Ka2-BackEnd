@@ -59,4 +59,35 @@ public static class MessageKeys
     public const string ChangePasswordFailed = "ChangePasswordFailed";
     public const string PasswordChanged = "PasswordChanged";
     public const string FilesRetrieved = "FilesRetrieved";
+    public const string BirthDateRequired = "BirthDateRequired";
+    public const string BirthDateInFuture = "BirthDateInFuture";
+    public const string ShopCategoryRequired = "ShopCategoryRequired";
+    public const string ShopNameMaxLength = "ShopNameMaxLength";
+    public const string ShopNameRequired = "ShopNameRequired";
+    public const string TextAddressMaxLength = "TextAddressMaxLength";
+    public const string TextAddressRequired = "TextAddressRequired";
+    public const string LatitudeInvalid = "LatitudeInvalid";
+    public const string LongitudeInvalid = "LongitudeInvalid";
+    public const string ReturnPolicyRequired = "ReturnPolicyRequired";
+    public const string ReturnPolicyMaxLength = "ReturnPolicyMaxLength";
+    public const string WorkingHoursRequired = "WorkingHoursRequired";
+    public const string WorkingHoursDuplicateDay = "WorkingHoursDuplicateDay";
+    public const string WorkingHoursRangeInvalid = "WorkingHoursRangeInvalid";
+    public const string ShabaInvalid = "ShabaInvalid";
+    public const string ShabaRequired = "ShabaRequired";
+    public const string NationalCodeInvalid = "NationalCodeInvalid";
+    public const string NationalCodeRequired = "NationalCodeRequired";
+    public const string ShopAlreadySubmitted = "ShopAlreadySubmitted";
+    public const string ShopAlreadyApproved = "ShopAlreadyApproved";
+    public const string ShopNotFound = "ShopNotFound";
+    public const string ShopCategoryNotFound = "ShopCategoryNotFound";
+    public const string NationalCodeAlreadyExists = "NationalCodeAlreadyExists";
+    public const string ShopStepOrderInvalid = "ShopStepOrderInvalid";
+    public const string ShopCategoriesRetrieved = "ShopCategoriesRetrieved";
+    public const string ShopProfileRetrieved = "ShopProfileRetrieved";
+    public const string ShopSubmittedForReview = "ShopSubmittedForReview";
+    public const string ShopDetailsSaved = "ShopDetailsSaved";
+    public const string ShopBasicInfoSaved = "ShopBasicInfoSaved";
+
+
 }

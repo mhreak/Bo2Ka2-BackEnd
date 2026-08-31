@@ -79,9 +79,14 @@ public class FileService : IFileService
     private static void ValidateUserFileType(string userRole, UploadFileType fileType)
     {
         if (userRole == "Admin")
+            return;
+
+        if ((userRole == "User" || userRole == "Shop")
+            && (fileType == UploadFileType.Avatar || fileType == UploadFileType.Cover || fileType == UploadFileType.TicketAttachment))
         {
             return;
         }
+
         throw new BadRequestException("InvalidRole", "INVALID_ROLE");
     }
 

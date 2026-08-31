@@ -43,5 +43,6 @@ public static class DatabaseDependencyInjection
 
         await LocationSeeder.SeedAsync(dbContext);
         await AdminSeeder.SeedAsync(dbContext, userManager, roleManager);
+        await ShopCategorySeeder.SeedAsync(dbContext);
     }
 }

@@ -14,5 +14,5 @@ public class User : IdentityUser<Guid>
     public Guid? AdminId { get; set; }
     public Admin? Admin { get; set; }
 
-
+    public Bodokado.Domain.Entities.Shops.Shop? Shop { get; set; }
 }

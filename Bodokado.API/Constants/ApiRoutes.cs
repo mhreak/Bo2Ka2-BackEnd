@@ -6,6 +6,7 @@ public static class ApiRoutes
     private const string Version = "v1";
     private const string Base = $"{Api}/{Version}";
     private const string AdminBase = $"{Base}/admin";
+    private const string ShopBase = $"{Base}/shop";
 
     public static class Admin
     {
@@ -19,5 +20,11 @@ public static class ApiRoutes
         public const string Files = $"{Base}/files";
         public const string Locations = $"{Base}/locations";
         public const string Users = $"{Base}/users";
+    }
+
+    public static class Shop
+    {
+        public const string Auth = $"{ShopBase}/auth";
+        public const string Registration = $"{ShopBase}/registration";
     }
 }
