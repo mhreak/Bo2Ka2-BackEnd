@@ -1,0 +1,42 @@
+using Bodokado.Application.Administrator.Auth.Interfaces;
+using Bodokado.Application.Administrator.Auth.Services;
+using Bodokado.Application.Common.Auth;
+using Bodokado.Application.Common.Auth.Interfaces;
+using Bodokado.Application.Common.Auth.Services;
+using Bodokado.Application.Common.File.Interfaces;
+using Bodokado.Application.Common.File.Services;
+using Bodokado.Application.Common.Interfaces;
+using Bodokado.Infrastructure.Authentication;
+using Bodokado.Persistence.Repositories;
+using Bodokado.Persistence.Repositories.File;
+using Bodokado.Persistence.UnitOfWork;
+using Bodokado.Application.Common.Location.Interfaces;
+using Bodokado.Persistence.Services;
+using Bodokado.Application.Common.Profile.Interfaces;
+using Bodokado.Application.Common.Profile.Services;
+
+namespace Bodokado.API.DependencyInjection;
+
+public static class CoreRepositoryDependencyInjection
+{
+    public static IServiceCollection AddCoreRepositoryDependencies(this IServiceCollection services)
+    {
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IAdminRepository, AdminRepository>();
+        services.AddScoped<IFileAssetRepository, FileAssetRepository>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+        services.AddScoped<RoleAuthCore>();
+        services.AddScoped<IRegisterSendOtpService, RegisterSendOtpService>();
+        services.AddScoped<IRefreshAccessTokenService, RefreshAccessTokenService>();
+        services.AddScoped<IAdminRegisterService, AdminRegisterService>();
+        services.AddScoped<IAdminLoginService, AdminLoginService>();
+        services.AddScoped<IFileService, FileService>();
+        services.AddScoped<IJwtService, JwtService>();
+        services.AddScoped<IGoogleTokenValidator, GoogleTokenValidator>();
+        services.AddScoped<ILocationService, LocationService>();
+        services.AddScoped<IUserProfileService, UserProfileService>();
+
+        return services;
+    }
+}
