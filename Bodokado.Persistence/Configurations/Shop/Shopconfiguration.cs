@@ -52,7 +52,7 @@ public class ShopConfiguration : IEntityTypeConfiguration<Shop>
         builder.HasOne(s => s.CoverFile)
             .WithMany()
             .HasForeignKey(s => s.CoverFileId)
-            .OnDelete(DeleteBehavior.SetNull);
+            .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasIndex(s => s.UserId).IsUnique();
         builder.HasIndex(s => s.NationalCode);

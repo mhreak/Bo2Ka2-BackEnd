@@ -83,5 +83,18 @@
   "ShopProfileRetrieved": "Shop profile retrieved successfully.",
   "ShopSubmittedForReview": "Shop submitted for review successfully.",
   "ShopDetailsSaved": "Shop details saved successfully.",
-  "ShopBasicInfoSaved": "Shop basic information saved successfully."
+  "ShopBasicInfoSaved": "Shop basic information saved successfully." ,
+   "ProductNameRequired": "Product name is required.",
+  "ProductNameMaxLength": "Product name must not exceed 200 characters.",
+  "ProductDescriptionMaxLength": "Product description must not exceed 4000 characters.",
+  "ProductBrandMaxLength": "Brand must not exceed 100 characters.",
+  "ProductBasePriceInvalid": "Base price must be greater than zero.",
+  "ProductDiscountPriceRequired": "Discount price is required when discount is enabled.",
+  "ProductDiscountPriceInvalid": "Discount price must be greater than zero and less than base price.",
+  "ProductStockInvalid": "Stock quantity cannot be negative.",
+  "ProductWeightInvalid": "Weight must be greater than zero.",
+  "ProductDimensionInvalid": "Dimensions must be greater than zero.",
+  "ProductColorNameRequired": "Color name is required.",
+  "ProductColorNameMaxLength": "Color name must not exceed 50 characters.",
+  "ProductImagesMaxCount": "A maximum of 10 images is allowed per product."
 }

@@ -89,5 +89,26 @@ public static class MessageKeys
     public const string ShopDetailsSaved = "ShopDetailsSaved";
     public const string ShopBasicInfoSaved = "ShopBasicInfoSaved";
 
+    public const string ProductsRetrieved = "ProductsRetrieved";
+    public const string ProductRetrieved = "ProductRetrieved";
+    public const string ProductCreated = "ProductCreated";
+    public const string ProductUpdated = "ProductUpdated";
+    public const string ProductDeleted = "ProductDeleted";
+    public const string ProductNotFound = "ProductNotFound";
+    public const string ShopNotApproved = "ShopNotApproved";
+    public const string ProductNameRequired = "ProductNameRequired";
+    public const string ProductNameMaxLength = "ProductNameMaxLength";
+    public const string ProductDescriptionMaxLength = "ProductDescriptionMaxLength";
+    public const string ProductBrandMaxLength = "ProductBrandMaxLength";
+    public const string ProductBasePriceInvalid = "ProductBasePriceInvalid";
+    public const string ProductDiscountPriceRequired = "ProductDiscountPriceRequired";
+    public const string ProductDiscountPriceInvalid = "ProductDiscountPriceInvalid";
+    public const string ProductStockInvalid = "ProductStockInvalid";
+    public const string ProductWeightInvalid = "ProductWeightInvalid";
+    public const string ProductDimensionInvalid = "ProductDimensionInvalid";
+    public const string ProductColorNameRequired = "ProductColorNameRequired";
+    public const string ProductColorNameMaxLength = "ProductColorNameMaxLength";
+    public const string ProductImagesMaxCount = "ProductImagesMaxCount";
+
 
 }
