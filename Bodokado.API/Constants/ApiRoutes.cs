@@ -15,6 +15,7 @@ public static class ApiRoutes
     {
         public const string Auth = $"{AdminBase}/auth";
         public const string Files = $"{AdminBase}/files";
+        public const string Locations = $"{AdminBase}/Locations";
     }
 
     public static class Shop
@@ -24,6 +25,7 @@ public static class ApiRoutes
         public const string Products = $"{ShopBase}/products";
         public const string Orders = $"{ShopBase}/orders";
         public const string Files = $"{ShopBase}/files";
+        public const string Locations = $"{ShopBase}/locations";
     }
 
     public static class Customer
@@ -39,6 +41,7 @@ public static class ApiRoutes
     {
         public const string Auth = $"{CorporateBase}/auth";
         public const string Files = $"{CorporateBase}/files";
+        public const string Locations = $"{CorporateBase}/Locations";
         // سفارشات سازمانی و کاتالوگ هدیه بعداً اضافه می‌شود
     }
 }
