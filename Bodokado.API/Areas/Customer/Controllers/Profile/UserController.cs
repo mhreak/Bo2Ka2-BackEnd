@@ -7,11 +7,11 @@ using Bodokado.Application.Common.Localization;
 using Bodokado.Application.Common.Profile.DTOs;
 using Bodokado.Application.Common.Profile.Interfaces;
 
-namespace Bodokado.API.Controllers;
+namespace Bodokado.API.Areas.Customer.Controllers;
 
 [ApiController]
 [Tags("User")]
-[Route(ApiRoutes.Generic.Users)]
+[Route(ApiRoutes.Customer.Users)]
 [Authorize(Roles = "User")]
 public class UserController : ControllerBase
 {

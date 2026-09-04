@@ -31,9 +31,13 @@ app.UseMiddleware<GlobalExceptionMiddleware>();
 app.UseSwagger();
 app.UseSwaggerUI(options =>
 {
-    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Bodokado API v1");
+    options.SwaggerEndpoint("/swagger/shop/swagger.json", "Shop API");
+    options.SwaggerEndpoint("/swagger/customer/swagger.json", "Customer API");
+    options.SwaggerEndpoint("/swagger/corporate/swagger.json", "Corporate API");
+    options.SwaggerEndpoint("/swagger/admin/swagger.json", "Admin API");
     options.RoutePrefix = "swagger";
 });
+
 
 app.MapOpenApi();
 

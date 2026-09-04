@@ -8,10 +8,10 @@ using Bodokado.Application.App.CustomerModule.Orders.Interfaces;
 using Bodokado.Application.Common.Localization;
 using Bodokado.Application.Common.Pagination;
 
-namespace Bodokado.API.Controllers;
+namespace Bodokado.API.Areas.Customer.Controllers;
 
 [ApiController]
-[Route(ApiRoutes.Generic.Orders)]
+[Route(ApiRoutes.Customer.Orders)]
 [Authorize(Roles = "User")]
 [Tags("Customer Orders")]
 public class CustomerOrderController : ControllerBase

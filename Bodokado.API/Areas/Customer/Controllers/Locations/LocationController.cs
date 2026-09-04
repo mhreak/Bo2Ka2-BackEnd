@@ -5,11 +5,11 @@ using Bodokado.API.Helpers;
 using Bodokado.Application.Common.Localization;
 using Bodokado.Application.Common.Location.Interfaces;
 
-namespace Bodokado.API.Controllers;
+namespace Bodokado.API.Areas.Customer.Controllers;
 
 /// <summary>کشور / استان / شهر</summary>
 [ApiController]
-[Route(ApiRoutes.Generic.Locations)]
+[Route(ApiRoutes.Customer.Locations)]
 [AllowAnonymous]
 [Tags("Location")]
 public class LocationController : ControllerBase

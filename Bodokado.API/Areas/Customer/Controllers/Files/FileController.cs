@@ -9,9 +9,9 @@ using Bodokado.Application.Common.File.Interfaces;
 using Bodokado.Application.Common.Localization;
 using Bodokado.Domain.Entities;
 
-namespace Bodokado.API.Controllers;
+namespace Bodokado.API.Areas.Customer.Controllers;
 
-[Route(ApiRoutes.Generic.Files)]
+[Route(ApiRoutes.Customer.Files)]
 [Authorize(Roles = "User,Shop")]
 [ApiController]
 [Tags("Files")]

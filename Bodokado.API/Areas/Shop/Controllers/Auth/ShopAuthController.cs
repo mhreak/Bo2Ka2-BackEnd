@@ -3,96 +3,92 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Bodokado.API.Constants;
 using Bodokado.API.Helpers;
-using Bodokado.Application.Common.Auth;
+using Bodokado.Application.App.ShopModule.Auth.Interfaces;
 using Bodokado.Application.Common.Auth.DTOs;
 using Bodokado.Application.Common.Auth.Interfaces;
-using Bodokado.Application.Common.Auth.Services;
 using Bodokado.Application.Common.Localization;
+using Bodokado.Application.Common.Auth;
 
-namespace Bodokado.API.Controllers;
+namespace Bodokado.API.Areas.Shop.Controllers;
 
 [ApiController]
-[Route(ApiRoutes.Generic.Auth)]
-[Tags("Auth")]
-public class AuthController : ControllerBase
+[Route(ApiRoutes.Shop.Auth)]
+[Tags("Shop Auth")]
+public class ShopAuthController : ControllerBase
 {
-    private readonly RoleAuthCore _roleAuthCore;
-    private readonly IRegisterSendOtpService _registerSendOtpService;
+    private readonly IShopAuthService _shopAuthService;
     private readonly IRefreshAccessTokenService _refreshAccessTokenService;
     private readonly IRefreshTokenService _refreshTokenService;
     private readonly IResponseLocalizer _responseLocalizer;
-    private const string UserRole = "User";
 
-    public AuthController(
-        RoleAuthCore roleAuthCore,
-        IRegisterSendOtpService registerSendOtpService,
+    public ShopAuthController(
+        IShopAuthService shopAuthService,
         IRefreshAccessTokenService refreshAccessTokenService,
         IRefreshTokenService refreshTokenService,
         IResponseLocalizer responseLocalizer)
     {
-        _roleAuthCore = roleAuthCore;
-        _registerSendOtpService = registerSendOtpService;
+        _shopAuthService = shopAuthService;
         _refreshAccessTokenService = refreshAccessTokenService;
         _refreshTokenService = refreshTokenService;
         _responseLocalizer = responseLocalizer;
     }
 
-    /// <summary>ارسال OTP برای ثبت‌نام</summary>
+    /// <summary>ارسال OTP برای ثبت‌نام فروشگاه</summary>
     [AllowAnonymous]
     [HttpPost("register-send-otp")]
     public async Task<IActionResult> RegisterSendOtp(RegisterSendOtpRequestDto request)
     {
-        var result = await _registerSendOtpService.ExecuteAsync(request);
+        var result = await _shopAuthService.SendOtpForRegisterAsync(request);
         var message = await _responseLocalizer.LocalizeAsync(MessageKeys.OtpSent);
         return Ok(ApiResult.Success(result, message));
     }
 
-    /// <summary>ارسال OTP برای ورود</summary>
+    /// <summary>ارسال OTP برای ورود فروشگاه</summary>
     [AllowAnonymous]
     [HttpPost("send-otp-for-login")]
     public async Task<IActionResult> SendOtpForLogin(SendOtpForAuthRequestDto request)
     {
-        var result = await _roleAuthCore.SendOtpForLoginAsync(request.PhoneNumber, UserRole);
+        var result = await _shopAuthService.SendOtpForLoginAsync(request);
         var message = await _responseLocalizer.LocalizeAsync(MessageKeys.OtpSent);
         return Ok(ApiResult.Success(result, message));
     }
 
-    /// <summary>ورود با OTP</summary>
+    /// <summary>ورود فروشگاه با OTP</summary>
     [AllowAnonymous]
     [HttpPost("login-otp")]
     public async Task<IActionResult> LoginOtp(LoginOtpRequestDto request)
     {
-        var result = await _roleAuthCore.LoginOtpAsync(request.PhoneNumber, request.Code, UserRole);
+        var result = await _shopAuthService.LoginOtpAsync(request);
         var message = await _responseLocalizer.LocalizeAsync(MessageKeys.LoginSuccess);
         return Ok(ApiResult.Success(result, message));
     }
 
-    /// <summary>ورود با نام کاربری و رمز</summary>
+    /// <summary>ورود فروشگاه با نام کاربری و رمز</summary>
     [AllowAnonymous]
     [HttpPost("login-by-password")]
     public async Task<IActionResult> LoginByPassword(LoginByPasswordRequestDto request)
     {
-        var result = await _roleAuthCore.LoginByPasswordAsync(request.Username, request.Password, UserRole);
+        var result = await _shopAuthService.LoginByPasswordAsync(request);
         var message = await _responseLocalizer.LocalizeAsync(MessageKeys.LoginSuccess);
         return Ok(ApiResult.Success(result, message));
     }
 
-    /// <summary>تکمیل ثبت‌نام با موبایل + OTP (ساخت کاربر + توکن)</summary>
+    /// <summary>تکمیل ثبت‌نام فروشگاه با موبایل + OTP (ساخت کاربر + توکن، شروع ویزارد ثبت‌نام)</summary>
     [AllowAnonymous]
     [HttpPost("register-by-mobile")]
     public async Task<IActionResult> RegisterByMobile(RegisterByMobileRequestDto request)
     {
-        var result = await _roleAuthCore.RegisterByMobileAsync(request.PhoneNumber, request.Code, UserRole);
+        var result = await _shopAuthService.RegisterByMobileAsync(request);
         var message = await _responseLocalizer.LocalizeAsync(MessageKeys.RegisterSuccess);
         return Ok(ApiResult.Success(result, message));
     }
 
-    /// <summary>ورود / ثبت‌نام با Google</summary>
+    /// <summary>ورود / ثبت‌نام فروشگاه با Google</summary>
     [AllowAnonymous]
     [HttpPost("google")]
     public async Task<IActionResult> Google(GoogleAuthRequestDto request)
     {
-        var result = await _roleAuthCore.GoogleAuthAsync(request.IdToken, UserRole);
+        var result = await _shopAuthService.GoogleAuthAsync(request);
         var message = await _responseLocalizer.LocalizeAsync(MessageKeys.LoginSuccess);
         return Ok(ApiResult.Success(result, message));
     }
@@ -117,19 +113,19 @@ public class AuthController : ControllerBase
         return Ok(ApiResult.Success(result, message));
     }
 
-    /// <summary>تغییر رمز عبور (نیاز به JWT)</summary>
-    [Authorize(Roles = "User")]
+    /// <summary>تغییر رمز عبور فروشگاه (نیاز به JWT)</summary>
+    [Authorize(Roles = "Shop")]
     [HttpPost("change-password")]
     public async Task<IActionResult> ChangePassword(ChangePasswordRequestDto request, CancellationToken ct)
     {
         var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-        var result = await _roleAuthCore.ChangePasswordAsync(userId, request, ct);
+        var result = await _shopAuthService.ChangePasswordAsync(userId, request, ct);
         var message = await _responseLocalizer.LocalizeAsync(MessageKeys.PasswordChanged);
         return Ok(ApiResult.Success(result, message));
     }
 
     /// <summary>خروج و ابطال Refresh Token</summary>
-    [Authorize(Roles = "User")]
+    [Authorize(Roles = "Shop")]
     [HttpPost("logout")]
     public async Task<IActionResult> Logout(RefreshTokenRequestDto request)
     {
