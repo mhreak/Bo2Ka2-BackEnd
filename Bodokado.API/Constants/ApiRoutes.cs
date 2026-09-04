@@ -20,6 +20,7 @@ public static class ApiRoutes
         public const string Files = $"{Base}/files";
         public const string Locations = $"{Base}/locations";
         public const string Users = $"{Base}/users";
+        public const string Orders = $"{Base}/orders";
     }
 
     public static class Shop
@@ -27,5 +28,6 @@ public static class ApiRoutes
         public const string Auth = $"{ShopBase}/auth";
         public const string Registration = $"{ShopBase}/registration";
         public const string Products = $"{ShopBase}/products";
+        public const string Orders = $"{ShopBase}/orders";
     }
 }

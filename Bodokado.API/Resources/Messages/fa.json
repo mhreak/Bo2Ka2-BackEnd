@@ -103,5 +103,20 @@
   "ProductDimensionInvalid": "ابعاد باید بزرگ‌تر از صفر باشد.",
   "ProductColorNameRequired": "نام رنگ الزامی است.",
   "ProductColorNameMaxLength": "نام رنگ نباید بیشتر از ۵۰ کاراکتر باشد.",
-  "ProductImagesMaxCount": "حداکثر ۱۰ تصویر برای هر محصول مجاز است."
+  "ProductImagesMaxCount": "حداکثر ۱۰ تصویر برای هر محصول مجاز است." ,
+  "OrdersRetrieved": "لیست سفارش‌ها با موفقیت دریافت شد.",
+  "OrderRetrieved": "جزئیات سفارش با موفقیت دریافت شد.",
+  "OrderCreated": "سفارش با موفقیت ثبت شد.",
+  "OrderConfirmed": "سفارش با موفقیت تایید شد.",
+  "OrderRejected": "سفارش رد شد.",
+  "OrderShipped": "سفارش به وضعیت ارسال‌شده تغییر کرد.",
+  "OrderCancelled": "سفارش لغو شد.",
+  "OrderNotFound": "سفارش یافت نشد.",
+  "OrderInvalidStatus": "وضعیت فعلی سفارش اجازه این عملیات را نمی‌دهد.",
+  "OrderItemsRequired": "حداقل یک محصول برای ثبت سفارش لازم است.",
+  "OrderItemsMustSameShop": "همه محصولات سفارش باید از یک فروشگاه باشند.",
+  "OrderQuantityInvalid": "تعداد محصول باید بیشتر از صفر باشد.",
+  "OrderInsufficientStock": "موجودی کافی برای این محصول وجود ندارد.",
+  "BuyerNameRequired": "نام خریدار الزامی است.",
+  "BuyerPhoneRequired": "شماره تماس خریدار الزامی است."
 }

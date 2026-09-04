@@ -96,5 +96,20 @@
   "ProductDimensionInvalid": "Dimensions must be greater than zero.",
   "ProductColorNameRequired": "Color name is required.",
   "ProductColorNameMaxLength": "Color name must not exceed 50 characters.",
-  "ProductImagesMaxCount": "A maximum of 10 images is allowed per product."
+  "ProductImagesMaxCount": "A maximum of 10 images is allowed per product." ,
+    "OrdersRetrieved": "Orders retrieved successfully.",
+  "OrderRetrieved": "Order retrieved successfully.",
+  "OrderCreated": "Order created successfully.",
+  "OrderConfirmed": "Order confirmed successfully.",
+  "OrderRejected": "Order rejected.",
+  "OrderShipped": "Order marked as shipped.",
+  "OrderCancelled": "Order cancelled.",
+  "OrderNotFound": "Order not found.",
+  "OrderInvalidStatus": "Current order status does not allow this operation.",
+  "OrderItemsRequired": "At least one product is required to place an order.",
+  "OrderItemsMustSameShop": "All order items must belong to the same shop.",
+  "OrderQuantityInvalid": "Quantity must be greater than zero.",
+  "OrderInsufficientStock": "Insufficient stock for this product.",
+  "BuyerNameRequired": "Buyer name is required.",
+  "BuyerPhoneRequired": "Buyer phone is required."
 }

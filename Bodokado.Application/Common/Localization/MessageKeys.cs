@@ -110,5 +110,21 @@ public static class MessageKeys
     public const string ProductColorNameMaxLength = "ProductColorNameMaxLength";
     public const string ProductImagesMaxCount = "ProductImagesMaxCount";
 
+     public const string OrdersRetrieved = "OrdersRetrieved";
+    public const string OrderRetrieved = "OrderRetrieved";
+    public const string OrderCreated = "OrderCreated";
+    public const string OrderConfirmed = "OrderConfirmed";
+    public const string OrderRejected = "OrderRejected";
+    public const string OrderShipped = "OrderShipped";
+    public const string OrderCancelled = "OrderCancelled";
+    public const string OrderNotFound = "OrderNotFound";
+    public const string OrderInvalidStatus = "OrderInvalidStatus";
+    public const string OrderItemsRequired = "OrderItemsRequired";
+    public const string OrderItemsMustSameShop = "OrderItemsMustSameShop";
+    public const string OrderQuantityInvalid = "OrderQuantityInvalid";
+    public const string OrderInsufficientStock = "OrderInsufficientStock";
+    public const string BuyerNameRequired = "BuyerNameRequired";
+    public const string BuyerPhoneRequired = "BuyerPhoneRequired";
+
 
 }

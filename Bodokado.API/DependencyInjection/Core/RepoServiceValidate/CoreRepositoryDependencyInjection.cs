@@ -3,6 +3,10 @@ using Bodokado.Application.Administrator.Auth.Services;
 using Bodokado.Application.App.ShopModule.Auth.Interfaces;
 using Bodokado.Application.App.ShopModule.Auth.Services;
 using Bodokado.Application.App.ShopModule.Products.Interfaces;
+using Bodokado.Application.App.ShopModule.Orders.Interfaces;
+using Bodokado.Application.App.ShopModule.Orders.Services;
+using Bodokado.Application.App.CustomerModule.Orders.Interfaces;
+using Bodokado.Application.App.CustomerModule.Orders.Services;
 using Bodokado.Application.App.ShopModule.Products.Services;
 using Bodokado.Application.App.ShopModule.Registration.Interfaces;
 using Bodokado.Application.App.ShopModule.Registration.Services;
@@ -16,6 +20,7 @@ using Bodokado.Infrastructure.Authentication;
 using Bodokado.Persistence.Repositories;
 using Bodokado.Persistence.Repositories.File;
 using Bodokado.Persistence.Repositories.Products;
+using Bodokado.Persistence.Repositories.Orders;
 using Bodokado.Persistence.Repositories.Shops;
 using Bodokado.Persistence.UnitOfWork;
 using Bodokado.Application.Common.Location.Interfaces;
@@ -35,6 +40,7 @@ public static class CoreRepositoryDependencyInjection
         services.AddScoped<IShopRepository, ShopRepository>();
         services.AddScoped<IShopCategoryRepository, ShopCategoryRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<IOrderRepository, OrderRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services.AddScoped<RoleAuthCore>();
@@ -50,6 +56,8 @@ public static class CoreRepositoryDependencyInjection
         services.AddScoped<IShopAuthService, ShopAuthService>();
         services.AddScoped<IShopRegistrationService, ShopRegistrationService>();
         services.AddScoped<IProductService, ProductService>();
+        services.AddScoped<IShopOrderService, ShopOrderService>();
+        services.AddScoped<ICustomerOrderService, CustomerOrderService>();
 
         return services;
     }

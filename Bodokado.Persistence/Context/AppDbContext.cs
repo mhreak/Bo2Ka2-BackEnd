@@ -3,9 +3,10 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Bodokado.Domain.Entities;
 using Bodokado.Domain.Entities.Locations;
+using Bodokado.Domain.Entities.Orders;
+using Bodokado.Domain.Entities.Products;
 using Bodokado.Domain.Entities.Shops;
 using Bodokado.Domain.Entities.Users;
-using Bodokado.Domain.Entities.Products;
 
 namespace Bodokado.Persistence.Context;
 
@@ -21,9 +22,10 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     public DbSet<Shop> Shops => Set<Shop>();
     public DbSet<ShopCategory> ShopCategories => Set<ShopCategory>();
     public DbSet<ShopWorkingHour> ShopWorkingHours => Set<ShopWorkingHour>();
-
     public DbSet<Product> Products => Set<Product>();
     public DbSet<ProductColor> ProductColors => Set<ProductColor>();
+    public DbSet<Order> Orders => Set<Order>();
+    public DbSet<OrderItem> OrderItems => Set<OrderItem>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
