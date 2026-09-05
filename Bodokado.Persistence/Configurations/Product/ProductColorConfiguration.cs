@@ -8,7 +8,7 @@ public class ProductColorConfiguration : IEntityTypeConfiguration<ProductColor>
 {
     public void Configure(EntityTypeBuilder<ProductColor> builder)
     {
-        builder.ToTable("ProductColors");
+        builder.ToTable("ProductColor");
         builder.HasKey(c => c.Id);
 
         builder.Property(c => c.Name).IsRequired().HasMaxLength(50);

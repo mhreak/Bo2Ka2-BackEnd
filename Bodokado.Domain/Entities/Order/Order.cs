@@ -22,8 +22,6 @@ public class Order : BaseEntity
     public string BuyerName { get; set; } = string.Empty;
     public string BuyerPhone { get; set; } = string.Empty;
     public string? DeliveryAddress { get; set; }
-    public Guid? ProvinceId { get; set; }
-    public Province? Province { get; set; }
     public Guid? CityId { get; set; }
     public City? City { get; set; }
     public decimal? Latitude { get; set; }

@@ -11,8 +11,6 @@ public class User : IdentityUser<Guid>
     public DateTime? UpdatedAt { get; set; }
     public bool IsDeleted { get; set; }
 
-    public Guid? AdminId { get; set; }
-    public Admin? Admin { get; set; }
 
     public Bodokado.Domain.Entities.Shops.Shop? Shop { get; set; }
 }

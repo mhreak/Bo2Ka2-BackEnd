@@ -8,7 +8,7 @@ public class ShopWorkingHourConfiguration : IEntityTypeConfiguration<ShopWorking
 {
     public void Configure(EntityTypeBuilder<ShopWorkingHour> builder)
     {
-        builder.ToTable("ShopWorkingHours");
+        builder.ToTable("ShopWorkingHour");
         builder.HasKey(w => w.Id);
         builder.Property(w => w.IsDeleted).IsRequired().HasDefaultValue(false);
         builder.HasQueryFilter(w => !w.IsDeleted);

@@ -97,7 +97,6 @@ public class ShopRegistrationService : IShopRegistrationService
         shop.AvatarFileId = request.AvatarFileId;
         shop.CoverFileId = request.CoverFileId;
         shop.TextAddress = request.TextAddress.Trim();
-        shop.ProvinceId = request.ProvinceId;
         shop.CityId = request.CityId;
         shop.Latitude = request.Latitude;
         shop.Longitude = request.Longitude;
@@ -209,7 +208,6 @@ public class ShopRegistrationService : IShopRegistrationService
         CoverFileId = shop.CoverFileId,
         CoverPath = shop.CoverFile?.Path,
         TextAddress = shop.TextAddress,
-        ProvinceId = shop.ProvinceId,
         CityId = shop.CityId,
         Latitude = shop.Latitude,
         Longitude = shop.Longitude,

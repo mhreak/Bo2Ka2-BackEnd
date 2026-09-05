@@ -10,7 +10,6 @@ public class CreateOrderRequestDto
     public string BuyerName { get; set; } = string.Empty;
     public string BuyerPhone { get; set; } = string.Empty;
     public string? DeliveryAddress { get; set; }
-    public Guid? ProvinceId { get; set; }
     public Guid? CityId { get; set; }
     public decimal? Latitude { get; set; }
     public decimal? Longitude { get; set; }

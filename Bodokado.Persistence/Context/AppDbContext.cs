@@ -17,7 +17,7 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     public DbSet<Country> Countries => Set<Country>();
     public DbSet<Province> Provinces => Set<Province>();
     public DbSet<City> Cities => Set<City>();
-    public DbSet<Admin> Admins => Set<Admin>();
+
     public DbSet<FileAsset> Files => Set<FileAsset>();
     public DbSet<Shop> Shops => Set<Shop>();
     public DbSet<ShopCategory> ShopCategories => Set<ShopCategory>();

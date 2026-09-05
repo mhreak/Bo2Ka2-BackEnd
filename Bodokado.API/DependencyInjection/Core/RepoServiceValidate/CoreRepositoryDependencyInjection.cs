@@ -35,7 +35,6 @@ public static class CoreRepositoryDependencyInjection
     public static IServiceCollection AddCoreRepositoryDependencies(this IServiceCollection services)
     {
         services.AddScoped<IUserRepository, UserRepository>();
-        services.AddScoped<IAdminRepository, AdminRepository>();
         services.AddScoped<IFileAssetRepository, FileAssetRepository>();
         services.AddScoped<IShopRepository, ShopRepository>();
         services.AddScoped<IShopCategoryRepository, ShopCategoryRepository>();

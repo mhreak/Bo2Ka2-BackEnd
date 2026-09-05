@@ -109,7 +109,6 @@ public class CustomerOrderService : ICustomerOrderService
             BuyerName = request.BuyerName.Trim(),
             BuyerPhone = request.BuyerPhone.Trim(),
             DeliveryAddress = string.IsNullOrWhiteSpace(request.DeliveryAddress) ? null : request.DeliveryAddress.Trim(),
-            ProvinceId = request.ProvinceId,
             CityId = request.CityId,
             Latitude = request.Latitude,
             Longitude = request.Longitude,

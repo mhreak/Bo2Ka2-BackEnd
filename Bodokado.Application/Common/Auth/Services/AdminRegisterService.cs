@@ -11,13 +11,11 @@ public class AdminRegisterService : IAdminRegisterService
 {
     private readonly UserManager<User> _userManager;
     private readonly RoleManager<IdentityRole<Guid>> _roleManager;
-    private readonly IAdminRepository _adminRepository;
 
-    public AdminRegisterService(UserManager<User> userManager, RoleManager<IdentityRole<Guid>> roleManager, IAdminRepository adminRepository)
+    public AdminRegisterService(UserManager<User> userManager, RoleManager<IdentityRole<Guid>> roleManager)
     {
         _userManager = userManager;
         _roleManager = roleManager;
-        _adminRepository = adminRepository;
     }
 
     public async Task RegisterAsync(AdminRegisterRequestDto request)
@@ -34,10 +32,6 @@ public class AdminRegisterService : IAdminRegisterService
             var errors = string.Join(", ", result.Errors.Select(x => x.Description));
             throw new BadRequestException(MessageKeys.UserCreationError, "user_creation_failed", errors);
         }
-        var admin = new Admin();
-        await _adminRepository.AddAsync(admin);
-        await _adminRepository.SaveChangesAsync();
-        user.AdminId = admin.Id;
         await _userManager.AddToRoleAsync(user, "Admin");
         await _userManager.UpdateAsync(user);
     }

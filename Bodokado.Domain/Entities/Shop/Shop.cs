@@ -25,8 +25,6 @@ public class Shop : BaseEntity
     public Guid? CoverFileId { get; set; }
     public FileAsset? CoverFile { get; set; }
     public string? TextAddress { get; set; }
-    public Guid? ProvinceId { get; set; }
-    public Province? Province { get; set; }
     public Guid? CityId { get; set; }
     public City? City { get; set; }
     public decimal? Latitude { get; set; }

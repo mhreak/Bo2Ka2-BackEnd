@@ -8,7 +8,7 @@ public class ShopConfiguration : IEntityTypeConfiguration<Shop>
 {
     public void Configure(EntityTypeBuilder<Shop> builder)
     {
-        builder.ToTable("Shops");
+        builder.ToTable("Shop");
         builder.HasKey(s => s.Id);
 
         builder.Property(s => s.FirstName).HasMaxLength(100);
@@ -34,10 +34,6 @@ public class ShopConfiguration : IEntityTypeConfiguration<Shop>
             .HasForeignKey(s => s.ShopCategoryId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne(s => s.Province)
-            .WithMany()
-            .HasForeignKey(s => s.ProvinceId)
-            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(s => s.City)
             .WithMany()

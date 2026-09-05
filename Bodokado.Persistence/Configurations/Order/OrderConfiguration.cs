@@ -8,7 +8,7 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
 {
     public void Configure(EntityTypeBuilder<Order> builder)
     {
-        builder.ToTable("Orders");
+        builder.ToTable("Order");
         builder.HasKey(o => o.Id);
 
         builder.Property(o => o.OrderNumber).IsRequired().HasMaxLength(32);
@@ -49,10 +49,6 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
             .HasForeignKey(o => o.CustomerUserId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne(o => o.Province)
-            .WithMany()
-            .HasForeignKey(o => o.ProvinceId)
-            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(o => o.City)
             .WithMany()

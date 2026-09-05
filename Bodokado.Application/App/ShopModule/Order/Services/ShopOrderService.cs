@@ -241,7 +241,6 @@ public class ShopOrderService : IShopOrderService
             BuyerName = o.BuyerName,
             BuyerPhone = o.BuyerPhone,
             DeliveryAddress = o.DeliveryAddress,
-            ProvinceId = o.ProvinceId,
             CityId = o.CityId,
             Latitude = o.Latitude,
             Longitude = o.Longitude,

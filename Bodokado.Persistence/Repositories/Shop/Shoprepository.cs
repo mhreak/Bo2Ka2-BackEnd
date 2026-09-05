@@ -19,7 +19,6 @@ public class ShopRepository : BaseRepository<Shop>, IShopRepository
     {
         return await _context.Shops
             .Include(s => s.ShopCategory)
-            .Include(s => s.Province)
             .Include(s => s.City)
             .Include(s => s.AvatarFile)
             .Include(s => s.CoverFile)

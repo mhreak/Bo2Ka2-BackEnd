@@ -20,7 +20,7 @@ public class ShopProfileDto
     public Guid? CoverFileId { get; set; }
     public string? CoverPath { get; set; }
     public string? TextAddress { get; set; }
-    public Guid? ProvinceId { get; set; }
+
     public Guid? CityId { get; set; }
     public decimal? Latitude { get; set; }
     public decimal? Longitude { get; set; }

@@ -347,9 +347,6 @@ namespace Bodokado.Persistence.Migrations
                     b.Property<int>("PaymentStatus")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("ProvinceId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("RecipientName")
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
@@ -399,13 +396,11 @@ namespace Bodokado.Persistence.Migrations
                     b.HasIndex("OrderNumber")
                         .IsUnique();
 
-                    b.HasIndex("ProvinceId");
-
                     b.HasIndex("ShopId");
 
                     b.HasIndex("Status");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Order", (string)null);
                 });
 
             modelBuilder.Entity("Bodokado.Domain.Entities.Orders.OrderItem", b =>
@@ -460,7 +455,7 @@ namespace Bodokado.Persistence.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderItems", (string)null);
+                    b.ToTable("OrderItem", (string)null);
                 });
 
             modelBuilder.Entity("Bodokado.Domain.Entities.Products.Product", b =>
@@ -554,7 +549,7 @@ namespace Bodokado.Persistence.Migrations
 
                     b.HasIndex("ShopId", "Name");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Product", (string)null);
                 });
 
             modelBuilder.Entity("Bodokado.Domain.Entities.Products.ProductColor", b =>
@@ -593,7 +588,7 @@ namespace Bodokado.Persistence.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductColors", (string)null);
+                    b.ToTable("ProductColor", (string)null);
                 });
 
             modelBuilder.Entity("Bodokado.Domain.Entities.Shops.Shop", b =>
@@ -645,9 +640,6 @@ namespace Bodokado.Persistence.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
-                    b.Property<Guid?>("ProvinceId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("RejectionReason")
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
@@ -696,8 +688,6 @@ namespace Bodokado.Persistence.Migrations
 
                     b.HasIndex("NationalCode");
 
-                    b.HasIndex("ProvinceId");
-
                     b.HasIndex("ShopCategoryId");
 
                     b.HasIndex("UserId")
@@ -705,7 +695,7 @@ namespace Bodokado.Persistence.Migrations
 
                     b.HasIndex("VerificationStatus");
 
-                    b.ToTable("Shops", (string)null);
+                    b.ToTable("Shop", (string)null);
                 });
 
             modelBuilder.Entity("Bodokado.Domain.Entities.Shops.ShopCategory", b =>
@@ -744,7 +734,7 @@ namespace Bodokado.Persistence.Migrations
 
                     b.HasIndex("Name");
 
-                    b.ToTable("ShopCategories", (string)null);
+                    b.ToTable("ShopCategory", (string)null);
                 });
 
             modelBuilder.Entity("Bodokado.Domain.Entities.Shops.ShopWorkingHour", b =>
@@ -784,27 +774,7 @@ namespace Bodokado.Persistence.Migrations
                     b.HasIndex("ShopId", "DayOfWeek")
                         .IsUnique();
 
-                    b.ToTable("ShopWorkingHours", (string)null);
-                });
-
-            modelBuilder.Entity("Bodokado.Domain.Entities.Users.Admin", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Admins", (string)null);
+                    b.ToTable("ShopWorkingHour", (string)null);
                 });
 
             modelBuilder.Entity("Bodokado.Domain.Entities.Users.User", b =>
@@ -815,9 +785,6 @@ namespace Bodokado.Persistence.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
-
-                    b.Property<Guid?>("AdminId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -882,10 +849,6 @@ namespace Bodokado.Persistence.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AdminId")
-                        .IsUnique()
-                        .HasFilter("[AdminId] IS NOT NULL");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -1072,11 +1035,6 @@ namespace Bodokado.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Bodokado.Domain.Entities.Locations.Province", "Province")
-                        .WithMany()
-                        .HasForeignKey("ProvinceId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("Bodokado.Domain.Entities.Shops.Shop", "Shop")
                         .WithMany()
                         .HasForeignKey("ShopId")
@@ -1086,8 +1044,6 @@ namespace Bodokado.Persistence.Migrations
                     b.Navigation("City");
 
                     b.Navigation("CustomerUser");
-
-                    b.Navigation("Province");
 
                     b.Navigation("Shop");
                 });
@@ -1150,11 +1106,6 @@ namespace Bodokado.Persistence.Migrations
                         .HasForeignKey("CoverFileId")
                         .OnDelete(DeleteBehavior.NoAction);
 
-                    b.HasOne("Bodokado.Domain.Entities.Locations.Province", "Province")
-                        .WithMany()
-                        .HasForeignKey("ProvinceId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("Bodokado.Domain.Entities.Shops.ShopCategory", "ShopCategory")
                         .WithMany("Shops")
                         .HasForeignKey("ShopCategoryId")
@@ -1172,8 +1123,6 @@ namespace Bodokado.Persistence.Migrations
 
                     b.Navigation("CoverFile");
 
-                    b.Navigation("Province");
-
                     b.Navigation("ShopCategory");
 
                     b.Navigation("User");
@@ -1188,16 +1137,6 @@ namespace Bodokado.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Shop");
-                });
-
-            modelBuilder.Entity("Bodokado.Domain.Entities.Users.User", b =>
-                {
-                    b.HasOne("Bodokado.Domain.Entities.Users.Admin", "Admin")
-                        .WithOne()
-                        .HasForeignKey("Bodokado.Domain.Entities.Users.User", "AdminId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.Navigation("Admin");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>

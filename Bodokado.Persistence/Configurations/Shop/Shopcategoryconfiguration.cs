@@ -8,7 +8,7 @@ public class ShopCategoryConfiguration : IEntityTypeConfiguration<ShopCategory>
 {
     public void Configure(EntityTypeBuilder<ShopCategory> builder)
     {
-        builder.ToTable("ShopCategories");
+        builder.ToTable("ShopCategory");
         builder.HasKey(c => c.Id);
         builder.Property(c => c.Name).IsRequired().HasMaxLength(150);
         builder.Property(c => c.IconKey).HasMaxLength(200);
