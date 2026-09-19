@@ -22,7 +22,6 @@ public class ProductRepository : BaseRepository<Product>, IProductRepository
     public async Task<Product?> GetByIdWithDetailsForShopAsync(Guid productId, Guid shopId, CancellationToken ct = default)
     {
         return await _context.Products
-            .Include(p => p.Colors.Where(c => !c.IsDeleted))
             .FirstOrDefaultAsync(p => p.Id == productId && p.ShopId == shopId && !p.IsDeleted, ct);
     }
 

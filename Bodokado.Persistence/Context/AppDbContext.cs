@@ -23,7 +23,7 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     public DbSet<ShopCategory> ShopCategories => Set<ShopCategory>();
     public DbSet<ShopWorkingHour> ShopWorkingHours => Set<ShopWorkingHour>();
     public DbSet<Product> Products => Set<Product>();
-    public DbSet<ProductColor> ProductColors => Set<ProductColor>();
+    
     public DbSet<Order> Orders => Set<Order>();
     public DbSet<OrderItem> OrderItems => Set<OrderItem>();
     public DbSet<ProductCategory> ProductCategories => Set<ProductCategory>();

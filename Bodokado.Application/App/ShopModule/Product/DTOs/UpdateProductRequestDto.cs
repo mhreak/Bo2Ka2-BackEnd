@@ -24,6 +24,4 @@ public class UpdateProductRequestDto
 
     /// <summary>لیست کامل شناسه فایل‌های تصویر (ترتیب = SortOrder). تصاویر قبلی که در لیست نباشند حذف می‌شوند.</summary>
     public List<Guid> ImageFileIds { get; set; } = new();
-
-    public List<ProductColorDto> Colors { get; set; } = new();
 }

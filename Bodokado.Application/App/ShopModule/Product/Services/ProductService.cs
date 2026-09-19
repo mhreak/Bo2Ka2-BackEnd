@@ -86,7 +86,6 @@ public class ProductService : IProductService
             CreatedAt = DateTime.UtcNow
         };
 
-        ApplyColors(product, request.Colors);
 
         await _productRepository.AddAsync(product);
         await _unitOfWork.SaveChangesAsync(ct);
@@ -123,12 +122,7 @@ public class ProductService : IProductService
         product.ImageFileIds = await ValidateAndNormalizeImageIdsAsync(request.ImageFileIds, userId);
         product.UpdatedAt = DateTime.UtcNow;
 
-        foreach (var color in product.Colors.Where(c => !c.IsDeleted).ToList())
-        {
-            color.IsDeleted = true;
-            color.UpdatedAt = DateTime.UtcNow;
-        }
-        ApplyColors(product, request.Colors);
+        
 
         _productRepository.Update(product);
         await _unitOfWork.SaveChangesAsync(ct);
@@ -223,29 +217,7 @@ public class ProductService : IProductService
         return map;
     }
 
-    private static void ApplyColors(Product product, List<ProductColorDto>? colors)
-    {
-        if (colors is null || colors.Count == 0)
-            return;
-
-        var order = 0;
-        foreach (var c in colors)
-        {
-            if (string.IsNullOrWhiteSpace(c.Name))
-                continue;
-
-            product.Colors.Add(new ProductColor
-            {
-                Id = Guid.NewGuid(),
-                ProductId = product.Id,
-                Name = c.Name.Trim(),
-                HexCode = string.IsNullOrWhiteSpace(c.HexCode) ? null : c.HexCode.Trim(),
-                SortOrder = c.SortOrder > 0 ? c.SortOrder : order,
-                CreatedAt = DateTime.UtcNow
-            });
-            order++;
-        }
-    }
+    
 
     private static decimal GetEffectivePrice(Product p)
         => p.IsDiscountEnabled && p.DiscountPrice.HasValue ? p.DiscountPrice.Value : p.BasePrice;
@@ -313,16 +285,7 @@ public class ProductService : IProductService
             SoldCount = p.SoldCount,
             Status = p.Status,
             Images = images,
-            Colors = p.Colors
-                .Where(c => !c.IsDeleted)
-                .OrderBy(c => c.SortOrder)
-                .Select(c => new ProductColorDto
-                {
-                    Id = c.Id,
-                    Name = c.Name,
-                    HexCode = c.HexCode,
-                    SortOrder = c.SortOrder
-                }).ToList(),
+
             CreatedAt = p.CreatedAt,
             UpdatedAt = p.UpdatedAt
         };

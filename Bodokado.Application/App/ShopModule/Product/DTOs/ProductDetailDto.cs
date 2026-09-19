@@ -29,7 +29,6 @@ public class ProductDetailDto
     public ProductStatus Status { get; set; }
 
     public List<ProductImageDto> Images { get; set; } = new();
-    public List<ProductColorDto> Colors { get; set; } = new();
 
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }

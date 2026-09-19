@@ -26,5 +26,4 @@ public class CreateProductRequestDto
     /// <summary>شناسه فایل‌های آپلودشده (از قبل با File API آپلود شده‌اند)</summary>
     public List<Guid> ImageFileIds { get; set; } = new();
 
-    public List<ProductColorDto> Colors { get; set; } = new();
 }

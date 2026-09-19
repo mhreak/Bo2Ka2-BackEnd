@@ -48,13 +48,6 @@ public class UpdateProductRequestValidator : AbstractValidator<UpdateProductRequ
             .GreaterThan(0).WithMessage(MessageKeys.ProductDimensionInvalid)
             .When(x => x.HeightCm.HasValue);
 
-        RuleForEach(x => x.Colors)
-            .ChildRules(c =>
-            {
-                c.RuleFor(y => y.Name)
-                    .NotEmpty().WithMessage(MessageKeys.ProductColorNameRequired)
-                    .MaximumLength(50).WithMessage(MessageKeys.ProductColorNameMaxLength);
-            });
 
         RuleFor(x => x.ImageFileIds)
             .Must(ids => ids == null || ids.Count <= 10)
