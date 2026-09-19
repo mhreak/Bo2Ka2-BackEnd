@@ -26,6 +26,8 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     public DbSet<ProductColor> ProductColors => Set<ProductColor>();
     public DbSet<Order> Orders => Set<Order>();
     public DbSet<OrderItem> OrderItems => Set<OrderItem>();
+    public DbSet<ProductCategory> ProductCategories => Set<ProductCategory>();
+    public DbSet<ProductProperty> ProductProperties => Set<ProductProperty>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

@@ -125,6 +125,25 @@ public static class MessageKeys
     public const string OrderInsufficientStock = "OrderInsufficientStock";
     public const string BuyerNameRequired = "BuyerNameRequired";
     public const string BuyerPhoneRequired = "BuyerPhoneRequired";
+    public const string ProductCategoriesRetrieved = "ProductCategoriesRetrieved";
+    public const string ProductCategoryRetrieved = "ProductCategoryRetrieved";
+    public const string ProductCategoryCreated = "ProductCategoryCreated";
+    public const string ProductCategoryUpdated = "ProductCategoryUpdated";
+    public const string ProductCategoryDeleted = "ProductCategoryDeleted";
+    public const string ProductCategoryNotFound = "ProductCategoryNotFound";
+    public const string ProductCategoryNameRequired = "ProductCategoryNameRequired";
+    public const string ProductCategoryNameMaxLength = "ProductCategoryNameMaxLength";
+    public const string ProductCategoryInvalidParent = "ProductCategoryInvalidParent";
+    public const string ProductCategoryHasChildren = "ProductCategoryHasChildren";
+    public const string ProductPropertiesRetrieved = "ProductPropertiesRetrieved";
+    public const string ProductPropertyRetrieved = "ProductPropertyRetrieved";
+    public const string ProductPropertyCreated = "ProductPropertyCreated";
+    public const string ProductPropertyUpdated = "ProductPropertyUpdated";
+    public const string ProductPropertyDeleted = "ProductPropertyDeleted";
+    public const string ProductPropertyNotFound = "ProductPropertyNotFound";
+    public const string ProductPropertyNameRequired = "ProductPropertyNameRequired";
+    public const string ProductPropertyNameMaxLength = "ProductPropertyNameMaxLength";
+    public const string ProductPropertyTypeInvalid = "ProductPropertyTypeInvalid";
 
 
 }
