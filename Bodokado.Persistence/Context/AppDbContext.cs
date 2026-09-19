@@ -28,6 +28,8 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     public DbSet<OrderItem> OrderItems => Set<OrderItem>();
     public DbSet<ProductCategory> ProductCategories => Set<ProductCategory>();
     public DbSet<ProductProperty> ProductProperties => Set<ProductProperty>();
+    public DbSet<ProductPropertyValue> ProductPropertyValues => Set<ProductPropertyValue>();
+    public DbSet<ProductProductProperty> Product_ProductProperties => Set<ProductProductProperty>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

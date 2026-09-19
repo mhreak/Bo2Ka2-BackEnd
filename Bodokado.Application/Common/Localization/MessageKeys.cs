@@ -144,6 +144,27 @@ public static class MessageKeys
     public const string ProductPropertyNameRequired = "ProductPropertyNameRequired";
     public const string ProductPropertyNameMaxLength = "ProductPropertyNameMaxLength";
     public const string ProductPropertyTypeInvalid = "ProductPropertyTypeInvalid";
+    // ProductPropertyValue
+public const string ProductPropertyValuesRetrieved = "ProductPropertyValuesRetrieved";
+public const string ProductPropertyValueRetrieved = "ProductPropertyValueRetrieved";
+public const string ProductPropertyValueCreated = "ProductPropertyValueCreated";
+public const string ProductPropertyValueUpdated = "ProductPropertyValueUpdated";
+public const string ProductPropertyValueDeleted = "ProductPropertyValueDeleted";
+public const string ProductPropertyValueNotFound = "ProductPropertyValueNotFound";
+public const string ProductPropertyValueTitleRequired = "ProductPropertyValueTitleRequired";
+public const string ProductPropertyValueTitleMaxLength = "ProductPropertyValueTitleMaxLength";
+public const string ProductPropertyValueValueRequired = "ProductPropertyValueValueRequired";
+public const string ProductPropertyValueValueMaxLength = "ProductPropertyValueValueMaxLength";
+
+// ProductProductProperty
+public const string ProductProductPropertiesRetrieved = "ProductProductPropertiesRetrieved";
+public const string ProductProductPropertyRetrieved = "ProductProductPropertyRetrieved";
+public const string ProductProductPropertyCreated = "ProductProductPropertyCreated";
+public const string ProductProductPropertyUpdated = "ProductProductPropertyUpdated";
+public const string ProductProductPropertyDeleted = "ProductProductPropertyDeleted";
+public const string ProductProductPropertyNotFound = "ProductProductPropertyNotFound";
+public const string ProductProductPropertiesSet = "ProductProductPropertiesSet";
+public const string ProductProductPropertyValueMaxLength = "ProductProductPropertyValueMaxLength";
 
 
 }

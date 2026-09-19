@@ -15,4 +15,19 @@ public interface IProductCatalogService
     Task<ProductPropertyDto> CreatePropertyAsync(CreateProductPropertyRequestDto request, CancellationToken ct = default);
     Task<ProductPropertyDto> UpdatePropertyAsync(Guid id, UpdateProductPropertyRequestDto request, CancellationToken ct = default);
     Task DeletePropertyAsync(Guid id, CancellationToken ct = default);
+
+
+    Task<List<ProductPropertyValueDto>> GetPropertyValuesAsync(Guid? productPropertyId = null, bool onlyActive = false, CancellationToken ct = default);
+    Task<ProductPropertyValueDto> GetPropertyValueByIdAsync(Guid id, CancellationToken ct = default);
+    Task<ProductPropertyValueDto> CreatePropertyValueAsync(CreateProductPropertyValueRequestDto request, CancellationToken ct = default);
+    Task<ProductPropertyValueDto> UpdatePropertyValueAsync(Guid id, UpdateProductPropertyValueRequestDto request, CancellationToken ct = default);
+    Task DeletePropertyValueAsync(Guid id, CancellationToken ct = default);
+
+
+    Task<List<ProductProductPropertyDto>> GetProductPropertiesAsync(Guid productId, CancellationToken ct = default);
+    Task<ProductProductPropertyDto> GetProductPropertyByIdAsync(Guid id, CancellationToken ct = default);
+    Task<ProductProductPropertyDto> CreateProductPropertyAsync(CreateProductProductPropertyRequestDto request, CancellationToken ct = default);
+    Task<ProductProductPropertyDto> UpdateProductPropertyAsync(Guid id, UpdateProductProductPropertyRequestDto request, CancellationToken ct = default);
+    Task DeleteProductPropertyAsync(Guid id, CancellationToken ct = default);
+    Task<List<ProductProductPropertyDto>> SetProductPropertiesAsync(Guid productId, SetProductPropertiesRequestDto request, CancellationToken ct = default);
 }

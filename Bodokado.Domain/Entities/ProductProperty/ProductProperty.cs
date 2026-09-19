@@ -14,4 +14,7 @@ public class ProductProperty : BaseEntity
 
     public Guid? ProductCategoryId { get; set; }
     public ProductCategory? ProductCategory { get; set; }
+
+    public List<ProductPropertyValue> Values { get; set; } = new();
+    public List<ProductProductProperty> ProductLinks { get; set; } = new();
 }

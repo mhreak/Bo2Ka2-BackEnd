@@ -18,6 +18,8 @@ public static class ApiRoutes
         public const string Locations = $"{AdminBase}/Locations";
         public const string ProductCategories = $"{AdminBase}/ProductCategories";
         public const string ProductProperties = $"{AdminBase}/ProductProperties";
+        public const string ProductProductProperties = $"{AdminBase}/ProductProductProperties";
+        public const string ProductPropertyValues = $"{AdminBase}/ProductPropertyValues";
     }
 
     public static class Shop
@@ -30,6 +32,8 @@ public static class ApiRoutes
         public const string Locations = $"{ShopBase}/locations";
         public const string ProductCategories = $"{ShopBase}/ProductCategories";
         public const string ProductProperties = $"{ShopBase}/ProductProperties";
+        public const string ProductPropertyValues = $"{ShopBase}/ProductPropertyValues";
+        public const string ProductProductProperties = $"{ShopBase}/ProductProductProperties";
     }
 
     public static class Customer
@@ -41,12 +45,16 @@ public static class ApiRoutes
         public const string Orders = $"{CustomerBase}/orders";
         public const string ProductCategories = $"{CustomerBase}/ProductCategories";
         public const string ProductProperties = $"{CustomerBase}/ProductProperties";
+        public const string ProductPropertyValues = $"{CustomerBase}/ProductPropertyValues";
+        public const string ProductProductProperties = $"{CustomerBase}/ProductProductProperties";
     }
 
     public static class Corporate
     {
         public const string Auth = $"{CorporateBase}/auth";
+        public const string ProductPropertyValues = $"{CorporateBase}/ProductPropertyValues";
         public const string Files = $"{CorporateBase}/files";
+        public const string ProductProductProperties = $"{CorporateBase}/ProductProductProperties";
         public const string Locations = $"{CorporateBase}/Locations";
         public const string ProductProperties = $"{CorporateBase}/ProductProperties";
         public const string ProductCategories = $"{CorporateBase}/ProductCategories";

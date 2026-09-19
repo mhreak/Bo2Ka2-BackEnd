@@ -52,4 +52,6 @@ public class Product : BaseEntity
     public List<Guid> ImageFileIds { get; set; } = new();
 
     public List<ProductColor> Colors { get; set; } = new();
+
+    public List<ProductProductProperty> ProductProperties { get; set; } = new();
 }
