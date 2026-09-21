@@ -32,7 +32,7 @@ public class ProductProductPropertyController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateProductProductPropertyRequestDto request, CancellationToken ct)
+    public async Task<IActionResult> Create([FromBody] CreateProductProductAttributeRequestDto request, CancellationToken ct)
     {
         var data = await _catalogService.CreateProductPropertyAsync(request, ct);
         var message = await _responseLocalizer.LocalizeAsync(MessageKeys.ProductProductPropertyCreated);
@@ -40,7 +40,7 @@ public class ProductProductPropertyController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
-    public async Task<IActionResult> Update(Guid id, [FromBody] UpdateProductProductPropertyRequestDto request, CancellationToken ct)
+    public async Task<IActionResult> Update(Guid id, [FromBody] UpdateProductProductAttributeRequestDto request, CancellationToken ct)
     {
         var data = await _catalogService.UpdateProductPropertyAsync(id, request, ct);
         var message = await _responseLocalizer.LocalizeAsync(MessageKeys.ProductProductPropertyUpdated);
@@ -56,7 +56,7 @@ public class ProductProductPropertyController : ControllerBase
     }
 
     [HttpPut("by-product/{productId:guid}/set")]
-    public async Task<IActionResult> SetForProduct(Guid productId, [FromBody] SetProductPropertiesRequestDto request, CancellationToken ct)
+    public async Task<IActionResult> SetForProduct(Guid productId, [FromBody] SetProductAttributesRequestDto request, CancellationToken ct)
     {
         var data = await _catalogService.SetProductPropertiesAsync(productId, request, ct);
         var message = await _responseLocalizer.LocalizeAsync(MessageKeys.ProductProductPropertiesSet);

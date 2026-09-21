@@ -6,20 +6,20 @@ using Bodokado.Persistence.Repositories;
 
 namespace Bodokado.Persistence.Repositories.Products;
 
-public class ProductPropertyValueRepository : BaseRepository<ProductPropertyValue>, IProductPropertyValueRepository
+public class ProductPropertyValueRepository : BaseRepository<ProductAttributeValue>, IProductPropertyValueRepository
 {
     public ProductPropertyValueRepository(AppDbContext context) : base(context) { }
 
-    public async Task<ProductPropertyValue?> GetByIdWithPropertyAsync(Guid id, CancellationToken ct = default)
+    public async Task<ProductAttributeValue?> GetByIdWithPropertyAsync(Guid id, CancellationToken ct = default)
     {
         return await _context.ProductPropertyValues
             .Include(v => v.ProductProperty)
             .FirstOrDefaultAsync(v => v.Id == id && !v.IsDeleted, ct);
     }
 
-    public async Task<List<ProductPropertyValue>> GetListAsync(Guid? productPropertyId, bool onlyActive, CancellationToken ct = default)
+    public async Task<List<ProductAttributeValue>> GetListAsync(Guid? productPropertyId, bool onlyActive, CancellationToken ct = default)
     {
-        IQueryable<ProductPropertyValue> q = _context.ProductPropertyValues
+        IQueryable<ProductAttributeValue> q = _context.ProductPropertyValues
             .AsNoTracking()
             .Include(v => v.ProductProperty)
             .Where(v => !v.IsDeleted);

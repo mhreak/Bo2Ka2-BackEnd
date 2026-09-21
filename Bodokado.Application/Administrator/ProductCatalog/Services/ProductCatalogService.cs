@@ -1,6 +1,6 @@
 using Bodokado.Application.App.AdminModule.ProductCatalog.DTOs;
 using Bodokado.Application.App.AdminModule.ProductCatalog.Interfaces;
-using Bodokado.Application.App.ShopModule.Products.Interfaces;
+using Bodokado.Application.App.ShopModule.Products.Interfaces; // یا مسیر درست IProductRepository
 using Bodokado.Application.Common.Exceptions;
 using Bodokado.Application.Common.File.Interfaces;
 using Bodokado.Application.Common.Interfaces;
@@ -13,32 +13,32 @@ namespace Bodokado.Application.Administrator.ProductCatalog.Services;
 public class ProductCatalogService : IProductCatalogService
 {
     private readonly IProductCategoryRepository _categoryRepository;
-    private readonly IProductPropertyRepository _propertyRepository;
+    private readonly IProductAttributeRepository _attributeRepository;
+    private readonly IProductAttributeValueRepository _attributeValueRepository;
+    private readonly IProductProductAttributeRepository _productProductAttributeRepository;
+    private readonly IProductRepository _productRepository;
     private readonly IFileAssetRepository _fileAssetRepository;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IProductPropertyValueRepository _propertyValueRepository;
-    private readonly IProductProductPropertyRepository _productProductPropertyRepository;
-    private readonly IProductRepository _productRepository;
-
-
 
     public ProductCatalogService(
         IProductCategoryRepository categoryRepository,
-        IProductPropertyRepository propertyRepository,
-        IFileAssetRepository fileAssetRepository,
-        IProductPropertyValueRepository productPropertyValueRepository,
-        IProductProductPropertyRepository productProductPropertyRepository,
+        IProductAttributeRepository attributeRepository,
+        IProductAttributeValueRepository attributeValueRepository,
+        IProductProductAttributeRepository productProductAttributeRepository,
         IProductRepository productRepository,
+        IFileAssetRepository fileAssetRepository,
         IUnitOfWork unitOfWork)
     {
         _categoryRepository = categoryRepository;
-        _propertyRepository = propertyRepository;
+        _attributeRepository = attributeRepository;
+        _attributeValueRepository = attributeValueRepository;
+        _productProductAttributeRepository = productProductAttributeRepository;
+        _productRepository = productRepository;
         _fileAssetRepository = fileAssetRepository;
-        _propertyValueRepository = productPropertyValueRepository;
-        _productProductPropertyRepository = productProductPropertyRepository;
-        _productRepository  = productRepository;
         _unitOfWork = unitOfWork;
     }
+
+    // ───────────── Category ─────────────
 
     public async Task<List<ProductCategoryDto>> GetCategoriesAsync(bool onlyActive = false, bool asTree = true, CancellationToken ct = default)
     {
@@ -134,25 +134,27 @@ public class ProductCatalogService : IProductCatalogService
         await _unitOfWork.SaveChangesAsync(ct);
     }
 
-    public async Task<List<ProductPropertyDto>> GetPropertiesAsync(Guid? productCategoryId = null, CancellationToken ct = default)
+    // ───────────── Attribute ─────────────
+
+    public async Task<List<ProductAttributeDto>> GetAttributesAsync(Guid? productCategoryId = null, CancellationToken ct = default)
     {
-        var list = await _propertyRepository.GetListAsync(productCategoryId, ct);
-        return list.Select(MapProperty).ToList();
+        var list = await _attributeRepository.GetListAsync(productCategoryId, ct);
+        return list.Select(MapAttribute).ToList();
     }
 
-    public async Task<ProductPropertyDto> GetPropertyByIdAsync(Guid id, CancellationToken ct = default)
+    public async Task<ProductAttributeDto> GetAttributeByIdAsync(Guid id, CancellationToken ct = default)
     {
-        var entity = await _propertyRepository.GetByIdWithCategoryAsync(id, ct)
-            ?? throw new NotFoundException(MessageKeys.ProductPropertyNotFound, "product_property_not_found");
-        return MapProperty(entity);
+        var entity = await _attributeRepository.GetByIdWithCategoryAsync(id, ct)
+            ?? throw new NotFoundException(MessageKeys.ProductAttributeNotFound, "product_attribute_not_found");
+        return MapAttribute(entity);
     }
 
-    public async Task<ProductPropertyDto> CreatePropertyAsync(CreateProductPropertyRequestDto request, CancellationToken ct = default)
+    public async Task<ProductAttributeDto> CreateAttributeAsync(CreateProductAttributeRequestDto request, CancellationToken ct = default)
     {
         await ValidateCategoryExistsIfSetAsync(request.ProductCategoryId, ct);
-        ValidatePropertyType(request.Type);
+        ValidateAttributeType(request.Type);
 
-        var entity = new ProductProperty
+        var entity = new ProductAttribute
         {
             Id = Guid.NewGuid(),
             Name = request.Name.Trim(),
@@ -162,21 +164,21 @@ public class ProductCatalogService : IProductCatalogService
             CreatedAt = DateTime.UtcNow
         };
 
-        await _propertyRepository.AddAsync(entity);
+        await _attributeRepository.AddAsync(entity);
         await _unitOfWork.SaveChangesAsync(ct);
 
-        var created = await _propertyRepository.GetByIdWithCategoryAsync(entity.Id, ct)
-            ?? throw new NotFoundException(MessageKeys.ProductPropertyNotFound, "product_property_not_found");
-        return MapProperty(created);
+        var created = await _attributeRepository.GetByIdWithCategoryAsync(entity.Id, ct)
+            ?? throw new NotFoundException(MessageKeys.ProductAttributeNotFound, "product_attribute_not_found");
+        return MapAttribute(created);
     }
 
-    public async Task<ProductPropertyDto> UpdatePropertyAsync(Guid id, UpdateProductPropertyRequestDto request, CancellationToken ct = default)
+    public async Task<ProductAttributeDto> UpdateAttributeAsync(Guid id, UpdateProductAttributeRequestDto request, CancellationToken ct = default)
     {
-        var entity = await _propertyRepository.GetByIdWithCategoryAsync(id, ct)
-            ?? throw new NotFoundException(MessageKeys.ProductPropertyNotFound, "product_property_not_found");
+        var entity = await _attributeRepository.GetByIdWithCategoryAsync(id, ct)
+            ?? throw new NotFoundException(MessageKeys.ProductAttributeNotFound, "product_attribute_not_found");
 
         await ValidateCategoryExistsIfSetAsync(request.ProductCategoryId, ct);
-        ValidatePropertyType(request.Type);
+        ValidateAttributeType(request.Type);
 
         entity.Name = request.Name.Trim();
         entity.Type = request.Type;
@@ -184,24 +186,201 @@ public class ProductCatalogService : IProductCatalogService
         entity.ProductCategoryId = request.ProductCategoryId;
         entity.UpdatedAt = DateTime.UtcNow;
 
-        _propertyRepository.Update(entity);
+        _attributeRepository.Update(entity);
         await _unitOfWork.SaveChangesAsync(ct);
 
-        var updated = await _propertyRepository.GetByIdWithCategoryAsync(id, ct)
-            ?? throw new NotFoundException(MessageKeys.ProductPropertyNotFound, "product_property_not_found");
-        return MapProperty(updated);
+        var updated = await _attributeRepository.GetByIdWithCategoryAsync(id, ct)
+            ?? throw new NotFoundException(MessageKeys.ProductAttributeNotFound, "product_attribute_not_found");
+        return MapAttribute(updated);
     }
 
-    public async Task DeletePropertyAsync(Guid id, CancellationToken ct = default)
+    public async Task DeleteAttributeAsync(Guid id, CancellationToken ct = default)
     {
-        var entity = await _propertyRepository.GetByIdWithCategoryAsync(id, ct)
-            ?? throw new NotFoundException(MessageKeys.ProductPropertyNotFound, "product_property_not_found");
+        var entity = await _attributeRepository.GetByIdWithCategoryAsync(id, ct)
+            ?? throw new NotFoundException(MessageKeys.ProductAttributeNotFound, "product_attribute_not_found");
 
         entity.IsDeleted = true;
         entity.UpdatedAt = DateTime.UtcNow;
-        _propertyRepository.Update(entity);
+        _attributeRepository.Update(entity);
         await _unitOfWork.SaveChangesAsync(ct);
     }
+
+    // ───────────── AttributeValue ─────────────
+
+    public async Task<List<ProductAttributeValueDto>> GetAttributeValuesAsync(Guid? productAttributeId = null, bool onlyActive = false, CancellationToken ct = default)
+    {
+        var list = await _attributeValueRepository.GetListAsync(productAttributeId, onlyActive, ct);
+        return list.Select(MapAttributeValue).ToList();
+    }
+
+    public async Task<ProductAttributeValueDto> GetAttributeValueByIdAsync(Guid id, CancellationToken ct = default)
+    {
+        var entity = await _attributeValueRepository.GetByIdWithAttributeAsync(id, ct)
+            ?? throw new NotFoundException(MessageKeys.ProductAttributeValueNotFound, "product_attribute_value_not_found");
+        return MapAttributeValue(entity);
+    }
+
+    public async Task<ProductAttributeValueDto> CreateAttributeValueAsync(CreateProductAttributeValueRequestDto request, CancellationToken ct = default)
+    {
+        await EnsureAttributeExistsAsync(request.ProductAttributeId, ct);
+
+        var entity = new ProductAttributeValue
+        {
+            Id = Guid.NewGuid(),
+            Title = request.Title.Trim(),
+            Value = request.Value.Trim(),
+            ProductAttributeId = request.ProductAttributeId,
+            IsActive = request.IsActive,
+            SortOrder = request.SortOrder,
+            CreatedAt = DateTime.UtcNow
+        };
+
+        await _attributeValueRepository.AddAsync(entity);
+        await _unitOfWork.SaveChangesAsync(ct);
+
+        var created = await _attributeValueRepository.GetByIdWithAttributeAsync(entity.Id, ct)
+            ?? throw new NotFoundException(MessageKeys.ProductAttributeValueNotFound, "product_attribute_value_not_found");
+        return MapAttributeValue(created);
+    }
+
+    public async Task<ProductAttributeValueDto> UpdateAttributeValueAsync(Guid id, UpdateProductAttributeValueRequestDto request, CancellationToken ct = default)
+    {
+        var entity = await _attributeValueRepository.GetByIdWithAttributeAsync(id, ct)
+            ?? throw new NotFoundException(MessageKeys.ProductAttributeValueNotFound, "product_attribute_value_not_found");
+
+        await EnsureAttributeExistsAsync(request.ProductAttributeId, ct);
+
+        entity.Title = request.Title.Trim();
+        entity.Value = request.Value.Trim();
+        entity.ProductAttributeId = request.ProductAttributeId;
+        entity.IsActive = request.IsActive;
+        entity.SortOrder = request.SortOrder;
+        entity.UpdatedAt = DateTime.UtcNow;
+
+        _attributeValueRepository.Update(entity);
+        await _unitOfWork.SaveChangesAsync(ct);
+
+        var updated = await _attributeValueRepository.GetByIdWithAttributeAsync(id, ct)
+            ?? throw new NotFoundException(MessageKeys.ProductAttributeValueNotFound, "product_attribute_value_not_found");
+        return MapAttributeValue(updated);
+    }
+
+    public async Task DeleteAttributeValueAsync(Guid id, CancellationToken ct = default)
+    {
+        var entity = await _attributeValueRepository.GetByIdWithAttributeAsync(id, ct)
+            ?? throw new NotFoundException(MessageKeys.ProductAttributeValueNotFound, "product_attribute_value_not_found");
+
+        entity.IsDeleted = true;
+        entity.UpdatedAt = DateTime.UtcNow;
+        _attributeValueRepository.Update(entity);
+        await _unitOfWork.SaveChangesAsync(ct);
+    }
+
+    // ───────────── ProductProductAttribute ─────────────
+
+    public async Task<List<ProductProductAttributeDto>> GetProductAttributesAsync(Guid productId, CancellationToken ct = default)
+    {
+        await EnsureProductExistsAsync(productId, ct);
+        var list = await _productProductAttributeRepository.GetByProductIdAsync(productId, ct);
+        return list.Select(MapProductAttribute).ToList();
+    }
+
+    public async Task<ProductProductAttributeDto> GetProductAttributeByIdAsync(Guid id, CancellationToken ct = default)
+    {
+        var entity = await _productProductAttributeRepository.GetByIdWithDetailsAsync(id, ct)
+            ?? throw new NotFoundException(MessageKeys.ProductProductAttributeNotFound, "product_product_attribute_not_found");
+        return MapProductAttribute(entity);
+    }
+
+    public async Task<ProductProductAttributeDto> CreateProductAttributeAsync(CreateProductProductAttributeRequestDto request, CancellationToken ct = default)
+    {
+        await EnsureProductExistsAsync(request.ProductId, ct);
+        if (request.ProductAttributeId.HasValue)
+            await EnsureAttributeExistsAsync(request.ProductAttributeId.Value, ct);
+
+        ValidateProductAttributeValue(request.Value);
+
+        var entity = new ProductProductAttribute
+        {
+            Id = Guid.NewGuid(),
+            ProductId = request.ProductId,
+            ProductAttributeId = request.ProductAttributeId,
+            Value = request.Value?.Trim(),
+            CreatedAt = DateTime.UtcNow
+        };
+
+        await _productProductAttributeRepository.AddAsync(entity);
+        await _unitOfWork.SaveChangesAsync(ct);
+
+        var created = await _productProductAttributeRepository.GetByIdWithDetailsAsync(entity.Id, ct)
+            ?? throw new NotFoundException(MessageKeys.ProductProductAttributeNotFound, "product_product_attribute_not_found");
+        return MapProductAttribute(created);
+    }
+
+    public async Task<ProductProductAttributeDto> UpdateProductAttributeAsync(Guid id, UpdateProductProductAttributeRequestDto request, CancellationToken ct = default)
+    {
+        var entity = await _productProductAttributeRepository.GetByIdWithDetailsAsync(id, ct)
+            ?? throw new NotFoundException(MessageKeys.ProductProductAttributeNotFound, "product_product_attribute_not_found");
+
+        if (request.ProductAttributeId.HasValue)
+            await EnsureAttributeExistsAsync(request.ProductAttributeId.Value, ct);
+
+        ValidateProductAttributeValue(request.Value);
+
+        entity.ProductAttributeId = request.ProductAttributeId;
+        entity.Value = request.Value?.Trim();
+        entity.UpdatedAt = DateTime.UtcNow;
+
+        _productProductAttributeRepository.Update(entity);
+        await _unitOfWork.SaveChangesAsync(ct);
+
+        var updated = await _productProductAttributeRepository.GetByIdWithDetailsAsync(id, ct)
+            ?? throw new NotFoundException(MessageKeys.ProductProductAttributeNotFound, "product_product_attribute_not_found");
+        return MapProductAttribute(updated);
+    }
+
+    public async Task DeleteProductAttributeAsync(Guid id, CancellationToken ct = default)
+    {
+        var entity = await _productProductAttributeRepository.GetByIdWithDetailsAsync(id, ct)
+            ?? throw new NotFoundException(MessageKeys.ProductProductAttributeNotFound, "product_product_attribute_not_found");
+
+        entity.IsDeleted = true;
+        entity.UpdatedAt = DateTime.UtcNow;
+        _productProductAttributeRepository.Update(entity);
+        await _unitOfWork.SaveChangesAsync(ct);
+    }
+
+    public async Task<List<ProductProductAttributeDto>> SetProductAttributesAsync(Guid productId, SetProductAttributesRequestDto request, CancellationToken ct = default)
+    {
+        await EnsureProductExistsAsync(productId, ct);
+
+        foreach (var item in request.Items)
+        {
+            if (item.ProductAttributeId.HasValue)
+                await EnsureAttributeExistsAsync(item.ProductAttributeId.Value, ct);
+            ValidateProductAttributeValue(item.Value);
+        }
+
+        await _productProductAttributeRepository.SoftDeleteByProductIdAsync(productId, ct);
+
+        foreach (var item in request.Items)
+        {
+            // مهم: ProductProductAttribute نه ProductAttributeValue
+            await _productProductAttributeRepository.AddAsync(new ProductProductAttribute
+            {
+                Id = Guid.NewGuid(),
+                ProductId = productId,
+                ProductAttributeId = item.ProductAttributeId,
+                Value = item.Value?.Trim(),
+                CreatedAt = DateTime.UtcNow
+            });
+        }
+
+        await _unitOfWork.SaveChangesAsync(ct);
+        return await GetProductAttributesAsync(productId, ct);
+    }
+
+    // ───────────── Helpers ─────────────
 
     private async Task ValidateParentAndImageAsync(Guid? parentCategoryId, Guid? imageId, Guid? excludeId, CancellationToken ct)
     {
@@ -230,10 +409,30 @@ public class ProductCatalogService : IProductCatalogService
             throw new BadRequestException(MessageKeys.ProductCategoryNotFound, "product_category_not_found");
     }
 
-    private static void ValidatePropertyType(ProductPropertyType type)
+    private static void ValidateAttributeType(ProductAttributeType type)
     {
-        if (type is not (ProductPropertyType.Selectable or ProductPropertyType.Text))
-            throw new BadRequestException(MessageKeys.ProductPropertyTypeInvalid, "product_property_type_invalid");
+        if (type is not (ProductAttributeType.Selectable or ProductAttributeType.Text))
+            throw new BadRequestException(MessageKeys.ProductAttributeTypeInvalid, "product_attribute_type_invalid");
+    }
+
+    private async Task EnsureAttributeExistsAsync(Guid attributeId, CancellationToken ct)
+    {
+        var prop = await _attributeRepository.GetByIdAsync(attributeId);
+        if (prop is null || prop.IsDeleted)
+            throw new BadRequestException(MessageKeys.ProductAttributeNotFound, "product_attribute_not_found");
+    }
+
+    private async Task EnsureProductExistsAsync(Guid productId, CancellationToken ct)
+    {
+        var product = await _productRepository.GetByIdAsync(productId);
+        if (product is null || product.IsDeleted)
+            throw new NotFoundException(MessageKeys.ProductNotFound, "product_not_found");
+    }
+
+    private static void ValidateProductAttributeValue(string? value)
+    {
+        if (value is not null && value.Length > 100)
+            throw new BadRequestException(MessageKeys.ProductProductAttributeValueMaxLength, "product_product_attribute_value_max_length");
     }
 
     private static ProductCategoryDto MapCategoryFlat(ProductCategory c) => new()
@@ -248,7 +447,7 @@ public class ProductCatalogService : IProductCatalogService
         CreatedAt = c.CreatedAt
     };
 
-    private static ProductPropertyDto MapProperty(ProductProperty p) => new()
+    private static ProductAttributeDto MapAttribute(ProductAttribute p) => new()
     {
         Id = p.Id,
         Name = p.Name,
@@ -258,215 +457,26 @@ public class ProductCatalogService : IProductCatalogService
         ProductCategoryName = p.ProductCategory?.Name,
         CreatedAt = p.CreatedAt
     };
-        public async Task<List<ProductPropertyValueDto>> GetPropertyValuesAsync(Guid? productPropertyId = null, bool onlyActive = false, CancellationToken ct = default)
-    {
-        var list = await _propertyValueRepository.GetListAsync(productPropertyId, onlyActive, ct);
-        return list.Select(MapPropertyValue).ToList();
-    }
 
-    public async Task<ProductPropertyValueDto> GetPropertyValueByIdAsync(Guid id, CancellationToken ct = default)
-    {
-        var entity = await _propertyValueRepository.GetByIdWithPropertyAsync(id, ct)
-            ?? throw new NotFoundException(MessageKeys.ProductPropertyValueNotFound, "product_property_value_not_found");
-        return MapPropertyValue(entity);
-    }
-
-    public async Task<ProductPropertyValueDto> CreatePropertyValueAsync(CreateProductPropertyValueRequestDto request, CancellationToken ct = default)
-    {
-        await EnsurePropertyExistsAsync(request.ProductPropertyId, ct);
-
-        var entity = new ProductPropertyValue
-        {
-            Id = Guid.NewGuid(),
-            Title = request.Title.Trim(),
-            Value = request.Value.Trim(),
-            ProductPropertyId = request.ProductPropertyId,
-            IsActive = request.IsActive,
-            SortOrder = request.SortOrder,
-            CreatedAt = DateTime.UtcNow
-        };
-
-        await _propertyValueRepository.AddAsync(entity);
-        await _unitOfWork.SaveChangesAsync(ct);
-
-        var created = await _propertyValueRepository.GetByIdWithPropertyAsync(entity.Id, ct)
-            ?? throw new NotFoundException(MessageKeys.ProductPropertyValueNotFound, "product_property_value_not_found");
-        return MapPropertyValue(created);
-    }
-
-    public async Task<ProductPropertyValueDto> UpdatePropertyValueAsync(Guid id, UpdateProductPropertyValueRequestDto request, CancellationToken ct = default)
-    {
-        var entity = await _propertyValueRepository.GetByIdWithPropertyAsync(id, ct)
-            ?? throw new NotFoundException(MessageKeys.ProductPropertyValueNotFound, "product_property_value_not_found");
-
-        await EnsurePropertyExistsAsync(request.ProductPropertyId, ct);
-
-        entity.Title = request.Title.Trim();
-        entity.Value = request.Value.Trim();
-        entity.ProductPropertyId = request.ProductPropertyId;
-        entity.IsActive = request.IsActive;
-        entity.SortOrder = request.SortOrder;
-        entity.UpdatedAt = DateTime.UtcNow;
-
-        _propertyValueRepository.Update(entity);
-        await _unitOfWork.SaveChangesAsync(ct);
-
-        var updated = await _propertyValueRepository.GetByIdWithPropertyAsync(id, ct)
-            ?? throw new NotFoundException(MessageKeys.ProductPropertyValueNotFound, "product_property_value_not_found");
-        return MapPropertyValue(updated);
-    }
-
-    public async Task DeletePropertyValueAsync(Guid id, CancellationToken ct = default)
-    {
-        var entity = await _propertyValueRepository.GetByIdWithPropertyAsync(id, ct)
-            ?? throw new NotFoundException(MessageKeys.ProductPropertyValueNotFound, "product_property_value_not_found");
-
-        entity.IsDeleted = true;
-        entity.UpdatedAt = DateTime.UtcNow;
-        _propertyValueRepository.Update(entity);
-        await _unitOfWork.SaveChangesAsync(ct);
-    }
-
-    public async Task<List<ProductProductPropertyDto>> GetProductPropertiesAsync(Guid productId, CancellationToken ct = default)
-    {
-        await EnsureProductExistsAsync(productId, ct);
-        var list = await _productProductPropertyRepository.GetByProductIdAsync(productId, ct);
-        return list.Select(MapProductProperty).ToList();
-    }
-
-    public async Task<ProductProductPropertyDto> GetProductPropertyByIdAsync(Guid id, CancellationToken ct = default)
-    {
-        var entity = await _productProductPropertyRepository.GetByIdWithDetailsAsync(id, ct)
-            ?? throw new NotFoundException(MessageKeys.ProductProductPropertyNotFound, "product_product_property_not_found");
-        return MapProductProperty(entity);
-    }
-
-    public async Task<ProductProductPropertyDto> CreateProductPropertyAsync(CreateProductProductPropertyRequestDto request, CancellationToken ct = default)
-    {
-        await EnsureProductExistsAsync(request.ProductId, ct);
-        if (request.ProductPropertyId.HasValue)
-            await EnsurePropertyExistsAsync(request.ProductPropertyId.Value, ct);
-
-        ValidateProductPropertyValue(request.Value);
-
-        var entity = new ProductProductProperty
-        {
-            Id = Guid.NewGuid(),
-            ProductId = request.ProductId,
-            ProductPropertyId = request.ProductPropertyId,
-            Value = request.Value?.Trim(),
-            CreatedAt = DateTime.UtcNow
-        };
-
-        await _productProductPropertyRepository.AddAsync(entity);
-        await _unitOfWork.SaveChangesAsync(ct);
-
-        var created = await _productProductPropertyRepository.GetByIdWithDetailsAsync(entity.Id, ct)
-            ?? throw new NotFoundException(MessageKeys.ProductProductPropertyNotFound, "product_product_property_not_found");
-        return MapProductProperty(created);
-    }
-
-    public async Task<ProductProductPropertyDto> UpdateProductPropertyAsync(Guid id, UpdateProductProductPropertyRequestDto request, CancellationToken ct = default)
-    {
-        var entity = await _productProductPropertyRepository.GetByIdWithDetailsAsync(id, ct)
-            ?? throw new NotFoundException(MessageKeys.ProductProductPropertyNotFound, "product_product_property_not_found");
-
-        if (request.ProductPropertyId.HasValue)
-            await EnsurePropertyExistsAsync(request.ProductPropertyId.Value, ct);
-
-        ValidateProductPropertyValue(request.Value);
-
-        entity.ProductPropertyId = request.ProductPropertyId;
-        entity.Value = request.Value?.Trim();
-        entity.UpdatedAt = DateTime.UtcNow;
-
-        _productProductPropertyRepository.Update(entity);
-        await _unitOfWork.SaveChangesAsync(ct);
-
-        var updated = await _productProductPropertyRepository.GetByIdWithDetailsAsync(id, ct)
-            ?? throw new NotFoundException(MessageKeys.ProductProductPropertyNotFound, "product_product_property_not_found");
-        return MapProductProperty(updated);
-    }
-
-    public async Task DeleteProductPropertyAsync(Guid id, CancellationToken ct = default)
-    {
-        var entity = await _productProductPropertyRepository.GetByIdWithDetailsAsync(id, ct)
-            ?? throw new NotFoundException(MessageKeys.ProductProductPropertyNotFound, "product_product_property_not_found");
-
-        entity.IsDeleted = true;
-        entity.UpdatedAt = DateTime.UtcNow;
-        _productProductPropertyRepository.Update(entity);
-        await _unitOfWork.SaveChangesAsync(ct);
-    }
-
-    public async Task<List<ProductProductPropertyDto>> SetProductPropertiesAsync(Guid productId, SetProductPropertiesRequestDto request, CancellationToken ct = default)
-    {
-        await EnsureProductExistsAsync(productId, ct);
-
-        foreach (var item in request.Items)
-        {
-            if (item.ProductPropertyId.HasValue)
-                await EnsurePropertyExistsAsync(item.ProductPropertyId.Value, ct);
-            ValidateProductPropertyValue(item.Value);
-        }
-
-        await _productProductPropertyRepository.SoftDeleteByProductIdAsync(productId, ct);
-
-        foreach (var item in request.Items)
-        {
-            await _productProductPropertyRepository.AddAsync(new ProductProductProperty
-            {
-                Id = Guid.NewGuid(),
-                ProductId = productId,
-                ProductPropertyId = item.ProductPropertyId,
-                Value = item.Value?.Trim(),
-                CreatedAt = DateTime.UtcNow
-            });
-        }
-
-        await _unitOfWork.SaveChangesAsync(ct);
-        return await GetProductPropertiesAsync(productId, ct);
-    }
-
-    private async Task EnsurePropertyExistsAsync(Guid propertyId, CancellationToken ct)
-    {
-        var prop = await _propertyRepository.GetByIdAsync(propertyId);
-        if (prop is null || prop.IsDeleted)
-            throw new BadRequestException(MessageKeys.ProductPropertyNotFound, "product_property_not_found");
-    }
-
-    private async Task EnsureProductExistsAsync(Guid productId, CancellationToken ct)
-    {
-        var product = await _productRepository.GetByIdAsync(productId);
-        if (product is null || product.IsDeleted)
-            throw new NotFoundException(MessageKeys.ProductNotFound, "product_not_found");
-    }
-
-    private static void ValidateProductPropertyValue(string? value)
-    {
-        if (value is not null && value.Length > 100)
-            throw new BadRequestException(MessageKeys.ProductProductPropertyValueMaxLength, "product_product_property_value_max_length");
-    }
-
-    private static ProductPropertyValueDto MapPropertyValue(ProductPropertyValue v) => new()
+    private static ProductAttributeValueDto MapAttributeValue(ProductAttributeValue v) => new()
     {
         Id = v.Id,
         Title = v.Title,
         Value = v.Value,
-        ProductPropertyId = v.ProductPropertyId,
-        ProductPropertyName = v.ProductProperty?.Name,
+        ProductAttributeId = v.ProductAttributeId,
+        ProductAttributeName = v.ProductAttribute?.Name,
         IsActive = v.IsActive,
         SortOrder = v.SortOrder,
         CreatedAt = v.CreatedAt
     };
 
-    private static ProductProductPropertyDto MapProductProperty(ProductProductProperty x) => new()
+    private static ProductProductAttributeDto MapProductAttribute(ProductProductAttribute x) => new()
     {
         Id = x.Id,
         ProductId = x.ProductId,
         ProductName = x.Product?.Name,
-        ProductPropertyId = x.ProductPropertyId,
-        ProductPropertyName = x.ProductProperty?.Name,
+        ProductAttributeId = x.ProductAttributeId,
+        ProductAttributeName = x.ProductAttribute?.Name,
         Value = x.Value,
         CreatedAt = x.CreatedAt
     };

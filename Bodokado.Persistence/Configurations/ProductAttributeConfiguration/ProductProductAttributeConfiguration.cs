@@ -4,11 +4,11 @@ using Bodokado.Domain.Entities.Products;
 
 namespace Bodokado.Persistence.Configurations.Products;
 
-public class ProductProductPropertyConfiguration : IEntityTypeConfiguration<ProductProductProperty>
+public class ProductProductAttributeConfiguration : IEntityTypeConfiguration<ProductProductAttribute>
 {
-    public void Configure(EntityTypeBuilder<ProductProductProperty> builder)
+    public void Configure(EntityTypeBuilder<ProductProductAttribute> builder)
     {
-        builder.ToTable("Product_ProductProperty");
+        builder.ToTable("Product_ProductAttribute");
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Value).HasMaxLength(100);
@@ -16,17 +16,17 @@ public class ProductProductPropertyConfiguration : IEntityTypeConfiguration<Prod
         builder.HasQueryFilter(x => !x.IsDeleted);
 
         builder.HasOne(x => x.Product)
-            .WithMany(p => p.ProductProperties)
+            .WithMany(p => p.ProductAttributes)
             .HasForeignKey(x => x.ProductId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasOne(x => x.ProductProperty)
-            .WithMany(p => p.ProductLinks)
-            .HasForeignKey(x => x.ProductPropertyId)
+        builder.HasOne(x => x.ProductAttribute)
+            .WithMany(p => p.ProductAttributeLinks)
+            .HasForeignKey(x => x.ProductAttributeId)
             .OnDelete(DeleteBehavior.SetNull);
 
         builder.HasIndex(x => x.ProductId);
-        builder.HasIndex(x => x.ProductPropertyId);
-        builder.HasIndex(x => new { x.ProductId, x.ProductPropertyId });
+        builder.HasIndex(x => x.ProductAttributeId);
+        builder.HasIndex(x => new { x.ProductId, x.ProductAttributeId });
     }
 }

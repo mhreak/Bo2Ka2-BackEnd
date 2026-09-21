@@ -3,8 +3,8 @@ using Bodokado.Domain.Entities.Products;
 
 namespace Bodokado.Application.App.AdminModule.ProductCatalog.Interfaces;
 
-public interface IProductPropertyRepository : IGenericRepository<ProductProperty>
+public interface IProductAttributeRepository : IGenericRepository<ProductAttribute>
 {
-    Task<ProductProperty?> GetByIdWithCategoryAsync(Guid id, CancellationToken ct = default);
-    Task<List<ProductProperty>> GetListAsync(Guid? productCategoryId, CancellationToken ct = default);
+    Task<ProductAttribute?> GetByIdWithCategoryAsync(Guid id, CancellationToken ct = default);
+    Task<List<ProductAttribute>> GetListAsync(Guid? productCategoryId, CancellationToken ct = default);
 }

@@ -1,10 +1,10 @@
-public class SetProductPropertiesRequestDto
+public class SetProductAttributesRequestDto
 {
     public List<ProductPropertyAssignmentDto> Items { get; set; } = new();
 }
 
 public class ProductPropertyAssignmentDto
 {
-    public Guid? ProductPropertyId { get; set; }
+    public Guid? ProductAttributeId { get; set; }
     public string? Value { get; set; }
 }

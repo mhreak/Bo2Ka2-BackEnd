@@ -4,10 +4,10 @@ using Bodokado.Domain.Enums;
 
 namespace Bodokado.Domain.Entities.Products;
 
-public class ProductProperty : BaseEntity
+public class ProductAttribute : BaseEntity
 {
     public string Name { get; set; } = string.Empty;
-    public ProductPropertyType Type { get; set; } = ProductPropertyType.Text;
+    public ProductAttributeType Type { get; set; } = ProductAttributeType.Text;
 
     /// <summary>ترتیب نمایش (OrderItemsBy)</summary>
     public int SortOrder { get; set; }
@@ -15,6 +15,6 @@ public class ProductProperty : BaseEntity
     public Guid? ProductCategoryId { get; set; }
     public ProductCategory? ProductCategory { get; set; }
 
-    public List<ProductPropertyValue> Values { get; set; } = new();
-    public List<ProductProductProperty> ProductLinks { get; set; } = new();
+    public List<ProductAttributeValue> Values { get; set; } = new();
+    public List<ProductProductAttribute> ProductAttributeLinks { get; set; } = new();
 }

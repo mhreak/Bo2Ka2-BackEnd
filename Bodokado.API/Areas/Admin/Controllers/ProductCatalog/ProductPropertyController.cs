@@ -41,7 +41,7 @@ public class ProductPropertyController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateProductPropertyRequestDto request, CancellationToken ct)
+    public async Task<IActionResult> Create([FromBody] CreateProductAttributeRequestDto request, CancellationToken ct)
     {
         var data = await _catalogService.CreatePropertyAsync(request, ct);
         var message = await _responseLocalizer.LocalizeAsync(MessageKeys.ProductPropertyCreated);
@@ -49,7 +49,7 @@ public class ProductPropertyController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
-    public async Task<IActionResult> Update(Guid id, [FromBody] UpdateProductPropertyRequestDto request, CancellationToken ct)
+    public async Task<IActionResult> Update(Guid id, [FromBody] UpdateProductAttributeRequestDto request, CancellationToken ct)
     {
         var data = await _catalogService.UpdatePropertyAsync(id, request, ct);
         var message = await _responseLocalizer.LocalizeAsync(MessageKeys.ProductPropertyUpdated);

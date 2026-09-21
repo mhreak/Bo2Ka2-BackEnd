@@ -3,16 +3,16 @@ using Bodokado.Application.Common.Localization;
 using Bodokado.Domain.Enums;
 using FluentValidation;
 
-public class CreateProductPropertyRequestValidator : AbstractValidator<CreateProductPropertyRequestDto>
+public class CreateProductAttributeRequestValidator : AbstractValidator<CreateProductAttributeRequestDto>
 {
-    public CreateProductPropertyRequestValidator()
+    public CreateProductAttributeRequestValidator()
     {
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage(MessageKeys.ProductPropertyNameRequired)
             .MaximumLength(150).WithMessage(MessageKeys.ProductPropertyNameMaxLength);
 
         RuleFor(x => x.Type)
-            .Must(t => t is ProductPropertyType.Selectable or ProductPropertyType.Text)
+            .Must(t => t is ProductAttributeType.Selectable or ProductAttributeType.Text)
             .WithMessage(MessageKeys.ProductPropertyTypeInvalid);
     }
 }

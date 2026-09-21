@@ -4,11 +4,11 @@ using Bodokado.Domain.Entities.Products;
 
 namespace Bodokado.Persistence.Configurations.Products;
 
-public class ProductPropertyValueConfiguration : IEntityTypeConfiguration<ProductPropertyValue>
+public class ProductAttributeValueConfiguration : IEntityTypeConfiguration<ProductAttributeValue>
 {
-    public void Configure(EntityTypeBuilder<ProductPropertyValue> builder)
+    public void Configure(EntityTypeBuilder<ProductAttributeValue> builder)
     {
-        builder.ToTable("ProductPropertyValue");
+        builder.ToTable("ProductAttributeValue");
         builder.HasKey(v => v.Id);
 
         builder.Property(v => v.Title).IsRequired().HasMaxLength(150);
@@ -16,12 +16,12 @@ public class ProductPropertyValueConfiguration : IEntityTypeConfiguration<Produc
         builder.Property(v => v.IsDeleted).IsRequired().HasDefaultValue(false);
         builder.HasQueryFilter(v => !v.IsDeleted);
 
-        builder.HasOne(v => v.ProductProperty)
+        builder.HasOne(v => v.ProductAttribute)
             .WithMany(p => p.Values)
-            .HasForeignKey(v => v.ProductPropertyId)
+            .HasForeignKey(v => v.ProductAttributeId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasIndex(v => v.ProductPropertyId);
+        builder.HasIndex(v => v.ProductAttributeId);
         builder.HasIndex(v => v.SortOrder);
         builder.HasIndex(v => v.IsActive);
     }

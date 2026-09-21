@@ -1,7 +1,7 @@
 namespace Bodokado.Domain.Enums;
 
 
-public enum ProductPropertyType
+public enum ProductAttributeType
 {
   
     Selectable = 1,

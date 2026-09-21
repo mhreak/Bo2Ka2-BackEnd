@@ -3,13 +3,13 @@ using Bodokado.Domain.Common;
 namespace Bodokado.Domain.Entities.Products;
 
 /// <summary>مقادیر از پیش‌تعریف‌شده برای ویژگی از نوع انتخابی</summary>
-public class ProductPropertyValue : BaseEntity
+public class ProductAttributeValue : BaseEntity
 {
     public string Title { get; set; } = string.Empty;
     public string Value { get; set; } = string.Empty;
 
-    public Guid ProductPropertyId { get; set; }
-    public ProductProperty ProductProperty { get; set; } = null!;
+    public Guid ProductAttributeId { get; set; }
+    public ProductAttribute ProductAttributeI { get; set; } = null!;
 
     public bool IsActive { get; set; } = true;
 

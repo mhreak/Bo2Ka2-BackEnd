@@ -16,5 +16,5 @@ public class ProductCategory : BaseEntity
     public Guid? ImageId { get; set; }
     public FileAsset? Image { get; set; }
 
-    public List<ProductProperty> Properties { get; set; } = new();
+    public List<ProductAttribute> Attributes { get; set; } = new();
 }

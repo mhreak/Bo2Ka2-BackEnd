@@ -5,11 +5,11 @@ using Bodokado.Domain.Entities.Products;
 
 namespace Bodokado.Persistence.Configurations.Products;
 
-public class ProductPropertyConfiguration : IEntityTypeConfiguration<ProductProperty>
+public class ProductAttributeConfiguration : IEntityTypeConfiguration<ProductAttribute>
 {
-    public void Configure(EntityTypeBuilder<ProductProperty> builder)
+    public void Configure(EntityTypeBuilder<ProductAttribute> builder)
     {
-        builder.ToTable("ProductProperty");
+        builder.ToTable("ProductAttribute");
         builder.HasKey(p => p.Id);
 
         builder.Property(p => p.Name).IsRequired().HasMaxLength(150);
@@ -17,7 +17,7 @@ public class ProductPropertyConfiguration : IEntityTypeConfiguration<ProductProp
         builder.HasQueryFilter(p => !p.IsDeleted);
 
         builder.HasOne(p => p.ProductCategory)
-            .WithMany(c => c.Properties)
+            .WithMany(c => c.Attributes)
             .HasForeignKey(p => p.ProductCategoryId)
             .OnDelete(DeleteBehavior.SetNull);
 

@@ -166,5 +166,37 @@ public const string ProductProductPropertyNotFound = "ProductProductPropertyNotF
 public const string ProductProductPropertiesSet = "ProductProductPropertiesSet";
 public const string ProductProductPropertyValueMaxLength = "ProductProductPropertyValueMaxLength";
 
+    public const string ProductAttributesRetrieved = "ProductAttributesRetrieved";
+    public const string ProductAttributeRetrieved = "ProductAttributeRetrieved";
+    public const string ProductAttributeCreated = "ProductAttributeCreated";
+    public const string ProductAttributeUpdated = "ProductAttributeUpdated";
+    public const string ProductAttributeDeleted = "ProductAttributeDeleted";
+    public const string ProductAttributeNotFound = "ProductAttributeNotFound";
+    public const string ProductAttributeNameRequired = "ProductAttributeNameRequired";
+    public const string ProductAttributeNameMaxLength = "ProductAttributeNameMaxLength";
+    public const string ProductAttributeTypeInvalid = "ProductAttributeTypeInvalid";
+
+    // ProductAttributeValue
+    public const string ProductAttributeValuesRetrieved = "ProductAttributeValuesRetrieved";
+    public const string ProductAttributeValueRetrieved = "ProductAttributeValueRetrieved";
+    public const string ProductAttributeValueCreated = "ProductAttributeValueCreated";
+    public const string ProductAttributeValueUpdated = "ProductAttributeValueUpdated";
+    public const string ProductAttributeValueDeleted = "ProductAttributeValueDeleted";
+    public const string ProductAttributeValueNotFound = "ProductAttributeValueNotFound";
+    public const string ProductAttributeValueTitleRequired = "ProductAttributeValueTitleRequired";
+    public const string ProductAttributeValueTitleMaxLength = "ProductAttributeValueTitleMaxLength";
+    public const string ProductAttributeValueValueRequired = "ProductAttributeValueValueRequired";
+    public const string ProductAttributeValueValueMaxLength = "ProductAttributeValueValueMaxLength";
+
+    // ProductProductAttribute
+    public const string ProductProductAttributesRetrieved = "ProductProductAttributesRetrieved";
+    public const string ProductProductAttributeRetrieved = "ProductProductAttributeRetrieved";
+    public const string ProductProductAttributeCreated = "ProductProductAttributeCreated";
+    public const string ProductProductAttributeUpdated = "ProductProductAttributeUpdated";
+    public const string ProductProductAttributeDeleted = "ProductProductAttributeDeleted";
+    public const string ProductProductAttributeNotFound = "ProductProductAttributeNotFound";
+    public const string ProductProductAttributesSet = "ProductProductAttributesSet";
+    public const string ProductProductAttributeValueMaxLength = "ProductProductAttributeValueMaxLength";
+
 
 }
