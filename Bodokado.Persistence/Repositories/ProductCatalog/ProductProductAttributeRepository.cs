@@ -6,24 +6,24 @@ using Bodokado.Persistence.Repositories;
 
 namespace Bodokado.Persistence.Repositories.Products;
 
-public class ProductProductPropertyRepository : BaseRepository<ProductAttributeValue>, IProductProductPropertyRepository
+public class ProductProductAttributeRepository : BaseRepository<ProductProductAttribute>, IProductProductAttributeRepository
 {
-    public ProductProductPropertyRepository(AppDbContext context) : base(context) { }
+    public ProductProductAttributeRepository(AppDbContext context) : base(context) { }
 
-    public async Task<ProductAttributeValue?> GetByIdWithDetailsAsync(Guid id, CancellationToken ct = default)
+    public async Task<ProductProductAttribute?> GetByIdWithDetailsAsync(Guid id, CancellationToken ct = default)
     {
-        return await _context.Product_ProductProperties
+        return await _context.Product_ProductAttributes
             .Include(x => x.Product)
-            .Include(x => x.ProductProperty)
+            .Include(x => x.ProductAttribute)
             .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
-    public async Task<List<ProductAttributeValue>> GetByProductIdAsync(Guid productId, CancellationToken ct = default)
+    public async Task<List<ProductProductAttribute>> GetByProductIdAsync(Guid productId, CancellationToken ct = default)
     {
-        return await _context.Product_ProductProperties
+        return await _context.Product_ProductAttributes
             .AsNoTracking()
             .Include(x => x.Product)
-            .Include(x => x.ProductProperty)
+            .Include(x => x.ProductAttribute)
             .Where(x => x.ProductId == productId && !x.IsDeleted)
             .OrderBy(x => x.CreatedAt)
             .ToListAsync(ct);
@@ -31,7 +31,7 @@ public class ProductProductPropertyRepository : BaseRepository<ProductAttributeV
 
     public async Task SoftDeleteByProductIdAsync(Guid productId, CancellationToken ct = default)
     {
-        var items = await _context.Product_ProductProperties
+        var items = await _context.Product_ProductAttributes
             .Where(x => x.ProductId == productId && !x.IsDeleted)
             .ToListAsync(ct);
 

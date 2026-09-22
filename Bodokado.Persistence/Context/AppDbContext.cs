@@ -24,13 +24,13 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     public DbSet<ShopCategory> ShopCategories => Set<ShopCategory>();
     public DbSet<ShopWorkingHour> ShopWorkingHours => Set<ShopWorkingHour>();
     public DbSet<Product> Products => Set<Product>();
-    
+
     public DbSet<Order> Orders => Set<Order>();
     public DbSet<OrderItem> OrderItems => Set<OrderItem>();
     public DbSet<ProductCategory> ProductCategories => Set<ProductCategory>();
-    public DbSet<ProductAttribute> ProductProperties => Set<ProductAttribute>();
-    public DbSet<ProductAttributeValue> ProductPropertyValues => Set<ProductAttributeValue>();
-    public DbSet<ProductAttributeValue> Product_ProductProperties => Set<ProductAttributeValue>();
+    public DbSet<ProductAttribute> ProductAttributes => Set<ProductAttribute>();
+    public DbSet<ProductAttributeValue> ProductAttributeValues => Set<ProductAttributeValue>();
+    public DbSet<ProductProductAttribute> Product_ProductAttributes => Set<ProductProductAttribute>();
     public DbSet<OrderCustomizationType> OrderCustomizationTypes => Set<OrderCustomizationType>();
     public DbSet<OrderCustomizationTypeOption> OrderCustomizationTypeOptions => Set<OrderCustomizationTypeOption>();
     public DbSet<ShopOrderCustomizationType> ShopOrderCustomizationTypes => Set<ShopOrderCustomizationType>();

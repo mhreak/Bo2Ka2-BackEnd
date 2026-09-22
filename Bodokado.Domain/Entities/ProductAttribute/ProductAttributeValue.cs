@@ -9,7 +9,7 @@ public class ProductAttributeValue : BaseEntity
     public string Value { get; set; } = string.Empty;
 
     public Guid ProductAttributeId { get; set; }
-    public ProductAttribute ProductAttributeI { get; set; } = null!;
+    public ProductAttribute ProductAttribute { get; set; } = null!;
 
     public bool IsActive { get; set; } = true;
 

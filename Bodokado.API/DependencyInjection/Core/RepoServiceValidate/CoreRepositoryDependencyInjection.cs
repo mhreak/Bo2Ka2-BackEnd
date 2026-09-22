@@ -61,9 +61,9 @@ public static class CoreRepositoryDependencyInjection
         services.AddScoped<ICustomerOrderService, CustomerOrderService>();
         services.AddScoped<IProductCatalogService, ProductCatalogService>();
         services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
-        services.AddScoped<IProductPropertyRepository, ProductPropertyRepository>();
-        services.AddScoped<IProductPropertyValueRepository, ProductPropertyValueRepository>();
-        services.AddScoped<IProductProductPropertyRepository, ProductProductPropertyRepository>();
+        services.AddScoped<IProductAttributeRepository, ProductAttributeRepository>();
+        services.AddScoped<IProductAttributeValueRepository, ProductAttributeValueRepository>();
+        services.AddScoped<IProductProductAttributeRepository, ProductProductAttributeRepository>();
 
         return services;
     }

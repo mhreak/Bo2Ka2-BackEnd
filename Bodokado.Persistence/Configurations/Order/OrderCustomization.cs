@@ -77,12 +77,12 @@ public class OrderCustomizationTypeOptionConfiguration : IEntityTypeConfiguratio
         builder.HasOne(x => x.ImageFile)
             .WithMany()
             .HasForeignKey(x => x.ImageFileId)
-            .OnDelete(DeleteBehavior.SetNull);
+            .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasOne(x => x.ThumbnailImageFile)
             .WithMany()
             .HasForeignKey(x => x.ThumbnailImageFileId)
-            .OnDelete(DeleteBehavior.SetNull);
+            .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasIndex(x => x.OrderCustomizationTypeId);
         builder.HasIndex(x => x.ShowOrder);

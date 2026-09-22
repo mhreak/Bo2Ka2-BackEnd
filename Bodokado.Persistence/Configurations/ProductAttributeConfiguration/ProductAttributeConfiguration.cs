@@ -13,6 +13,7 @@ public class ProductAttributeConfiguration : IEntityTypeConfiguration<ProductAtt
         builder.HasKey(p => p.Id);
 
         builder.Property(p => p.Name).IsRequired().HasMaxLength(150);
+
         builder.Property(p => p.IsDeleted).IsRequired().HasDefaultValue(false);
         builder.HasQueryFilter(p => !p.IsDeleted);
 
