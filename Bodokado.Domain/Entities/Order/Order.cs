@@ -1,4 +1,5 @@
 using Bodokado.Domain.Common;
+using Bodokado.Domain.Entities.Discounts;
 using Bodokado.Domain.Entities.Locations;
 using Bodokado.Domain.Entities.Shops;
 using Bodokado.Domain.Entities.Users;
@@ -27,6 +28,10 @@ public class Order : BaseEntity
     public decimal? Latitude { get; set; }
     public decimal? Longitude { get; set; }
 
+    // روی Order.cs
+    public Guid? DiscountCodeId { get; set; }
+    public DiscountCode? DiscountCode { get; set; }
+
     // ارسال و زمان
     public ShippingMethod ShippingMethod { get; set; } = ShippingMethod.Normal;
     public DateTime? DeliveryDate { get; set; }
@@ -51,7 +56,6 @@ public class Order : BaseEntity
     public decimal PackagingCost { get; set; }
     public decimal DiscountAmount { get; set; }
     public bool ApplyDiscountCode { get; set; }
-    public string? DiscountCode { get; set; }
     public decimal FinalAmount { get; set; }
 
     // پرداخت

@@ -22,6 +22,10 @@ public class ProductAttributeConfiguration : IEntityTypeConfiguration<ProductAtt
             .HasForeignKey(p => p.ProductCategoryId)
             .OnDelete(DeleteBehavior.SetNull);
 
+        builder.Property(p => p.UseForProductVariants)
+            .IsRequired()
+            .HasDefaultValue(false);
+
         builder.HasIndex(p => p.ProductCategoryId);
         builder.HasIndex(p => p.SortOrder);
     }

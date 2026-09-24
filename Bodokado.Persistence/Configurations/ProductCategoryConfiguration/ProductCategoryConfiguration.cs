@@ -9,7 +9,7 @@ public class ProductCategoryConfiguration : IEntityTypeConfiguration<ProductCate
 {
     public void Configure(EntityTypeBuilder<ProductCategory> builder)
     {
-        builder.ToTable("ProductCategory");
+        builder.ToTable("ShopProduct_ProductCategory");
         builder.HasKey(c => c.Id);
 
         builder.Property(c => c.Name).IsRequired().HasMaxLength(150);

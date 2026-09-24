@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bodokado.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260921123344_AddShopRatingOption")]
-    partial class AddShopRatingOption
+    [Migration("20260924161735_AddBackendDomainTablesFromSpec")]
+    partial class AddBackendDomainTablesFromSpec
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,221 @@ namespace Bodokado.Persistence.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Bodokado.Domain.Entities.Delivery.DeliveryServiceProvider", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ExcludedCityIds")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<string>("ExcludedProvinceIds")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<string>("IncludedCityIds")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<string>("IncludedProvinceIds")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<Guid?>("LogoFileId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ServiceProviderName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsActive");
+
+                    b.HasIndex("LogoFileId");
+
+                    b.ToTable("DeliveryServiceProvider", (string)null);
+                });
+
+            modelBuilder.Entity("Bodokado.Domain.Entities.Delivery.ShopOrderDeliveryRule", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("DeliveryServiceProviderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ExcludedCityIds")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<string>("ExcludedProvinceIds")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<string>("IncludedCityIds")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<string>("IncludedProvinceIds")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<Guid>("ShopId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DeliveryServiceProviderId");
+
+                    b.HasIndex("IsActive");
+
+                    b.HasIndex("ShopId");
+
+                    b.ToTable("ShopOrderDeliveryRule", (string)null);
+                });
+
+            modelBuilder.Entity("Bodokado.Domain.Entities.Discounts.DiscountCode", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("Discount")
+                        .HasColumnType("int");
+
+                    b.Property<short>("DiscountCodeType")
+                        .HasColumnType("smallint");
+
+                    b.Property<short>("DiscountType")
+                        .HasColumnType("smallint");
+
+                    b.Property<string>("ExcludedOrganizationIds")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<string>("ExcludedProductCategoryIds")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<string>("ExcludedProductIds")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<string>("ExcludedShopIds")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<DateTime?>("FinishDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("IncludedOrganizationIds")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<string>("IncludedProductCategoryIds")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<string>("IncludedProductIds")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<string>("IncludedShopIds")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<bool>("IsActiveByAdmin")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<Guid?>("OrderCustomizationTypeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("StartDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.HasIndex("FinishDateTime");
+
+                    b.HasIndex("IsActive");
+
+                    b.HasIndex("IsActiveByAdmin");
+
+                    b.HasIndex("OrderCustomizationTypeId");
+
+                    b.HasIndex("StartDateTime");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("DiscountCode", (string)null);
+                });
 
             modelBuilder.Entity("Bodokado.Domain.Entities.FileAsset", b =>
                 {
@@ -418,9 +633,8 @@ namespace Bodokado.Persistence.Migrations
                         .HasPrecision(18)
                         .HasColumnType("decimal(18,0)");
 
-                    b.Property<string>("DiscountCode")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<Guid?>("DiscountCodeId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("FinalAmount")
                         .HasPrecision(18)
@@ -531,6 +745,8 @@ namespace Bodokado.Persistence.Migrations
 
                     b.HasIndex("CustomerUserId");
 
+                    b.HasIndex("DiscountCodeId");
+
                     b.HasIndex("OrderNumber")
                         .IsUnique();
 
@@ -596,6 +812,250 @@ namespace Bodokado.Persistence.Migrations
                     b.ToTable("OrderItem", (string)null);
                 });
 
+            modelBuilder.Entity("Bodokado.Domain.Entities.Organizations.Organization", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<Guid?>("LogoFileId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("OrganizationName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsActive");
+
+                    b.HasIndex("LogoFileId");
+
+                    b.HasIndex("OrganizationName");
+
+                    b.ToTable("Organization", (string)null);
+                });
+
+            modelBuilder.Entity("Bodokado.Domain.Entities.Organizations.OrganizationPersonnelCategory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CategoryName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<Guid>("OrganizationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsActive");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.ToTable("OrganizationPersonnelCategory", (string)null);
+                });
+
+            modelBuilder.Entity("Bodokado.Domain.Entities.Organizations.OrganizationalGiftCampaign", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CampaignName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("FinishDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActiveByAdmin")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<short?>("MessageType")
+                        .HasColumnType("smallint");
+
+                    b.Property<short>("OccasionType")
+                        .HasColumnType("smallint");
+
+                    b.Property<Guid>("OrganizationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("OrganizationalMessage")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<bool>("OrganizationalMessageEnabled")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<Guid?>("OrganizationalMessageFileId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("StartDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FinishDateTime");
+
+                    b.HasIndex("IsActiveByAdmin");
+
+                    b.HasIndex("OccasionType");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.HasIndex("OrganizationalMessageFileId");
+
+                    b.HasIndex("StartDateTime");
+
+                    b.ToTable("OrganizationalGiftCampaign", (string)null);
+                });
+
+            modelBuilder.Entity("Bodokado.Domain.Entities.Organizations.OrganizationalGiftCampaignConstraint", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Constraint")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<short>("ConstraintType")
+                        .HasColumnType("smallint");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<Guid?>("OrganizationPersonnelCategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("OrganizationalGiftCampaignId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ConstraintType");
+
+                    b.HasIndex("OrganizationPersonnelCategoryId");
+
+                    b.HasIndex("OrganizationalGiftCampaignId");
+
+                    b.ToTable("OrganizationalGiftCampaignConstraint", (string)null);
+                });
+
+            modelBuilder.Entity("Bodokado.Domain.Entities.Organizations.UserOrganization", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("OrganizationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<Guid?>("OrganizationPersonnelCategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("UserId", "OrganizationId");
+
+                    b.HasIndex("IsActive");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.HasIndex("OrganizationPersonnelCategoryId");
+
+                    b.ToTable("User_Organization", (string)null);
+                });
+
+            modelBuilder.Entity("Bodokado.Domain.Entities.Organizations.UserOrganizationalGiftCampaign", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("OrganizationalGiftCampaignId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("GiftCode")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nchar(10)")
+                        .IsFixedLength();
+
+                    b.HasKey("UserId", "OrganizationalGiftCampaignId");
+
+                    b.HasIndex("GiftCode")
+                        .IsUnique();
+
+                    b.HasIndex("OrganizationalGiftCampaignId");
+
+                    b.ToTable("User_OrganizationalGiftCampaign", (string)null);
+                });
+
             modelBuilder.Entity("Bodokado.Domain.Entities.Products.Product", b =>
                 {
                     b.Property<Guid>("Id")
@@ -628,9 +1088,10 @@ namespace Bodokado.Persistence.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("ImageFileIds")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("IsActiveByAdmin")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -647,10 +1108,18 @@ namespace Bodokado.Persistence.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<Guid?>("MainImageFileId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
+
+                    b.Property<short>("ProductType")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("smallint")
+                        .HasDefaultValue((short)1);
 
                     b.Property<Guid>("ShopId")
                         .HasColumnType("uniqueidentifier");
@@ -677,7 +1146,11 @@ namespace Bodokado.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("IsActiveByAdmin");
+
                     b.HasIndex("IsSpecial");
+
+                    b.HasIndex("MainImageFileId");
 
                     b.HasIndex("ShopId");
 
@@ -687,7 +1160,7 @@ namespace Bodokado.Persistence.Migrations
 
                     b.HasIndex("ShopId", "Name");
 
-                    b.ToTable("Product", (string)null);
+                    b.ToTable("ShopProduct", (string)null);
                 });
 
             modelBuilder.Entity("Bodokado.Domain.Entities.Products.ProductAttribute", b =>
@@ -720,6 +1193,11 @@ namespace Bodokado.Persistence.Migrations
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("UseForProductVariants")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.HasKey("Id");
 
@@ -818,7 +1296,7 @@ namespace Bodokado.Persistence.Migrations
 
                     b.HasIndex("ParentCategoryId");
 
-                    b.ToTable("ProductCategory", (string)null);
+                    b.ToTable("ShopProduct_ProductCategory", (string)null);
                 });
 
             modelBuilder.Entity("Bodokado.Domain.Entities.Products.ProductProductAttribute", b =>
@@ -859,6 +1337,112 @@ namespace Bodokado.Persistence.Migrations
                     b.ToTable("Product_ProductAttribute", (string)null);
                 });
 
+            modelBuilder.Entity("Bodokado.Domain.Entities.Products.ShopProductVariation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ShopProductVariation", (string)null);
+                });
+
+            modelBuilder.Entity("Bodokado.Domain.Entities.Products.ShopProductVariationProductAttributeValue", b =>
+                {
+                    b.Property<Guid>("ShopProductVariationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ProductAttributeValueId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("ShopProductVariationId", "ProductAttributeValueId");
+
+                    b.HasIndex("ProductAttributeValueId");
+
+                    b.ToTable("ShopProductVariation_ProductAttributeValue", (string)null);
+                });
+
+            modelBuilder.Entity("Bodokado.Domain.Entities.Ratings.EntityRating", b =>
+                {
+                    b.Property<Guid>("EntityId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("RatingOptionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("InsertDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double>("Score")
+                        .HasColumnType("float");
+
+                    b.HasKey("EntityId", "RatingOptionId");
+
+                    b.HasIndex("EntityId");
+
+                    b.HasIndex("InsertDateTime");
+
+                    b.HasIndex("RatingOptionId");
+
+                    b.ToTable("EntityRating", (string)null);
+                });
+
+            modelBuilder.Entity("Bodokado.Domain.Entities.ShopRatingOptions.ShopRatingOption", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("OptionName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("ShopCategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<short>("ShowOrder")
+                        .HasColumnType("smallint");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ShopCategoryId");
+
+                    b.ToTable("ShopRatingOption");
+                });
+
             modelBuilder.Entity("Bodokado.Domain.Entities.Shops.Shop", b =>
                 {
                     b.Property<Guid>("Id")
@@ -883,6 +1467,11 @@ namespace Bodokado.Persistence.Migrations
                     b.Property<int>("CurrentStep")
                         .HasColumnType("int");
 
+                    b.Property<bool>("EnableStories")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
                     b.Property<string>("FirstName")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -904,6 +1493,9 @@ namespace Bodokado.Persistence.Migrations
                         .HasPrecision(9, 6)
                         .HasColumnType("decimal(9,6)");
 
+                    b.Property<Guid?>("ManagerUserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("NationalCode")
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
@@ -923,7 +1515,7 @@ namespace Bodokado.Persistence.Migrations
                         .HasMaxLength(26)
                         .HasColumnType("nvarchar(26)");
 
-                    b.Property<Guid?>("ShopCategoryId")
+                    b.Property<Guid>("ShopCategoryId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ShopName")
@@ -953,6 +1545,8 @@ namespace Bodokado.Persistence.Migrations
                     b.HasIndex("CityId");
 
                     b.HasIndex("CoverFileId");
+
+                    b.HasIndex("ManagerUserId");
 
                     b.HasIndex("NationalCode");
 
@@ -1005,6 +1599,39 @@ namespace Bodokado.Persistence.Migrations
                     b.ToTable("ShopCategory", (string)null);
                 });
 
+            modelBuilder.Entity("Bodokado.Domain.Entities.Shops.ShopProductImage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("FileId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FileId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ShopProductImage", (string)null);
+                });
+
             modelBuilder.Entity("Bodokado.Domain.Entities.Shops.ShopWorkingHour", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1045,6 +1672,86 @@ namespace Bodokado.Persistence.Migrations
                     b.ToTable("ShopWorkingHour", (string)null);
                 });
 
+            modelBuilder.Entity("Bodokado.Domain.Entities.Stories.Story", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("DisabledByAdmin")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<bool>("IsActiveByAdmin")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<bool>("IsPublished")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<Guid?>("MediaFileId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("PublishDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ShopId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<short>("ShowOrder")
+                        .HasColumnType("smallint");
+
+                    b.Property<short>("ShowPlace")
+                        .HasColumnType("smallint");
+
+                    b.Property<short>("StoryButtonClickActionType")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("smallint")
+                        .HasDefaultValue((short)0);
+
+                    b.Property<Guid?>("StoryButtonClickEntityId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("StoryButtonText")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DisabledByAdmin");
+
+                    b.HasIndex("IsActiveByAdmin");
+
+                    b.HasIndex("IsPublished");
+
+                    b.HasIndex("MediaFileId");
+
+                    b.HasIndex("PublishDateTime");
+
+                    b.HasIndex("ShopId");
+
+                    b.HasIndex("ShowOrder");
+
+                    b.HasIndex("ShowPlace");
+
+                    b.ToTable("Story", (string)null);
+                });
+
             modelBuilder.Entity("Bodokado.Domain.Entities.Users.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1053,6 +1760,9 @@ namespace Bodokado.Persistence.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
+
+                    b.Property<DateTime?>("BirthDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -1069,22 +1779,35 @@ namespace Bodokado.Persistence.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<short?>("Gender")
+                        .HasColumnType("smallint");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Mobile")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -1106,6 +1829,10 @@ namespace Bodokado.Persistence.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ShamsiBirthDate")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -1116,7 +1843,18 @@ namespace Bodokado.Persistence.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<long>("WalletCredit")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasDefaultValue(0L);
+
                     b.HasKey("Id");
+
+                    b.HasIndex("IsActive");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("Mobile");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -1127,6 +1865,45 @@ namespace Bodokado.Persistence.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("Bodokado.Domain.Entities.Wallet.WalletTransactionLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<long>("Amount")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<DateTime>("TransactionDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TransactionDateTime");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("WalletTransactionLog", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
@@ -1260,6 +2037,52 @@ namespace Bodokado.Persistence.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Bodokado.Domain.Entities.Delivery.DeliveryServiceProvider", b =>
+                {
+                    b.HasOne("Bodokado.Domain.Entities.FileAsset", "LogoFile")
+                        .WithMany()
+                        .HasForeignKey("LogoFileId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("LogoFile");
+                });
+
+            modelBuilder.Entity("Bodokado.Domain.Entities.Delivery.ShopOrderDeliveryRule", b =>
+                {
+                    b.HasOne("Bodokado.Domain.Entities.Delivery.DeliveryServiceProvider", "DeliveryServiceProvider")
+                        .WithMany()
+                        .HasForeignKey("DeliveryServiceProviderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Bodokado.Domain.Entities.Shops.Shop", "Shop")
+                        .WithMany()
+                        .HasForeignKey("ShopId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DeliveryServiceProvider");
+
+                    b.Navigation("Shop");
+                });
+
+            modelBuilder.Entity("Bodokado.Domain.Entities.Discounts.DiscountCode", b =>
+                {
+                    b.HasOne("Bodokado.Domain.Entities.Order.OrderCustomizationType", "OrderCustomizationType")
+                        .WithMany()
+                        .HasForeignKey("OrderCustomizationTypeId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Bodokado.Domain.Entities.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("OrderCustomizationType");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Bodokado.Domain.Entities.Locations.City", b =>
                 {
                     b.HasOne("Bodokado.Domain.Entities.Locations.Country", "Country")
@@ -1376,6 +2199,11 @@ namespace Bodokado.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Bodokado.Domain.Entities.Discounts.DiscountCode", "DiscountCode")
+                        .WithMany()
+                        .HasForeignKey("DiscountCodeId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.HasOne("Bodokado.Domain.Entities.Shops.Shop", "Shop")
                         .WithMany()
                         .HasForeignKey("ShopId")
@@ -1385,6 +2213,8 @@ namespace Bodokado.Persistence.Migrations
                     b.Navigation("City");
 
                     b.Navigation("CustomerUser");
+
+                    b.Navigation("DiscountCode");
 
                     b.Navigation("Shop");
                 });
@@ -1408,13 +2238,121 @@ namespace Bodokado.Persistence.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("Bodokado.Domain.Entities.Organizations.Organization", b =>
+                {
+                    b.HasOne("Bodokado.Domain.Entities.FileAsset", "LogoFile")
+                        .WithMany()
+                        .HasForeignKey("LogoFileId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("LogoFile");
+                });
+
+            modelBuilder.Entity("Bodokado.Domain.Entities.Organizations.OrganizationPersonnelCategory", b =>
+                {
+                    b.HasOne("Bodokado.Domain.Entities.Organizations.Organization", "Organization")
+                        .WithMany("PersonnelCategories")
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Organization");
+                });
+
+            modelBuilder.Entity("Bodokado.Domain.Entities.Organizations.OrganizationalGiftCampaign", b =>
+                {
+                    b.HasOne("Bodokado.Domain.Entities.Organizations.Organization", "Organization")
+                        .WithMany("GiftCampaigns")
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Bodokado.Domain.Entities.FileAsset", "OrganizationalMessageFile")
+                        .WithMany()
+                        .HasForeignKey("OrganizationalMessageFileId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Organization");
+
+                    b.Navigation("OrganizationalMessageFile");
+                });
+
+            modelBuilder.Entity("Bodokado.Domain.Entities.Organizations.OrganizationalGiftCampaignConstraint", b =>
+                {
+                    b.HasOne("Bodokado.Domain.Entities.Organizations.OrganizationPersonnelCategory", "OrganizationPersonnelCategory")
+                        .WithMany()
+                        .HasForeignKey("OrganizationPersonnelCategoryId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Bodokado.Domain.Entities.Organizations.OrganizationalGiftCampaign", "OrganizationalGiftCampaign")
+                        .WithMany("Constraints")
+                        .HasForeignKey("OrganizationalGiftCampaignId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("OrganizationPersonnelCategory");
+
+                    b.Navigation("OrganizationalGiftCampaign");
+                });
+
+            modelBuilder.Entity("Bodokado.Domain.Entities.Organizations.UserOrganization", b =>
+                {
+                    b.HasOne("Bodokado.Domain.Entities.Organizations.Organization", "Organization")
+                        .WithMany("UserOrganizations")
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Bodokado.Domain.Entities.Organizations.OrganizationPersonnelCategory", "OrganizationPersonnelCategory")
+                        .WithMany()
+                        .HasForeignKey("OrganizationPersonnelCategoryId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Bodokado.Domain.Entities.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Organization");
+
+                    b.Navigation("OrganizationPersonnelCategory");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Bodokado.Domain.Entities.Organizations.UserOrganizationalGiftCampaign", b =>
+                {
+                    b.HasOne("Bodokado.Domain.Entities.Organizations.OrganizationalGiftCampaign", "OrganizationalGiftCampaign")
+                        .WithMany()
+                        .HasForeignKey("OrganizationalGiftCampaignId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Bodokado.Domain.Entities.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("OrganizationalGiftCampaign");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Bodokado.Domain.Entities.Products.Product", b =>
                 {
+                    b.HasOne("Bodokado.Domain.Entities.FileAsset", "MainImageFile")
+                        .WithMany()
+                        .HasForeignKey("MainImageFileId");
+
                     b.HasOne("Bodokado.Domain.Entities.Shops.Shop", "Shop")
                         .WithMany()
                         .HasForeignKey("ShopId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("MainImageFile");
 
                     b.Navigation("Shop");
                 });
@@ -1475,6 +2413,56 @@ namespace Bodokado.Persistence.Migrations
                     b.Navigation("ProductAttribute");
                 });
 
+            modelBuilder.Entity("Bodokado.Domain.Entities.Products.ShopProductVariation", b =>
+                {
+                    b.HasOne("Bodokado.Domain.Entities.Products.Product", "Product")
+                        .WithMany("Variations")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("Bodokado.Domain.Entities.Products.ShopProductVariationProductAttributeValue", b =>
+                {
+                    b.HasOne("Bodokado.Domain.Entities.Products.ProductAttributeValue", "ProductAttributeValue")
+                        .WithMany()
+                        .HasForeignKey("ProductAttributeValueId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Bodokado.Domain.Entities.Products.ShopProductVariation", "ShopProductVariation")
+                        .WithMany("AttributeValues")
+                        .HasForeignKey("ShopProductVariationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProductAttributeValue");
+
+                    b.Navigation("ShopProductVariation");
+                });
+
+            modelBuilder.Entity("Bodokado.Domain.Entities.Ratings.EntityRating", b =>
+                {
+                    b.HasOne("Bodokado.Domain.Entities.ShopRatingOptions.ShopRatingOption", "RatingOption")
+                        .WithMany()
+                        .HasForeignKey("RatingOptionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("RatingOption");
+                });
+
+            modelBuilder.Entity("Bodokado.Domain.Entities.ShopRatingOptions.ShopRatingOption", b =>
+                {
+                    b.HasOne("Bodokado.Domain.Entities.Shops.ShopCategory", "ShopCategory")
+                        .WithMany()
+                        .HasForeignKey("ShopCategoryId");
+
+                    b.Navigation("ShopCategory");
+                });
+
             modelBuilder.Entity("Bodokado.Domain.Entities.Shops.Shop", b =>
                 {
                     b.HasOne("Bodokado.Domain.Entities.FileAsset", "AvatarFile")
@@ -1492,10 +2480,16 @@ namespace Bodokado.Persistence.Migrations
                         .HasForeignKey("CoverFileId")
                         .OnDelete(DeleteBehavior.NoAction);
 
+                    b.HasOne("Bodokado.Domain.Entities.Users.User", "ManagerUser")
+                        .WithMany()
+                        .HasForeignKey("ManagerUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Bodokado.Domain.Entities.Shops.ShopCategory", "ShopCategory")
                         .WithMany("Shops")
                         .HasForeignKey("ShopCategoryId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Bodokado.Domain.Entities.Users.User", "User")
                         .WithOne("Shop")
@@ -1509,9 +2503,30 @@ namespace Bodokado.Persistence.Migrations
 
                     b.Navigation("CoverFile");
 
+                    b.Navigation("ManagerUser");
+
                     b.Navigation("ShopCategory");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Bodokado.Domain.Entities.Shops.ShopProductImage", b =>
+                {
+                    b.HasOne("Bodokado.Domain.Entities.FileAsset", "File")
+                        .WithMany()
+                        .HasForeignKey("FileId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Bodokado.Domain.Entities.Products.Product", "Product")
+                        .WithMany("Images")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("File");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Bodokado.Domain.Entities.Shops.ShopWorkingHour", b =>
@@ -1523,6 +2538,33 @@ namespace Bodokado.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Shop");
+                });
+
+            modelBuilder.Entity("Bodokado.Domain.Entities.Stories.Story", b =>
+                {
+                    b.HasOne("Bodokado.Domain.Entities.FileAsset", "MediaFile")
+                        .WithMany()
+                        .HasForeignKey("MediaFileId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Bodokado.Domain.Entities.Shops.Shop", "Shop")
+                        .WithMany()
+                        .HasForeignKey("ShopId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("MediaFile");
+
+                    b.Navigation("Shop");
+                });
+
+            modelBuilder.Entity("Bodokado.Domain.Entities.Wallet.WalletTransactionLog", b =>
+                {
+                    b.HasOne("Bodokado.Domain.Entities.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -1603,9 +2645,27 @@ namespace Bodokado.Persistence.Migrations
                     b.Navigation("Items");
                 });
 
+            modelBuilder.Entity("Bodokado.Domain.Entities.Organizations.Organization", b =>
+                {
+                    b.Navigation("GiftCampaigns");
+
+                    b.Navigation("PersonnelCategories");
+
+                    b.Navigation("UserOrganizations");
+                });
+
+            modelBuilder.Entity("Bodokado.Domain.Entities.Organizations.OrganizationalGiftCampaign", b =>
+                {
+                    b.Navigation("Constraints");
+                });
+
             modelBuilder.Entity("Bodokado.Domain.Entities.Products.Product", b =>
                 {
+                    b.Navigation("Images");
+
                     b.Navigation("ProductAttributes");
+
+                    b.Navigation("Variations");
                 });
 
             modelBuilder.Entity("Bodokado.Domain.Entities.Products.ProductAttribute", b =>
@@ -1620,6 +2680,11 @@ namespace Bodokado.Persistence.Migrations
                     b.Navigation("Attributes");
 
                     b.Navigation("Children");
+                });
+
+            modelBuilder.Entity("Bodokado.Domain.Entities.Products.ShopProductVariation", b =>
+                {
+                    b.Navigation("AttributeValues");
                 });
 
             modelBuilder.Entity("Bodokado.Domain.Entities.Shops.Shop", b =>

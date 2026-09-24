@@ -17,4 +17,6 @@ public class ProductListItemDto
     public ProductStatus Status { get; set; }
     public string? PrimaryImagePath { get; set; }
     public DateTime CreatedAt { get; set; }
+    public ProductType ProductType { get; set; }
+    public Guid? MainImageFileId { get; set; }
 }

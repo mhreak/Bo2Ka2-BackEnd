@@ -11,4 +11,6 @@ public class ProductAttributeDto
     public Guid? ProductCategoryId { get; set; }
     public string? ProductCategoryName { get; set; }
     public DateTime CreatedAt { get; set; }
+
+    public bool UseForProductVariants { get; set; }
 }

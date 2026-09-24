@@ -24,7 +24,6 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
         builder.Property(o => o.GiftCardDesignKey).HasMaxLength(100);
         builder.Property(o => o.GiftMessage).HasMaxLength(1000);
         builder.Property(o => o.RecipientName).HasMaxLength(150);
-        builder.Property(o => o.DiscountCode).HasMaxLength(50);
         builder.Property(o => o.RejectionReason).HasMaxLength(1000);
         builder.Property(o => o.ShopNote).HasMaxLength(1000);
 
@@ -59,6 +58,14 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
             .WithOne(i => i.Order)
             .HasForeignKey(i => i.OrderId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasOne(o => o.DiscountCode)
+            .WithMany()
+            .HasForeignKey(o => o.DiscountCodeId)
+            .OnDelete(DeleteBehavior.SetNull)
+            .IsRequired(false);
+
+        builder.HasIndex(o => o.DiscountCodeId);
 
         builder.HasIndex(o => o.OrderNumber).IsUnique();
         builder.HasIndex(o => o.ShopId);

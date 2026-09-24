@@ -8,6 +8,7 @@ using Bodokado.Application.Common.Localization;
 using Bodokado.Application.Common.Pagination;
 using Bodokado.Domain.Entities;
 using Bodokado.Domain.Entities.Products;
+using Bodokado.Domain.Entities.Shops;
 using Bodokado.Domain.Enums;
 
 namespace Bodokado.Application.App.ShopModule.Products.Services;
@@ -31,18 +32,18 @@ public class ProductService : IProductService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<PagedResult<ProductListItemDto>> GetMyProductsAsync(Guid userId, ProductListQuery query, CancellationToken ct = default)
+    public async Task<PagedResult<ProductListItemDto>> GetMyProductsAsync(
+        Guid userId, ProductListQuery query, CancellationToken ct = default)
     {
         var shop = await GetApprovedShopAsync(userId, ct);
         var paged = await _productRepository.GetPagedForShopAsync(shop.Id, query, ct);
 
         var allFileIds = paged.Items
-            .SelectMany(p => p.ImageFileIds ?? Enumerable.Empty<Guid>())
+            .SelectMany(p => CollectImageFileIds(p))
             .Distinct()
             .ToList();
 
         var fileMap = await LoadFileMapAsync(allFileIds);
-
         var items = paged.Items.Select(p => MapListItem(p, fileMap)).ToList();
         return PagedResult<ProductListItemDto>.Create(items, query, paged.TotalCount);
     }
@@ -53,16 +54,18 @@ public class ProductService : IProductService
         var product = await _productRepository.GetByIdWithDetailsForShopAsync(productId, shop.Id, ct)
             ?? throw new NotFoundException(MessageKeys.ProductNotFound, "product_not_found");
 
-        var fileMap = await LoadFileMapAsync(product.ImageFileIds);
+        var fileMap = await LoadFileMapAsync(CollectImageFileIds(product));
         return MapDetail(product, fileMap);
     }
 
-    public async Task<ProductDetailDto> CreateAsync(Guid userId, CreateProductRequestDto request, CancellationToken ct = default)
+    public async Task<ProductDetailDto> CreateAsync(
+        Guid userId, CreateProductRequestDto request, CancellationToken ct = default)
     {
         var shop = await GetApprovedShopAsync(userId, ct);
         ValidatePricing(request.IsDiscountEnabled, request.BasePrice, request.DiscountPrice);
 
-        var imageFileIds = await ValidateAndNormalizeImageIdsAsync(request.ImageFileIds, userId);
+        var mainImageId = await ValidateFileOwnedByUserAsync(request.MainImageFileId, userId);
+        var extraImageIds = await ValidateAndNormalizeImageIdsAsync(request.ImageFileIds, userId);
 
         var product = new Product
         {
@@ -82,10 +85,25 @@ public class ProductService : IProductService
             HasSpecialPackaging = request.HasSpecialPackaging,
             IsSpecial = request.IsSpecial,
             Status = request.Publish ? ProductStatus.Published : ProductStatus.Draft,
-            ImageFileIds = imageFileIds,
+            ProductType = request.ProductType,
+            MainImageFileId = mainImageId,
+            IsActiveByAdmin = true, // فقط ادمین عوض می‌کند
             CreatedAt = DateTime.UtcNow
         };
 
+        // تصاویر فرعی
+        var sort = 0;
+        foreach (var fileId in extraImageIds)
+        {
+            product.Images.Add(new ShopProductImage
+            {
+                Id = Guid.NewGuid(),
+                ProductId = product.Id,
+                FileId = fileId,
+                SortOrder = sort++,
+                CreatedAt = DateTime.UtcNow
+            });
+        }
 
         await _productRepository.AddAsync(product);
         await _unitOfWork.SaveChangesAsync(ct);
@@ -93,17 +111,21 @@ public class ProductService : IProductService
         var created = await _productRepository.GetByIdWithDetailsForShopAsync(product.Id, shop.Id, ct)
             ?? throw new NotFoundException(MessageKeys.ProductNotFound, "product_not_found");
 
-        var fileMap = await LoadFileMapAsync(created.ImageFileIds);
+        var fileMap = await LoadFileMapAsync(CollectImageFileIds(created));
         return MapDetail(created, fileMap);
     }
 
-    public async Task<ProductDetailDto> UpdateAsync(Guid userId, Guid productId, UpdateProductRequestDto request, CancellationToken ct = default)
+    public async Task<ProductDetailDto> UpdateAsync(
+        Guid userId, Guid productId, UpdateProductRequestDto request, CancellationToken ct = default)
     {
         var shop = await GetApprovedShopAsync(userId, ct);
         var product = await _productRepository.GetByIdWithDetailsForShopAsync(productId, shop.Id, ct)
             ?? throw new NotFoundException(MessageKeys.ProductNotFound, "product_not_found");
 
         ValidatePricing(request.IsDiscountEnabled, request.BasePrice, request.DiscountPrice);
+
+        var mainImageId = await ValidateFileOwnedByUserAsync(request.MainImageFileId, userId);
+        var extraImageIds = await ValidateAndNormalizeImageIdsAsync(request.ImageFileIds, userId);
 
         product.Name = request.Name.Trim();
         product.Description = string.IsNullOrWhiteSpace(request.Description) ? null : request.Description.Trim();
@@ -119,10 +141,30 @@ public class ProductService : IProductService
         product.HasSpecialPackaging = request.HasSpecialPackaging;
         product.IsSpecial = request.IsSpecial;
         product.Status = request.Publish ? ProductStatus.Published : ProductStatus.Draft;
-        product.ImageFileIds = await ValidateAndNormalizeImageIdsAsync(request.ImageFileIds, userId);
+        product.ProductType = request.ProductType;
+        product.MainImageFileId = mainImageId;
         product.UpdatedAt = DateTime.UtcNow;
+        // IsActiveByAdmin را از request نخوان
 
-        
+        // جایگزینی تصاویر فرعی
+        foreach (var old in product.Images.ToList())
+        {
+            old.IsDeleted = true;
+            old.UpdatedAt = DateTime.UtcNow;
+        }
+
+        var sort = 0;
+        foreach (var fileId in extraImageIds)
+        {
+            product.Images.Add(new ShopProductImage
+            {
+                Id = Guid.NewGuid(),
+                ProductId = product.Id,
+                FileId = fileId,
+                SortOrder = sort++,
+                CreatedAt = DateTime.UtcNow
+            });
+        }
 
         _productRepository.Update(product);
         await _unitOfWork.SaveChangesAsync(ct);
@@ -130,7 +172,7 @@ public class ProductService : IProductService
         var updated = await _productRepository.GetByIdWithDetailsForShopAsync(product.Id, shop.Id, ct)
             ?? throw new NotFoundException(MessageKeys.ProductNotFound, "product_not_found");
 
-        var fileMap = await LoadFileMapAsync(updated.ImageFileIds);
+        var fileMap = await LoadFileMapAsync(CollectImageFileIds(updated));
         return MapDetail(updated, fileMap);
     }
 
@@ -146,15 +188,15 @@ public class ProductService : IProductService
         await _unitOfWork.SaveChangesAsync(ct);
     }
 
+    // ───────────── Helpers ─────────────
+
     private async Task<Domain.Entities.Shops.Shop> GetApprovedShopAsync(Guid userId, CancellationToken ct)
     {
         var shop = await _shopRepository.GetByUserIdAsync(userId, ct);
         if (shop is null)
             throw new BadRequestException(MessageKeys.ShopNotFound, "shop_not_found");
-
         if (shop.VerificationStatus != ShopVerificationStatus.Approved)
             throw new BadRequestException(MessageKeys.ShopNotApproved, "shop_not_approved");
-
         return shop;
     }
 
@@ -167,15 +209,25 @@ public class ProductService : IProductService
         {
             if (discountPrice is null || discountPrice <= 0)
                 throw new BadRequestException(MessageKeys.ProductDiscountPriceRequired, "product_discount_price_required");
-
             if (discountPrice >= basePrice)
                 throw new BadRequestException(MessageKeys.ProductDiscountPriceInvalid, "product_discount_price_invalid");
         }
     }
 
-    /// <summary>
-    /// شناسه‌های فایل از API عمومی آپلود را اعتبارسنجی می‌کند (وجود + مالکیت کاربر).
-    /// </summary>
+    private async Task<Guid?> ValidateFileOwnedByUserAsync(Guid? fileId, Guid userId)
+    {
+        if (!fileId.HasValue)
+            return null;
+
+        var file = await _fileAssetRepository.GetByIdAsync(fileId.Value);
+        if (file is null || file.IsDeleted)
+            throw new BadRequestException(MessageKeys.FileNotFound, "file_not_found");
+        if (file.UploaderId != userId)
+            throw new BadRequestException(MessageKeys.FileNotOwnedByUser, "file_not_owned");
+
+        return fileId;
+    }
+
     private async Task<List<Guid>> ValidateAndNormalizeImageIdsAsync(List<Guid>? imageFileIds, Guid userId)
     {
         if (imageFileIds is null || imageFileIds.Count == 0)
@@ -191,14 +243,23 @@ public class ProductService : IProductService
             var file = await _fileAssetRepository.GetByIdAsync(fileId);
             if (file is null || file.IsDeleted)
                 throw new BadRequestException(MessageKeys.FileNotFound, "file_not_found");
-
             if (file.UploaderId != userId)
                 throw new BadRequestException(MessageKeys.FileNotOwnedByUser, "file_not_owned");
-
             result.Add(fileId);
         }
-
         return result;
+    }
+
+    private static IEnumerable<Guid> CollectImageFileIds(Product p)
+    {
+        if (p.MainImageFileId.HasValue)
+            yield return p.MainImageFileId.Value;
+
+        if (p.Images is null)
+            yield break;
+
+        foreach (var img in p.Images.Where(i => !i.IsDeleted))
+            yield return img.FileId;
     }
 
     private async Task<Dictionary<Guid, FileAsset>> LoadFileMapAsync(IEnumerable<Guid>? ids)
@@ -213,11 +274,8 @@ public class ProductService : IProductService
             if (file is not null && !file.IsDeleted)
                 map[id] = file;
         }
-
         return map;
     }
-
-    
 
     private static decimal GetEffectivePrice(Product p)
         => p.IsDiscountEnabled && p.DiscountPrice.HasValue ? p.DiscountPrice.Value : p.BasePrice;
@@ -225,8 +283,14 @@ public class ProductService : IProductService
     private static ProductListItemDto MapListItem(Product p, Dictionary<Guid, FileAsset> fileMap)
     {
         string? primaryPath = null;
-        if (p.ImageFileIds is { Count: > 0 } && fileMap.TryGetValue(p.ImageFileIds[0], out var primaryFile))
-            primaryPath = primaryFile.Path;
+        if (p.MainImageFileId.HasValue && fileMap.TryGetValue(p.MainImageFileId.Value, out var mainFile))
+            primaryPath = mainFile.Path;
+        else if (p.Images is { Count: > 0 })
+        {
+            var first = p.Images.Where(i => !i.IsDeleted).OrderBy(i => i.SortOrder).FirstOrDefault();
+            if (first is not null && fileMap.TryGetValue(first.FileId, out var f))
+                primaryPath = f.Path;
+        }
 
         return new ProductListItemDto
         {
@@ -241,6 +305,7 @@ public class ProductService : IProductService
             IsSpecial = p.IsSpecial,
             SoldCount = p.SoldCount,
             Status = p.Status,
+            ProductType = p.ProductType,
             PrimaryImagePath = primaryPath,
             CreatedAt = p.CreatedAt
         };
@@ -249,18 +314,31 @@ public class ProductService : IProductService
     private static ProductDetailDto MapDetail(Product p, Dictionary<Guid, FileAsset> fileMap)
     {
         var images = new List<ProductImageDto>();
-        var order = 0;
-        foreach (var fileId in p.ImageFileIds ?? Enumerable.Empty<Guid>())
+
+        if (p.MainImageFileId.HasValue)
         {
-            fileMap.TryGetValue(fileId, out var file);
+            fileMap.TryGetValue(p.MainImageFileId.Value, out var main);
             images.Add(new ProductImageDto
             {
-                FileAssetId = fileId,
-                Path = file?.Path,
-                SortOrder = order,
-                IsPrimary = order == 0
+                FileAssetId = p.MainImageFileId.Value,
+                Path = main?.Path,
+                SortOrder = -1,
+                IsPrimary = true
             });
-            order++;
+        }
+
+        foreach (var img in (p.Images ?? new List<ShopProductImage>())
+                     .Where(i => !i.IsDeleted)
+                     .OrderBy(i => i.SortOrder))
+        {
+            fileMap.TryGetValue(img.FileId, out var file);
+            images.Add(new ProductImageDto
+            {
+                FileAssetId = img.FileId,
+                Path = file?.Path,
+                SortOrder = img.SortOrder,
+                IsPrimary = false
+            });
         }
 
         return new ProductDetailDto
@@ -284,8 +362,9 @@ public class ProductService : IProductService
             IsSpecial = p.IsSpecial,
             SoldCount = p.SoldCount,
             Status = p.Status,
+            ProductType = p.ProductType,
+            MainImageFileId = p.MainImageFileId,
             Images = images,
-
             CreatedAt = p.CreatedAt,
             UpdatedAt = p.UpdatedAt
         };

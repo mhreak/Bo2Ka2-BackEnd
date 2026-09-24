@@ -1,3 +1,5 @@
+using Bodokado.Domain.Enums;
+
 namespace Bodokado.Application.App.ShopModule.Products.DTOs;
 
 public class UpdateProductRequestDto
@@ -24,4 +26,9 @@ public class UpdateProductRequestDto
 
     /// <summary>لیست کامل شناسه فایل‌های تصویر (ترتیب = SortOrder). تصاویر قبلی که در لیست نباشند حذف می‌شوند.</summary>
     public List<Guid> ImageFileIds { get; set; } = new();
+
+    // CreateProductRequestDto / UpdateProductRequestDto
+    public Guid? MainImageFileId { get; set; }
+    public ProductType ProductType { get; set; } = ProductType.Simple;
+    // IsActiveByAdmin نگذار
 }

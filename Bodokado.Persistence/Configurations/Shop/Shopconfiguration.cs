@@ -32,7 +32,8 @@ public class ShopConfiguration : IEntityTypeConfiguration<Shop>
         builder.HasOne(s => s.ShopCategory)
             .WithMany(c => c.Shops)
             .HasForeignKey(s => s.ShopCategoryId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Restrict)
+            .IsRequired();
 
 
         builder.HasOne(s => s.City)
@@ -49,6 +50,19 @@ public class ShopConfiguration : IEntityTypeConfiguration<Shop>
             .WithMany()
             .HasForeignKey(s => s.CoverFileId)
             .OnDelete(DeleteBehavior.NoAction);
+
+        builder.Property(s => s.EnableStories)
+            .IsRequired()
+            .HasDefaultValue(true);
+
+        builder.HasOne(s => s.ManagerUser)
+        .WithMany()
+        .HasForeignKey(s => s.ManagerUserId)
+        .OnDelete(DeleteBehavior.Restrict)
+        .IsRequired(false);
+
+        builder.HasIndex(s => s.ManagerUserId);
+
 
         builder.HasIndex(s => s.UserId).IsUnique();
         builder.HasIndex(s => s.NationalCode);

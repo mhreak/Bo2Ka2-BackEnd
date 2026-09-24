@@ -45,7 +45,7 @@ public class CustomerOrderService : ICustomerOrderService
         foreach (var pid in productIds)
         {
             var p = await _productRepository.GetByIdAsync(pid);
-            if (p is null || p.IsDeleted || p.Status != ProductStatus.Published)
+            if (p is null || p.IsDeleted || p.Status != ProductStatus.Published || !p.IsActiveByAdmin)
                 throw new BadRequestException(MessageKeys.ProductNotFound, "product_not_found");
             products.Add(p);
         }
@@ -81,7 +81,8 @@ public class CustomerOrderService : ICustomerOrderService
                 Id = Guid.NewGuid(),
                 ProductId = product.Id,
                 ProductName = product.Name,
-                ProductImageFileId = product.ImageFileIds?.FirstOrDefault(),
+                // تصویر اصلی محصول (جایگزین ImageFileIds)
+                ProductImageFileId = product.MainImageFileId,
                 SelectedColor = string.IsNullOrWhiteSpace(reqItem.SelectedColor) ? null : reqItem.SelectedColor.Trim(),
                 UnitPrice = unitPrice,
                 Quantity = reqItem.Quantity,
@@ -94,7 +95,6 @@ public class CustomerOrderService : ICustomerOrderService
             _productRepository.Update(product);
         }
 
-        // هزینه‌های پیش‌فرض (فروشگاه می‌تواند در تایید تغییر دهد)
         decimal shippingCost = request.ShippingMethod == ShippingMethod.Express ? 50000 : 30000;
         decimal packagingCost = request.HasSpecialPackaging ? 25000 : 0;
         decimal discountAmount = 0;
@@ -129,7 +129,6 @@ public class CustomerOrderService : ICustomerOrderService
             PackagingCost = packagingCost,
             DiscountAmount = discountAmount,
             ApplyDiscountCode = !string.IsNullOrWhiteSpace(request.DiscountCode),
-            DiscountCode = NullIfWhite(request.DiscountCode),
             FinalAmount = goodsAmount + shippingCost + packagingCost - discountAmount,
             PaymentMethod = request.PaymentMethod,
             PaymentStatus = PaymentStatus.Pending,
@@ -150,7 +149,8 @@ public class CustomerOrderService : ICustomerOrderService
         return ShopOrderService.MapDetail(created, fileMap);
     }
 
-    public async Task<PagedResult<OrderListItemDto>> GetMyOrdersAsync(Guid customerUserId, PaginationQuery query, CancellationToken ct = default)
+    public async Task<PagedResult<OrderListItemDto>> GetMyOrdersAsync(
+        Guid customerUserId, PaginationQuery query, CancellationToken ct = default)
     {
         var paged = await _orderRepository.GetPagedForCustomerAsync(customerUserId, query, ct);
         var fileMap = await LoadPrimaryImagesAsync(paged.Items);
@@ -197,8 +197,11 @@ public class CustomerOrderService : ICustomerOrderService
     private async Task<Dictionary<Guid, FileAsset>> LoadPrimaryImagesAsync(IEnumerable<Order> orders)
     {
         var ids = orders
-            .SelectMany(o => o.Items.Where(i => !i.IsDeleted && i.ProductImageFileId.HasValue).Select(i => i.ProductImageFileId!.Value))
-            .Distinct().ToList();
+            .SelectMany(o => o.Items
+                .Where(i => !i.IsDeleted && i.ProductImageFileId.HasValue)
+                .Select(i => i.ProductImageFileId!.Value))
+            .Distinct()
+            .ToList();
         return await LoadFilesAsync(ids);
     }
 
@@ -207,7 +210,8 @@ public class CustomerOrderService : ICustomerOrderService
         var ids = order.Items
             .Where(i => !i.IsDeleted && i.ProductImageFileId.HasValue)
             .Select(i => i.ProductImageFileId!.Value)
-            .Distinct().ToList();
+            .Distinct()
+            .ToList();
         return await LoadFilesAsync(ids);
     }
 

@@ -1,3 +1,5 @@
+using Bodokado.Domain.Enums;
+
 namespace Bodokado.Application.App.ShopModule.Products.DTOs;
 
 public class CreateProductRequestDto
@@ -23,7 +25,9 @@ public class CreateProductRequestDto
     /// <summary>اگر true باشد محصول بلافاصله منتشر می‌شود</summary>
     public bool Publish { get; set; }
 
-    /// <summary>شناسه فایل‌های آپلودشده (از قبل با File API آپلود شده‌اند)</summary>
-    public List<Guid> ImageFileIds { get; set; } = new();
+    public Guid? MainImageFileId { get; set; }
+    public List<Guid>? ImageFileIds { get; set; }  // فقط تصاویر فرعی
+    public ProductType ProductType { get; set; } = ProductType.Simple;
+
 
 }

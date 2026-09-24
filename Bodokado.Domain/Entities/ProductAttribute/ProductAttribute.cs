@@ -15,6 +15,8 @@ public class ProductAttribute : BaseEntity
     public Guid? ProductCategoryId { get; set; }
     public ProductCategory? ProductCategory { get; set; }
 
+    public bool UseForProductVariants { get; set; }
+
     public List<ProductAttributeValue> Values { get; set; } = new();
     public List<ProductProductAttribute> ProductAttributeLinks { get; set; } = new();
 }

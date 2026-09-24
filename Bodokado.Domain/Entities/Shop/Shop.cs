@@ -16,8 +16,8 @@ public class Shop : BaseEntity
     public string? NationalCode { get; set; }
     public DateTime? BirthDate { get; set; }
     public string? ShopName { get; set; }
-    public Guid? ShopCategoryId { get; set; }
-    public ShopCategory? ShopCategory { get; set; }
+    public Guid ShopCategoryId { get; set; }
+    public ShopCategory ShopCategory { get; set; }
 
     // Step 2 - جزئیات فروشگاه
     public Guid? AvatarFileId { get; set; }
@@ -42,4 +42,10 @@ public class Shop : BaseEntity
     public string? RejectionReason { get; set; }
     public DateTime? SubmittedAt { get; set; }
     public DateTime? ReviewedAt { get; set; }
+
+
+    public Guid? ManagerUserId { get; set; }
+    public User? ManagerUser { get; set; }
+
+    public bool EnableStories { get; set; } = true;
 }

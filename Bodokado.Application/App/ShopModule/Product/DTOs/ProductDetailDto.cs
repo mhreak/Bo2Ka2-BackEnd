@@ -32,4 +32,7 @@ public class ProductDetailDto
 
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
+
+    public ProductType ProductType { get; set; }
+    public Guid? MainImageFileId { get; set; }
 }
