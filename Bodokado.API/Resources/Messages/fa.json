@@ -161,5 +161,12 @@
 "SettingKeyRequired": "کلید تنظیمات الزامی است.",
 "SettingValueRequired": "مقدار تنظیمات الزامی است.",
 "SettingValueInvalidJson": "مقدار تنظیمات باید JSON معتبر باشد.",
-"SettingNotFound": "تنظیمات یافت نشد."
+"SettingNotFound": "تنظیمات یافت نشد." ,
+"StoriesRetrieved": "لیست استوری‌ها دریافت شد.",
+"StoryRetrieved": "استوری دریافت شد.",
+"StoryCreated": "استوری ایجاد شد.",
+"StoryUpdated": "استوری به‌روزرسانی شد.",
+"StoryDeleted": "استوری حذف شد.",
+"StoryNotFound": "استوری یافت نشد.",
+"StoryButtonTextMaxLength": "متن دکمه استوری حداکثر ۳۰ کاراکتر است."
 }

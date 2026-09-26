@@ -21,6 +21,7 @@ public static class ApiRoutes
         public const string ProductProductProperties = $"{AdminBase}/ProductProductProperties";
         public const string ProductPropertyValues = $"{AdminBase}/ProductPropertyValues";
         public const string Settings = $"{AdminBase}/settings";
+        public const string Stories = $"{AdminBase}/stories";
     }
 
     public static class Shop
@@ -36,6 +37,7 @@ public static class ApiRoutes
         public const string ProductProperties = $"{ShopBase}/ProductProperties";
         public const string ProductPropertyValues = $"{ShopBase}/ProductPropertyValues";
         public const string ProductProductProperties = $"{ShopBase}/ProductProductProperties";
+        public const string Stories = $"{ShopBase}/stories";
     }
 
     public static class Customer
@@ -49,6 +51,7 @@ public static class ApiRoutes
         public const string ProductProperties = $"{CustomerBase}/ProductProperties";
         public const string ProductPropertyValues = $"{CustomerBase}/ProductPropertyValues";
         public const string ProductProductProperties = $"{CustomerBase}/ProductProductProperties";
+        public const string Stories = $"{CustomerBase}/stories";
 
         public const string Settings = $"{CustomerBase}/settings";
     }

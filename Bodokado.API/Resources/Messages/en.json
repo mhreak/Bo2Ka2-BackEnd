@@ -154,5 +154,12 @@
 "SettingKeyRequired": "Setting key is required.",
 "SettingValueRequired": "Setting value is required.",
 "SettingValueInvalidJson": "Setting value must be valid JSON.",
-"SettingNotFound": "Setting not found."
+"SettingNotFound": "Setting not found." ,
+"StoriesRetrieved": "Stories retrieved successfully.",
+"StoryRetrieved": "Story retrieved successfully.",
+"StoryCreated": "Story created successfully.",
+"StoryUpdated": "Story updated successfully.",
+"StoryDeleted": "Story deleted successfully.",
+"StoryNotFound": "Story not found.",
+"StoryButtonTextMaxLength": "Story button text must not exceed 30 characters."
 }

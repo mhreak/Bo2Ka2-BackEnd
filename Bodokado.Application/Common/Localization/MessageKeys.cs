@@ -207,4 +207,14 @@ public const string ProductProductPropertyValueMaxLength = "ProductProductProper
     public const string SettingNotFound = "SettingNotFound";
 
 
+    // Story
+    public const string StoriesRetrieved = "StoriesRetrieved";
+    public const string StoryRetrieved = "StoryRetrieved";
+    public const string StoryCreated = "StoryCreated";
+    public const string StoryUpdated = "StoryUpdated";
+    public const string StoryDeleted = "StoryDeleted";
+    public const string StoryNotFound = "StoryNotFound";
+    public const string StoryButtonTextMaxLength = "StoryButtonTextMaxLength";
+
+
 }
