@@ -29,6 +29,9 @@ using Bodokado.Application.Common.Profile.Interfaces;
 using Bodokado.Application.Common.Profile.Services;
 using Bodokado.Application.App.AdminModule.ProductCatalog.Interfaces;
 using Bodokado.Application.Administrator.ProductCatalog.Services;
+using Bodokado.Application.Administrator.Settings.Interfaces;
+using Bodokado.Application.App.AdminModule.Settings.Services;
+using Bodokado.Persistence.Repositories.Settings;
 
 namespace Bodokado.API.DependencyInjection;
 
@@ -64,6 +67,8 @@ public static class CoreRepositoryDependencyInjection
         services.AddScoped<IProductAttributeRepository, ProductAttributeRepository>();
         services.AddScoped<IProductAttributeValueRepository, ProductAttributeValueRepository>();
         services.AddScoped<IProductProductAttributeRepository, ProductProductAttributeRepository>();
+        services.AddScoped<ISettingRepository, SettingRepository>();
+        services.AddScoped<ISettingService, SettingService>();
 
         return services;
     }

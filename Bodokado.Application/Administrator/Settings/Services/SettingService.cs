@@ -1,16 +1,20 @@
 using System.Text.Json;
+using Bodokado.Application.Administrator.Settings.Interfaces;
 using Bodokado.Application.App.AdminModule.Settings.DTOs;
-using Bodokado.Application.App.AdminModule.Settings;
 using Bodokado.Application.Common.Exceptions;
 using Bodokado.Application.Common.Interfaces;
 using Bodokado.Application.Common.Localization;
 using Bodokado.Domain.Entities.Settings;
-using Bodokado.Application.Administrator.Settings.Interfaces;
 
 namespace Bodokado.Application.App.AdminModule.Settings.Services;
 
 public class SettingService : ISettingService
 {
+    private static readonly JsonSerializerOptions JsonOptions = new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+    };
+
     private readonly ISettingRepository _settingRepository;
     private readonly IUnitOfWork _unitOfWork;
 
@@ -37,13 +41,14 @@ public class SettingService : ISettingService
         if (string.IsNullOrWhiteSpace(request.Key))
             throw new BadRequestException(MessageKeys.SettingKeyRequired, "setting_key_required");
 
-        if (string.IsNullOrWhiteSpace(request.Value))
+        // Value می‌تواند string یا object از فرانت باشد
+        var json = NormalizeValueToJson(request.Value);
+        if (string.IsNullOrWhiteSpace(json))
             throw new BadRequestException(MessageKeys.SettingValueRequired, "setting_value_required");
 
-        // اعتبارسنجی اینکه Value واقعاً JSON معتبر باشد
         try
         {
-            using var _ = JsonDocument.Parse(request.Value);
+            using var _ = JsonDocument.Parse(json);
         }
         catch
         {
@@ -59,14 +64,14 @@ public class SettingService : ISettingService
             {
                 Id = Guid.NewGuid(),
                 Key = key,
-                Value = request.Value.Trim(),
+                Value = json,
                 CreatedAt = DateTime.UtcNow
             };
             await _settingRepository.AddAsync(setting);
         }
         else
         {
-            setting.Value = request.Value.Trim();
+            setting.Value = json;
             setting.UpdatedAt = DateTime.UtcNow;
             _settingRepository.Update(setting);
         }
@@ -75,12 +80,46 @@ public class SettingService : ISettingService
         return Map(setting);
     }
 
-    private static SettingDto Map(Setting s) => new()
+    private static string NormalizeValueToJson(object? value)
     {
-        Id = s.Id,
-        Key = s.Key,
-        Value = s.Value,
-        CreatedAt = s.CreatedAt,
-        UpdatedAt = s.UpdatedAt
-    };
+        if (value is null)
+            return string.Empty;
+
+        if (value is string s)
+            return s.Trim();
+
+        if (value is JsonElement el)
+        {
+            return el.ValueKind == JsonValueKind.String
+                ? (el.GetString() ?? string.Empty).Trim()
+                : JsonSerializer.Serialize(el, JsonOptions);
+        }
+
+        return JsonSerializer.Serialize(value, JsonOptions);
+    }
+
+    private static SettingDto Map(Setting s)
+    {
+        object? value = null;
+        if (!string.IsNullOrWhiteSpace(s.Value))
+        {
+            try
+            {
+                value = JsonSerializer.Deserialize<JsonElement>(s.Value);
+            }
+            catch
+            {
+                value = s.Value;
+            }
+        }
+
+        return new SettingDto
+        {
+            Id = s.Id,
+            Key = s.Key,
+            Value = value,
+            CreatedAt = s.CreatedAt,
+            UpdatedAt = s.UpdatedAt
+        };
+    }
 }
