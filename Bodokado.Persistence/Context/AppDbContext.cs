@@ -7,6 +7,7 @@ using Bodokado.Domain.Entities.Orders;
 using Bodokado.Domain.Entities.Organizations;
 using Bodokado.Domain.Entities.Products;
 using Bodokado.Domain.Entities.Ratings;
+using Bodokado.Domain.Entities.Settings;
 using Bodokado.Domain.Entities.Shops;
 using Bodokado.Domain.Entities.Stories;
 using Bodokado.Domain.Entities.Users;
@@ -65,6 +66,8 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     public DbSet<Story> Stories => Set<Story>();
 
     public DbSet<DiscountCode> DiscountCodes => Set<DiscountCode>();
+
+    public DbSet<Setting> Settings => Set<Setting>();
 
 
     public DbSet<OrganizationPersonnelCategory> OrganizationPersonnelCategories

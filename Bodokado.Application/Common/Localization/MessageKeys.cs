@@ -199,4 +199,12 @@ public const string ProductProductPropertyValueMaxLength = "ProductProductProper
     public const string ProductProductAttributeValueMaxLength = "ProductProductAttributeValueMaxLength";
 
 
+    public const string SettingRetrieved = "SettingRetrieved";
+    public const string SettingSaved = "SettingSaved";
+    public const string SettingKeyRequired = "SettingKeyRequired";
+    public const string SettingValueRequired = "SettingValueRequired";
+    public const string SettingValueInvalidJson = "SettingValueInvalidJson";
+    public const string SettingNotFound = "SettingNotFound";
+
+
 }

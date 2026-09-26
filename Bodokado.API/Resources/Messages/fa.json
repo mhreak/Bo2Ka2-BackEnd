@@ -155,5 +155,11 @@
 "ProductProductPropertyDeleted": "ویژگی از محصول حذف شد.",
 "ProductProductPropertyNotFound": "ویژگی محصول یافت نشد.",
 "ProductProductPropertiesSet": "ویژگی‌های محصول تنظیم شد.",
-"ProductProductPropertyValueMaxLength": "مقدار ویژگی محصول نباید بیشتر از ۱۰۰ کاراکتر باشد."
+"ProductProductPropertyValueMaxLength": "مقدار ویژگی محصول نباید بیشتر از ۱۰۰ کاراکتر باشد.",
+"SettingRetrieved": "تنظیمات دریافت شد.",
+"SettingSaved": "تنظیمات ذخیره شد.",
+"SettingKeyRequired": "کلید تنظیمات الزامی است.",
+"SettingValueRequired": "مقدار تنظیمات الزامی است.",
+"SettingValueInvalidJson": "مقدار تنظیمات باید JSON معتبر باشد.",
+"SettingNotFound": "تنظیمات یافت نشد."
 }

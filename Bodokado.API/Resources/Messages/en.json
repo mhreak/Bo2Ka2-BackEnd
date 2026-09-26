@@ -148,5 +148,11 @@
 "ProductProductPropertyDeleted": "Product property removed successfully.",
 "ProductProductPropertyNotFound": "Product property assignment not found.",
 "ProductProductPropertiesSet": "Product properties set successfully.",
-"ProductProductPropertyValueMaxLength": "Product property value must not exceed 100 characters."
+"ProductProductPropertyValueMaxLength": "Product property value must not exceed 100 characters.",
+"SettingRetrieved": "Settings retrieved successfully.",
+"SettingSaved": "Settings saved successfully.",
+"SettingKeyRequired": "Setting key is required.",
+"SettingValueRequired": "Setting value is required.",
+"SettingValueInvalidJson": "Setting value must be valid JSON.",
+"SettingNotFound": "Setting not found."
 }
