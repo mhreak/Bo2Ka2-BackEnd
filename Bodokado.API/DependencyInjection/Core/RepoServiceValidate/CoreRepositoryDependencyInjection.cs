@@ -79,6 +79,7 @@ public static class CoreRepositoryDependencyInjection
         services.AddScoped<ISettingService, SettingService>();
         services.AddScoped<IStoryRepository, StoryRepository>();
         services.AddScoped<IStoryService, StoryService>();
+        services.AddScoped<ICustomerShopService, CustomerShopService>();
 
         return services;
     }
