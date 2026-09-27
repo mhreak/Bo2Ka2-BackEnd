@@ -1,4 +1,5 @@
 using Bodokado.Domain.Entities;
+using Bodokado.Domain.Entities.Banners;
 using Bodokado.Domain.Entities.Delivery;
 using Bodokado.Domain.Entities.Discounts;
 using Bodokado.Domain.Entities.Locations;
@@ -64,6 +65,8 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     => Set<OrganizationalGiftCampaign>();
 
     public DbSet<Story> Stories => Set<Story>();
+
+    public DbSet<Banner> Banners => Set<Banner>();
 
     public DbSet<DiscountCode> DiscountCodes => Set<DiscountCode>();
 
