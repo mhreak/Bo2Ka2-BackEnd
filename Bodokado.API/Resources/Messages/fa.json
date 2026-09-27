@@ -81,6 +81,8 @@
   "ShopStepOrderInvalid": "ترتیب مراحل ثبت فروشگاه نامعتبر است.",
   "ShopCategoriesRetrieved": "دسته‌بندی‌های فروشگاه با موفقیت دریافت شد.",
   "ShopProfileRetrieved": "پروفایل فروشگاه با موفقیت دریافت شد.",
+  "ShopsRetrieved": "لیست فروشگاه‌ها با موفقیت دریافت شد.",
+  "ShopRetrieved": "اطلاعات فروشگاه با موفقیت دریافت شد.",
   "ShopSubmittedForReview": "فروشگاه با موفقیت برای بررسی ارسال شد.",
   "ShopDetailsSaved": "جزئیات فروشگاه با موفقیت ذخیره شد.",
   "ShopBasicInfoSaved": "اطلاعات پایه فروشگاه با موفقیت ذخیره شد." ,

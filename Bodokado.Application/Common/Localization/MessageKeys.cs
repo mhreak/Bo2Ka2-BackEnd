@@ -85,6 +85,8 @@ public static class MessageKeys
     public const string ShopStepOrderInvalid = "ShopStepOrderInvalid";
     public const string ShopCategoriesRetrieved = "ShopCategoriesRetrieved";
     public const string ShopProfileRetrieved = "ShopProfileRetrieved";
+    public const string ShopsRetrieved = "ShopsRetrieved";
+    public const string ShopRetrieved = "ShopRetrieved";
     public const string ShopSubmittedForReview = "ShopSubmittedForReview";
     public const string ShopDetailsSaved = "ShopDetailsSaved";
     public const string ShopBasicInfoSaved = "ShopBasicInfoSaved";

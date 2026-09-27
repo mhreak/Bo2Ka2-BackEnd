@@ -81,6 +81,8 @@
   "ShopStepOrderInvalid": "Invalid shop registration step order.",
   "ShopCategoriesRetrieved": "Shop categories retrieved successfully.",
   "ShopProfileRetrieved": "Shop profile retrieved successfully.",
+  "ShopsRetrieved": "Shops retrieved successfully.",
+  "ShopRetrieved": "Shop retrieved successfully.",
   "ShopSubmittedForReview": "Shop submitted for review successfully.",
   "ShopDetailsSaved": "Shop details saved successfully.",
   "ShopBasicInfoSaved": "Shop basic information saved successfully." ,
