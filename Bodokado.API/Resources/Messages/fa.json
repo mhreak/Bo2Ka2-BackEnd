@@ -170,5 +170,15 @@
 "StoryUpdated": "استوری به‌روزرسانی شد.",
 "StoryDeleted": "استوری حذف شد.",
 "StoryNotFound": "استوری یافت نشد.",
-"StoryButtonTextMaxLength": "متن دکمه استوری حداکثر ۳۰ کاراکتر است."
+"StoryButtonTextMaxLength": "متن دکمه استوری حداکثر ۳۰ کاراکتر است.",
+"BannersRetrieved": "لیست بنرها دریافت شد.",
+"BannerRetrieved": "بنر دریافت شد.",
+"BannerCreated": "بنر ایجاد شد.",
+"BannerUpdated": "بنر به‌روزرسانی شد.",
+"BannerDeleted": "بنر حذف شد.",
+"BannerNotFound": "بنر یافت نشد.",
+"BannerTitleRequired": "عنوان بنر الزامی است.",
+"BannerTitleMaxLength": "عنوان بنر حداکثر ۲۰۰ کاراکتر است.",
+"BannerDescriptionMaxLength": "توضیحات بنر حداکثر ۱۰۰۰ کاراکتر است.",
+"BannerLinkMaxLength": "لینک بنر حداکثر ۵۰۰ کاراکتر است."
 }

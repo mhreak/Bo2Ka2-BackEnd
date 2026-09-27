@@ -22,6 +22,7 @@ public static class ApiRoutes
         public const string ProductPropertyValues = $"{AdminBase}/ProductPropertyValues";
         public const string Settings = $"{AdminBase}/settings";
         public const string Stories = $"{AdminBase}/stories";
+        public const string Banners = $"{AdminBase}/Banners";
     }
 
     public static class Shop
@@ -48,6 +49,7 @@ public static class ApiRoutes
         public const string Users = $"{CustomerBase}/users";
         public const string Orders = $"{CustomerBase}/orders";
         public const string Shops = $"{CustomerBase}/shops";
+        public const string Banners = $"{CustomerBase}/Banners";
         public const string Products = $"{CustomerBase}/products";
         public const string ProductCategories = $"{CustomerBase}/ProductCategories";
         public const string ProductProperties = $"{CustomerBase}/ProductProperties";

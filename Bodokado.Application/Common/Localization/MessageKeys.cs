@@ -218,5 +218,16 @@ public const string ProductProductPropertyValueMaxLength = "ProductProductProper
     public const string StoryNotFound = "StoryNotFound";
     public const string StoryButtonTextMaxLength = "StoryButtonTextMaxLength";
 
+    public const string BannersRetrieved = "BannersRetrieved";
+    public const string BannerRetrieved = "BannerRetrieved";
+    public const string BannerCreated = "BannerCreated";
+    public const string BannerUpdated = "BannerUpdated";
+    public const string BannerDeleted = "BannerDeleted";
+    public const string BannerNotFound = "BannerNotFound";
+    public const string BannerTitleRequired = "BannerTitleRequired";
+    public const string BannerTitleMaxLength = "BannerTitleMaxLength";
+    public const string BannerDescriptionMaxLength = "BannerDescriptionMaxLength";
+    public const string BannerLinkMaxLength = "BannerLinkMaxLength";
+
 
 }

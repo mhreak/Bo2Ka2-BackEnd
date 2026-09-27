@@ -38,6 +38,9 @@ using Bodokado.Application.App.AdminModule.Settings.Services;
 using Bodokado.Persistence.Repositories.Settings;
 using Bodokado.Application.App.AdminModule.Stories.Interfaces;
 using Bodokado.Persistence.Repositories.Stories;
+using Bodokado.Application.Administrator.Banners.Interfaces;
+using Bodokado.Persistence.Repositories.Banners;
+using Bodokado.Application.Administrator.Banners.Services;
 
 namespace Bodokado.API.DependencyInjection;
 
@@ -80,6 +83,8 @@ public static class CoreRepositoryDependencyInjection
         services.AddScoped<IStoryRepository, StoryRepository>();
         services.AddScoped<IStoryService, StoryService>();
         services.AddScoped<ICustomerShopService, CustomerShopService>();
+        services.AddScoped<IBannerRepository, BannerRepository>();
+        services.AddScoped<IBannerService, BannerService>();
 
         return services;
     }
