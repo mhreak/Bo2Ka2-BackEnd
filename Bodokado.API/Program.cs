@@ -12,7 +12,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowLocalhost3000", policy =>
     {
-        policy.WithOrigins("http://localhost:3000", "https://localhost:3000")
+        policy.WithOrigins("http://localhost:3000", "https://localhost:3000" ,"http://94.184.46.18:80" ,"http://94.184.46.18:30000")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
@@ -26,7 +26,9 @@ builder.Services.Configure<FormOptions>(options =>
 
 var app = builder.Build();
 
+app.UseMiddleware<RequestLoggingMiddleware>();
 app.UseMiddleware<GlobalExceptionMiddleware>();
+app.UseHttpsRedirection();
 
 app.UseSwagger();
 app.UseSwaggerUI(options =>
@@ -43,7 +45,6 @@ app.MapOpenApi();
 
 await app.MigrateAndSeedDatabaseAsync();
 
-app.UseHttpsRedirection();
 app.UseCors("AllowLocalhost3000");
 app.UseAuthentication();
 app.UseAuthorization();

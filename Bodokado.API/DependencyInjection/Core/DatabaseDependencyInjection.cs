@@ -25,21 +25,22 @@ public static class DatabaseDependencyInjection
         var dbContext = services.GetRequiredService<AppDbContext>();
         var userManager = services.GetRequiredService<UserManager<User>>();
         var roleManager = services.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
-
-        const int retryCount = 10;
-        for (var i = 0; i < retryCount; i++)
-        {
-            try
-            {
-                await dbContext.Database.MigrateAsync();
-                break;
-            }
-            catch
-            {
-                if (i == retryCount - 1) throw;
-                await Task.Delay(TimeSpan.FromSeconds(5));
-            }
-        }
+        
+        await dbContext.Database.MigrateAsync();
+        // const int retryCount = 10;
+        // for (var i = 0; i < retryCount; i++)
+        // {
+        //     try
+        //     {
+        //         await dbContext.Database.MigrateAsync();
+        //         break;
+        //     }
+        //     catch
+        //     {
+        //         if (i == retryCount - 1) throw;
+        //         await Task.Delay(TimeSpan.FromSeconds(5));
+        //     }
+        // }
 
         await RoleSeeder.SeedAsync(roleManager, userManager);
         await LocationSeeder.SeedAsync(dbContext);
@@ -49,11 +50,10 @@ public static class DatabaseDependencyInjection
         await HomepageSettingSeeder.SeedAsync(dbContext);
         await StorySeeder.SeedAsync(dbContext);
 
-        if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
-        {
-            await UserSeeder.SeedAsync(dbContext, userManager, roleManager);
-            await ShopAndProductSeeder.SeedAsync(dbContext, userManager, roleManager);
-        }
+        
+        await UserSeeder.SeedAsync(dbContext, userManager, roleManager);
+        await ShopAndProductSeeder.SeedAsync(dbContext, userManager, roleManager);
+        
 
         await BannerSeeder.SeedAsync(dbContext);
     }
