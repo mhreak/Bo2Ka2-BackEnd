@@ -4,6 +4,7 @@ using Bodokado.Application.Administrator.Auth.Interfaces;
 using Bodokado.Application.Common.Exceptions;
 using Bodokado.Application.Common.Localization;
 using Bodokado.Domain.Entities.Users;
+using Bodokado.Domain.Constants;
 
 namespace Bodokado.Application.Administrator.Auth.Services;
 
@@ -23,8 +24,8 @@ public class AdminRegisterService : IAdminRegisterService
         var existing = await _userManager.FindByNameAsync(request.Username);
         if (existing != null)
             throw new BadRequestException(MessageKeys.UsernameAlreadyExists, "username_already_exists");
-        if (!await _roleManager.RoleExistsAsync("Admin"))
-            await _roleManager.CreateAsync(new IdentityRole<Guid> { Name = "Admin" });
+        if (!await _roleManager.RoleExistsAsync(RoleNames.Admin))
+            await _roleManager.CreateAsync(new IdentityRole<Guid> { Name = RoleNames.Admin });
         var user = new User { UserName = request.Username, FirstName = request.FirstName, LastName = request.LastName, IsActive = true };
         var result = await _userManager.CreateAsync(user, request.Password);
         if (!result.Succeeded)
@@ -32,7 +33,7 @@ public class AdminRegisterService : IAdminRegisterService
             var errors = string.Join(", ", result.Errors.Select(x => x.Description));
             throw new BadRequestException(MessageKeys.UserCreationError, "user_creation_failed", errors);
         }
-        await _userManager.AddToRoleAsync(user, "Admin");
+        await _userManager.AddToRoleAsync(user, RoleNames.Admin);
         await _userManager.UpdateAsync(user);
     }
 }

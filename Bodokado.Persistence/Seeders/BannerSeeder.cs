@@ -45,7 +45,7 @@ public static class BannerSeeder
                 Title = "هدیه سازمانی",
                 Description = "پکیج‌های ویژه شرکت‌ها و سازمان‌ها",
                 ImageId = null,
-                Link = "bodokado://corporate",
+                Link = "bodokado://user-organization",
                 ShowOrder = 3,
                 IsActive = true,
                 CreatedAt = now

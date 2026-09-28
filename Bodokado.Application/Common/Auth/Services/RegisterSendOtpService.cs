@@ -7,6 +7,7 @@ using Bodokado.Application.Common.Interfaces;
 using Bodokado.Application.Common.Localization;
 using Bodokado.Application.Common.Otp;
 using Bodokado.Domain.Entities.Users;
+using Bodokado.Domain.Constants;
 using Bodokado.Domain.Enums;
 
 namespace Bodokado.Application.Common.Auth.Services;
@@ -17,7 +18,7 @@ public class RegisterSendOtpService : IRegisterSendOtpService
     private readonly IUserRepository _userRepository;
     private readonly OtpSettings _otpSettings;
     private readonly UserManager<User> _userManager;
-    private const string DefaultRole = "User";
+    private const string DefaultRole = RoleNames.Customer;
 
     public RegisterSendOtpService(IOtpService otpService, IUserRepository userRepository, Microsoft.Extensions.Options.IOptions<OtpSettings> otpSettings, UserManager<User> userManager)
     {

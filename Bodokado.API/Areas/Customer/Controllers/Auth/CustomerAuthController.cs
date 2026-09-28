@@ -21,7 +21,7 @@ public class CustomerAuthController : ControllerBase
     private readonly IRefreshAccessTokenService _refreshAccessTokenService;
     private readonly IRefreshTokenService _refreshTokenService;
     private readonly IResponseLocalizer _responseLocalizer;
-    private const string UserRole = "User";
+    private const string UserRole = Bodokado.Domain.Constants.RoleNames.Customer;
 
     public CustomerAuthController(
         RoleAuthCore roleAuthCore,
@@ -118,7 +118,7 @@ public class CustomerAuthController : ControllerBase
     }
 
     /// <summary>تغییر رمز عبور (نیاز به JWT)</summary>
-    [Authorize(Roles = "User")]
+    [Authorize(Roles = Bodokado.Domain.Constants.RoleNames.Customer)]
     [HttpPost("change-password")]
     public async Task<IActionResult> ChangePassword(ChangePasswordRequestDto request, CancellationToken ct)
     {
@@ -129,7 +129,7 @@ public class CustomerAuthController : ControllerBase
     }
 
     /// <summary>خروج و ابطال Refresh Token</summary>
-    [Authorize(Roles = "User")]
+    [Authorize(Roles = Bodokado.Domain.Constants.RoleNames.Customer)]
     [HttpPost("logout")]
     public async Task<IActionResult> Logout(RefreshTokenRequestDto request)
     {

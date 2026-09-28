@@ -7,6 +7,7 @@ using Bodokado.Application.Common.File.DTOs;
 using Bodokado.Application.Common.File.Interfaces;
 using Bodokado.Application.Common.File.Validators;
 using Bodokado.Domain.Entities;
+using Bodokado.Domain.Constants;
 using Bodokado.Domain.Enums;
 
 namespace Bodokado.Application.Common.File.Services;
@@ -78,10 +79,10 @@ public class FileService : IFileService
 
     private static void ValidateUserFileType(string userRole, UploadFileType fileType)
     {
-        if (userRole == "Admin")
+        if (userRole == RoleNames.Admin)
             return;
 
-        if ((userRole == "User" || userRole == "Shop")
+        if ((userRole == RoleNames.Customer || userRole == RoleNames.Shop)
             && (fileType == UploadFileType.Avatar || fileType == UploadFileType.Cover || fileType == UploadFileType.TicketAttachment))
         {
             return;

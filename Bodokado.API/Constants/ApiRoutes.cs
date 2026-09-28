@@ -9,7 +9,7 @@ public static class ApiRoutes
     private const string AdminBase = $"{Base}/admin";
     private const string ShopBase = $"{Base}/shop";
     private const string CustomerBase = $"{Base}/customer";
-    private const string CorporateBase = $"{Base}/corporate";
+    private const string UserOrganizationBase = $"{Base}/user-organization";
 
     public static class Admin
     {
@@ -60,16 +60,16 @@ public static class ApiRoutes
         public const string Settings = $"{CustomerBase}/settings";
     }
 
-    public static class Corporate
+    public static class UserOrganization
     {
-        public const string Auth = $"{CorporateBase}/auth";
-        public const string ProductPropertyValues = $"{CorporateBase}/ProductPropertyValues";
-        public const string Files = $"{CorporateBase}/files";
-        public const string ProductProductProperties = $"{CorporateBase}/ProductProductProperties";
-        public const string Locations = $"{CorporateBase}/Locations";
-        public const string ProductProperties = $"{CorporateBase}/ProductProperties";
-        public const string ProductCategories = $"{CorporateBase}/ProductCategories";
-        public const string Settings = $"{CorporateBase}/settings";
+        public const string Auth = $"{UserOrganizationBase}/auth";
+        public const string ProductPropertyValues = $"{UserOrganizationBase}/ProductPropertyValues";
+        public const string Files = $"{UserOrganizationBase}/files";
+        public const string ProductProductProperties = $"{UserOrganizationBase}/ProductProductProperties";
+        public const string Locations = $"{UserOrganizationBase}/Locations";
+        public const string ProductProperties = $"{UserOrganizationBase}/ProductProperties";
+        public const string ProductCategories = $"{UserOrganizationBase}/ProductCategories";
+        public const string Settings = $"{UserOrganizationBase}/settings";
         // سفارشات سازمانی و کاتالوگ هدیه بعداً اضافه می‌شود
     }
 }

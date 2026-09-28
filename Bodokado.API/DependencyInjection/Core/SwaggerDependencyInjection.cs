@@ -23,9 +23,9 @@ public static class SwaggerDependencyInjection
                 Description = "APIهای مشتری عادی (حساب شخصی)"
             });
 
-            options.SwaggerDoc("corporate", new OpenApiInfo
+            options.SwaggerDoc("user-organization", new OpenApiInfo
             {
-                Title = "Bodokado Corporate API",
+                Title = "Bodokado User Organization API",
                 Version = "v1",
                 Description = "APIهای مشتری سازمانی"
             });
@@ -48,7 +48,7 @@ public static class SwaggerDependencyInjection
                 {
                     "shop" => ns.Contains("Areas.Shop", StringComparison.OrdinalIgnoreCase),
                     "customer" => ns.Contains("Areas.Customer", StringComparison.OrdinalIgnoreCase),
-                    "corporate" => ns.Contains("Areas.Corporate", StringComparison.OrdinalIgnoreCase),
+                    "user-organization" => ns.Contains("Areas.UserOrganization", StringComparison.OrdinalIgnoreCase),
                     "admin" => ns.Contains("Areas.Admin", StringComparison.OrdinalIgnoreCase),
                     _ => false
                 };

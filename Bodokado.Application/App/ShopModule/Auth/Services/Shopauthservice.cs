@@ -9,13 +9,14 @@ using Bodokado.Application.Common.Exceptions;
 using Bodokado.Application.Common.Localization;
 using Bodokado.Application.Common.Otp;
 using Bodokado.Domain.Entities.Users;
+using Bodokado.Domain.Constants;
 using Bodokado.Domain.Enums;
 
 namespace Bodokado.Application.App.ShopModule.Auth.Services;
 
 public class ShopAuthService : IShopAuthService
 {
-    private const string Role = "Shop";
+    private const string Role = RoleNames.Shop;
 
     private readonly RoleAuthCore _core;
     private readonly IOtpService _otpService;

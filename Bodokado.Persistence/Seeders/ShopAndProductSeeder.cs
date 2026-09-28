@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Bodokado.Domain.Entities.Products;
 using Bodokado.Domain.Entities.Shops;
 using Bodokado.Domain.Entities.Users;
+using Bodokado.Domain.Constants;
 using Bodokado.Domain.Enums;
 using Bodokado.Persistence.Context;
 
@@ -27,7 +28,7 @@ namespace Bodokado.Persistence.Seeders;
 /// </summary>
 public static class ShopAndProductSeeder
 {
-    private const string ShopRole = "Shop";
+    private const string ShopRole = RoleNames.Shop;
 
     /// <summary>رمز عبور یکسان همه‌ی کاربران نمونهٔ فروشگاه (برای تست ورود پنل فروشگاه)</summary>
     public const string DemoShopPassword = "ShopDemo123";
@@ -60,6 +61,16 @@ public static class ShopAndProductSeeder
         RoleManager<IdentityRole<Guid>> roleManager,
         CancellationToken ct = default)
     {
+        if (!await roleManager.RoleExistsAsync(ShopRole))
+            await roleManager.CreateAsync(new IdentityRole<Guid> { Name = ShopRole });
+
+        for (var demoShopIndex = 1; demoShopIndex <= 6; demoShopIndex++)
+        {
+            var existingUser = await userManager.FindByNameAsync($"shop_demo_{demoShopIndex}");
+            if (existingUser is not null && !await userManager.IsInRoleAsync(existingUser, ShopRole))
+                await userManager.AddToRoleAsync(existingUser, ShopRole);
+        }
+
         var alreadySeeded = await context.Shops.AnyAsync(s => !s.IsDeleted, ct);
         if (alreadySeeded)
             return;
@@ -72,9 +83,6 @@ public static class ShopAndProductSeeder
             return; // بدون دسته‌بندی، فروشگاه ساخته نمی‌شود (ShopCategoryId اجباری است)
 
         var cities = await context.Cities.Take(10).ToListAsync(ct);
-
-        if (!await roleManager.RoleExistsAsync(ShopRole))
-            await roleManager.CreateAsync(new IdentityRole<Guid> { Name = ShopRole });
 
         Guid? FindCity(string term) =>
             cities.FirstOrDefault(c => c.Name.Contains(term))?.Id ?? cities.FirstOrDefault()?.Id;

@@ -8,12 +8,13 @@ using Bodokado.Application.Common.Auth.DTOs;
 using Bodokado.Application.Common.Auth.Services;
 using Bodokado.Application.Common.Otp;
 using Bodokado.Domain.Entities.Users;
+using Bodokado.Domain.Constants;
 
 namespace Bodokado.Application.App.CustomerModule.Auth.Services;
 
 public class CustomerAuthService : ICustomerAuthService
 {
-    private const string Role = "Customer";
+    private const string Role = RoleNames.Customer;
     private readonly RoleAuthCore _core;
 
     public CustomerAuthService(UserManager<User> userManager, RoleManager<IdentityRole<Guid>> roleManager, IOtpService otpService, IUserRepository userRepository, IJwtService jwtService, IRefreshTokenService refreshTokenService, IGoogleTokenValidator googleTokenValidator, Microsoft.Extensions.Options.IOptions<OtpSettings> otpSettings)

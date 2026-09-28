@@ -11,7 +11,7 @@ namespace Bodokado.API.Areas.Admin.Controllers;
 
 [ApiController]
 [Route(ApiRoutes.Admin.Stories)]
-[Authorize(Roles = "Admin")]
+[Authorize(Roles = Bodokado.Domain.Constants.RoleNames.Admin)]
 [Tags("Admin Stories")]
 public class StoryController : ControllerBase
 {

@@ -3,31 +3,31 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Bodokado.API.Constants;
 using Bodokado.API.Helpers;
-using Bodokado.Application.App.CorporateModule.Auth.Interfaces;
+using Bodokado.Application.App.UserOrganizationModule.Auth.Interfaces;
 using Bodokado.Application.Common.Auth.DTOs;
 using Bodokado.Application.Common.Auth.Interfaces;
 using Bodokado.Application.Common.Localization;
 using Bodokado.Application.Common.Auth;
 
-namespace Bodokado.API.Areas.Corporate.Controllers;
+namespace Bodokado.API.Areas.UserOrganization.Controllers;
 
 [ApiController]
-[Route(ApiRoutes.Corporate.Auth)]
-[Tags("Corporate Auth")]
-public class CorporateAuthController : ControllerBase
+[Route(ApiRoutes.UserOrganization.Auth)]
+[Tags("User Organization Auth")]
+public class UserOrganizationAuthController : ControllerBase
 {
-    private readonly ICorporateAuthService _corporateAuthService;
+    private readonly IUserOrganizationAuthService _userOrganizationAuthService;
     private readonly IRefreshAccessTokenService _refreshAccessTokenService;
     private readonly IRefreshTokenService _refreshTokenService;
     private readonly IResponseLocalizer _responseLocalizer;
 
-    public CorporateAuthController(
-        ICorporateAuthService corporateAuthService,
+    public UserOrganizationAuthController(
+        IUserOrganizationAuthService userOrganizationAuthService,
         IRefreshAccessTokenService refreshAccessTokenService,
         IRefreshTokenService refreshTokenService,
         IResponseLocalizer responseLocalizer)
     {
-        _corporateAuthService = corporateAuthService;
+        _userOrganizationAuthService = userOrganizationAuthService;
         _refreshAccessTokenService = refreshAccessTokenService;
         _refreshTokenService = refreshTokenService;
         _responseLocalizer = responseLocalizer;
@@ -38,7 +38,7 @@ public class CorporateAuthController : ControllerBase
     [HttpPost("register-send-otp")]
     public async Task<IActionResult> RegisterSendOtp(RegisterSendOtpRequestDto request)
     {
-        var result = await _corporateAuthService.SendOtpForRegisterAsync(request);
+        var result = await _userOrganizationAuthService.SendOtpForRegisterAsync(request);
         var message = await _responseLocalizer.LocalizeAsync(MessageKeys.OtpSent);
         return Ok(ApiResult.Success(result, message));
     }
@@ -48,7 +48,7 @@ public class CorporateAuthController : ControllerBase
     [HttpPost("send-otp-for-login")]
     public async Task<IActionResult> SendOtpForLogin(SendOtpForAuthRequestDto request)
     {
-        var result = await _corporateAuthService.SendOtpForLoginAsync(request);
+        var result = await _userOrganizationAuthService.SendOtpForLoginAsync(request);
         var message = await _responseLocalizer.LocalizeAsync(MessageKeys.OtpSent);
         return Ok(ApiResult.Success(result, message));
     }
@@ -58,7 +58,7 @@ public class CorporateAuthController : ControllerBase
     [HttpPost("login-otp")]
     public async Task<IActionResult> LoginOtp(LoginOtpRequestDto request)
     {
-        var result = await _corporateAuthService.LoginOtpAsync(request);
+        var result = await _userOrganizationAuthService.LoginOtpAsync(request);
         var message = await _responseLocalizer.LocalizeAsync(MessageKeys.LoginSuccess);
         return Ok(ApiResult.Success(result, message));
     }
@@ -68,7 +68,7 @@ public class CorporateAuthController : ControllerBase
     [HttpPost("login-by-password")]
     public async Task<IActionResult> LoginByPassword(LoginByPasswordRequestDto request)
     {
-        var result = await _corporateAuthService.LoginByPasswordAsync(request);
+        var result = await _userOrganizationAuthService.LoginByPasswordAsync(request);
         var message = await _responseLocalizer.LocalizeAsync(MessageKeys.LoginSuccess);
         return Ok(ApiResult.Success(result, message));
     }
@@ -78,7 +78,7 @@ public class CorporateAuthController : ControllerBase
     [HttpPost("register-by-mobile")]
     public async Task<IActionResult> RegisterByMobile(RegisterByMobileRequestDto request)
     {
-        var result = await _corporateAuthService.RegisterByMobileAsync(request);
+        var result = await _userOrganizationAuthService.RegisterByMobileAsync(request);
         var message = await _responseLocalizer.LocalizeAsync(MessageKeys.RegisterSuccess);
         return Ok(ApiResult.Success(result, message));
     }
@@ -88,7 +88,7 @@ public class CorporateAuthController : ControllerBase
     [HttpPost("google")]
     public async Task<IActionResult> Google(GoogleAuthRequestDto request)
     {
-        var result = await _corporateAuthService.GoogleAuthAsync(request);
+        var result = await _userOrganizationAuthService.GoogleAuthAsync(request);
         var message = await _responseLocalizer.LocalizeAsync(MessageKeys.LoginSuccess);
         return Ok(ApiResult.Success(result, message));
     }
@@ -114,18 +114,18 @@ public class CorporateAuthController : ControllerBase
     }
 
     /// <summary>تغییر رمز عبور سازمانی (نیاز به JWT)</summary>
-    [Authorize(Roles = "Corporate")]
+    [Authorize(Roles = Bodokado.Domain.Constants.RoleNames.UserOrganization)]
     [HttpPost("change-password")]
     public async Task<IActionResult> ChangePassword(ChangePasswordRequestDto request, CancellationToken ct)
     {
         var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-        var result = await _corporateAuthService.ChangePasswordAsync(userId, request, ct);
+        var result = await _userOrganizationAuthService.ChangePasswordAsync(userId, request, ct);
         var message = await _responseLocalizer.LocalizeAsync(MessageKeys.PasswordChanged);
         return Ok(ApiResult.Success(result, message));
     }
 
     /// <summary>خروج و ابطال Refresh Token</summary>
-    [Authorize(Roles = "Corporate")]
+    [Authorize(Roles = Bodokado.Domain.Constants.RoleNames.UserOrganization)]
     [HttpPost("logout")]
     public async Task<IActionResult> Logout(RefreshTokenRequestDto request)
     {

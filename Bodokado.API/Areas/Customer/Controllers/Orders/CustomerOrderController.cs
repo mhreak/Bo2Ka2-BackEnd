@@ -12,7 +12,7 @@ namespace Bodokado.API.Areas.Customer.Controllers;
 
 [ApiController]
 [Route(ApiRoutes.Customer.Orders)]
-[Authorize(Roles = "User")]
+[Authorize(Roles = Bodokado.Domain.Constants.RoleNames.Customer)]
 [Tags("Customer Orders")]
 public class CustomerOrderController : ControllerBase
 {

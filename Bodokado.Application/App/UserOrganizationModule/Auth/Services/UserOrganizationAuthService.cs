@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
-using Bodokado.Application.App.CorporateModule.Auth.Interfaces;
+using Bodokado.Application.App.UserOrganizationModule.Auth.Interfaces;
 using Bodokado.Application.Common.Auth;
 using Bodokado.Application.Common.Auth.DTOs;
 using Bodokado.Application.Common.Auth.Interfaces;
@@ -9,13 +9,14 @@ using Bodokado.Application.Common.Exceptions;
 using Bodokado.Application.Common.Localization;
 using Bodokado.Application.Common.Otp;
 using Bodokado.Domain.Entities.Users;
+using Bodokado.Domain.Constants;
 using Bodokado.Domain.Enums;
 
-namespace Bodokado.Application.App.CorporateModule.Auth.Services;
+namespace Bodokado.Application.App.UserOrganizationModule.Auth.Services;
 
-public class CorporateAuthService : ICorporateAuthService
+public class UserOrganizationAuthService : IUserOrganizationAuthService
 {
-    private const string Role = "Corporate";
+    private const string Role = RoleNames.UserOrganization;
 
     private readonly RoleAuthCore _core;
     private readonly IOtpService _otpService;
@@ -23,7 +24,7 @@ public class CorporateAuthService : ICorporateAuthService
     private readonly UserManager<User> _userManager;
     private readonly OtpSettings _otpSettings;
 
-    public CorporateAuthService(
+    public UserOrganizationAuthService(
         UserManager<User> userManager,
         RoleManager<IdentityRole<Guid>> roleManager,
         IOtpService otpService,

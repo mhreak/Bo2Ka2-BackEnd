@@ -6,6 +6,7 @@ using Bodokado.Application.Common.Exceptions;
 using Bodokado.Application.Common.Localization;
 using Bodokado.Application.Common.Otp;
 using Bodokado.Domain.Entities.Users;
+using Bodokado.Domain.Constants;
 using Bodokado.Domain.Enums;
 
 namespace Bodokado.Application.Common.Auth.Services;
@@ -47,7 +48,7 @@ public class SubmitOtpService : ISubmitOtpService
             if (!createResult.Succeeded)
                 throw new BadRequestException(MessageKeys.UserCreationError, "user_creation_failed");
         }
-        var session = await _refreshTokenService.IssueAsync(user.Id, "Customer");
+        var session = await _refreshTokenService.IssueAsync(user.Id, RoleNames.Customer);
         var accessToken = await _jwtService.GenerateAccessToken(user, _userManager, session.SessionId);
         return new AuthResultDto { AccessToken = accessToken, RefreshToken = session.RefreshToken, ExpiresAt = _jwtService.GetAccessTokenExpiry() };
     }

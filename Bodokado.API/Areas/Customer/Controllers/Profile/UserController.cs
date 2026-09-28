@@ -12,7 +12,7 @@ namespace Bodokado.API.Areas.Customer.Controllers;
 [ApiController]
 [Tags("User")]
 [Route(ApiRoutes.Customer.Users)]
-[Authorize(Roles = "User")]
+[Authorize(Roles = Bodokado.Domain.Constants.RoleNames.Customer)]
 public class UserController : ControllerBase
 {
     private readonly IUserProfileService _profileService;

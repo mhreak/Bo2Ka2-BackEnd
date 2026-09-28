@@ -6,7 +6,7 @@ using Bodokado.Application.Common.Localization;
 
 namespace Bodokado.API.Controllers.Admin;
 
-[Authorize(Roles = "Admin")]
+[Authorize(Roles = Bodokado.Domain.Constants.RoleNames.Admin)]
 [ApiController]
 [TypeFilter(typeof(ControllerExceptionFilterAttribute))]
 public abstract class AdminBaseController : ControllerBase

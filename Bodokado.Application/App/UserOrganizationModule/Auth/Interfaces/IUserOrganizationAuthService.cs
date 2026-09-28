@@ -1,8 +1,8 @@
 using Bodokado.Application.Common.Auth.DTOs;
 
-namespace Bodokado.Application.App.CorporateModule.Auth.Interfaces;
+namespace Bodokado.Application.App.UserOrganizationModule.Auth.Interfaces;
 
-public interface ICorporateAuthService
+public interface IUserOrganizationAuthService
 {
     Task<SendOtpForAuthResponseDto> SendOtpForRegisterAsync(RegisterSendOtpRequestDto request);
     Task<SendOtpForAuthResponseDto> SendOtpForLoginAsync(SendOtpForAuthRequestDto request);

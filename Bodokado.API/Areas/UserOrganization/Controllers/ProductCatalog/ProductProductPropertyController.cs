@@ -5,10 +5,10 @@
 //using Bodokado.Application.App.AdminModule.ProductCatalog.Interfaces;
 //using Bodokado.Application.Common.Localization;
 
-//namespace Bodokado.API.Areas.Corporate.Controllers;
+//namespace Bodokado.API.Areas.UserOrganization.Controllers;
 
 //[ApiController]
-//[Route(ApiRoutes.Corporate.ProductProductProperties)]
+//[Route(ApiRoutes.UserOrganization.ProductProductProperties)]
 //[AllowAnonymous]
 //[Tags("Product Properties On Product")]
 //public class ProductProductPropertyController : ControllerBase

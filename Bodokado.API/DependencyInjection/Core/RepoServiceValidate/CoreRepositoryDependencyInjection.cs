@@ -2,6 +2,8 @@ using Bodokado.Application.Administrator.Auth.Interfaces;
 using Bodokado.Application.Administrator.Auth.Services;
 using Bodokado.Application.App.ShopModule.Auth.Interfaces;
 using Bodokado.Application.App.ShopModule.Auth.Services;
+using Bodokado.Application.App.UserOrganizationModule.Auth.Interfaces;
+using Bodokado.Application.App.UserOrganizationModule.Auth.Services;
 using Bodokado.Application.App.ShopModule.Products.Interfaces;
 using Bodokado.Application.App.ShopModule.Orders.Interfaces;
 using Bodokado.Application.App.ShopModule.Orders.Services;
@@ -67,6 +69,7 @@ public static class CoreRepositoryDependencyInjection
         services.AddScoped<ILocationService, LocationService>();
         services.AddScoped<IUserProfileService, UserProfileService>();
         services.AddScoped<IShopAuthService, ShopAuthService>();
+        services.AddScoped<IUserOrganizationAuthService, UserOrganizationAuthService>();
         services.AddScoped<IShopRegistrationService, ShopRegistrationService>();
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<IShopOrderService, ShopOrderService>();

@@ -11,7 +11,7 @@ namespace Bodokado.API.Controllers.Shop;
 
 [ApiController]
 [Route(ApiRoutes.Shop.Registration)]
-[Authorize(Roles = "Shop")]
+[Authorize(Roles = Bodokado.Domain.Constants.RoleNames.Shop)]
 [Tags("Shop Registration")]
 public class ShopRegistrationController : ControllerBase
 {

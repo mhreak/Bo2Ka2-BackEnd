@@ -47,5 +47,8 @@ public class Shop : BaseEntity
     public Guid? ManagerUserId { get; set; }
     public User? ManagerUser { get; set; }
 
+    
+    public string ? Apikey { get; set; }
+
     public bool EnableStories { get; set; } = true;
 }

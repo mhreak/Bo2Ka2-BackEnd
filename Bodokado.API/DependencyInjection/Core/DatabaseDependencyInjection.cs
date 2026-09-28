@@ -41,13 +41,20 @@ public static class DatabaseDependencyInjection
             }
         }
 
+        await RoleSeeder.SeedAsync(roleManager, userManager);
         await LocationSeeder.SeedAsync(dbContext);
         await ShopCategorySeeder.SeedAsync(dbContext);
-        await HomepageSettingSeeder.SeedAsync(dbContext);
-        await StorySeeder.SeedAsync(dbContext);
-        await BannerSeeder.SeedAsync(dbContext);
         await ProductCategorySeeder.SeedAsync(dbContext);
         await ProductAttributeSeeder.SeedAsync(dbContext);
-        await ShopAndProductSeeder.SeedAsync(dbContext, userManager, roleManager);
+        await HomepageSettingSeeder.SeedAsync(dbContext);
+        await StorySeeder.SeedAsync(dbContext);
+
+        if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
+        {
+            await UserSeeder.SeedAsync(dbContext, userManager, roleManager);
+            await ShopAndProductSeeder.SeedAsync(dbContext, userManager, roleManager);
+        }
+
+        await BannerSeeder.SeedAsync(dbContext);
     }
 }

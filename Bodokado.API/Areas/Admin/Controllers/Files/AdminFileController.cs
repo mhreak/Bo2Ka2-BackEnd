@@ -30,7 +30,7 @@ public class AdminFileController : AdminBaseController
             return BadRequest(ApiResult.BadRequest(await _responseLocalizer.LocalizeAsync(MessageKeys.FileInvalid)));
 
         var userId = GetCurrentUserId();
-        var file = await _fileService.UploadForUserAsync(request.File, userId, "Admin", request.FileType);
+        var file = await _fileService.UploadForUserAsync(request.File, userId, Bodokado.Domain.Constants.RoleNames.Admin, request.FileType);
         return Ok(ApiResult.Success(MapToResponse(file), await _responseLocalizer.LocalizeAsync(MessageKeys.FileUploaded)));
     }
 

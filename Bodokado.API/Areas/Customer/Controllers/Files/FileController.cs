@@ -12,7 +12,7 @@ using Bodokado.Domain.Entities;
 namespace Bodokado.API.Areas.Customer.Controllers;
 
 [Route(ApiRoutes.Customer.Files)]
-[Authorize(Roles = "User,Shop")]
+[Authorize(Roles = Bodokado.Domain.Constants.RoleNames.Customer + "," + Bodokado.Domain.Constants.RoleNames.Shop)]
 [ApiController]
 [Tags("Files")]
 public class FileController : ControllerBase
@@ -35,7 +35,9 @@ public class FileController : ControllerBase
             return BadRequest(ApiResult.BadRequest(await _responseLocalizer.LocalizeAsync(MessageKeys.FileInvalid)));
 
         var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-        var role = User.IsInRole("Shop") ? "Shop" : "User";
+        var role = User.IsInRole(Bodokado.Domain.Constants.RoleNames.Shop)
+            ? Bodokado.Domain.Constants.RoleNames.Shop
+            : Bodokado.Domain.Constants.RoleNames.Customer;
         var file = await _fileService.UploadForUserAsync(request.File, userId, role, request.FileType);
         return Ok(ApiResult.Success(MapToResponse(file), await _responseLocalizer.LocalizeAsync(MessageKeys.FileUploaded)));
     }

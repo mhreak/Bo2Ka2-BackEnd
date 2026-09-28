@@ -114,7 +114,7 @@ public class ShopAuthController : ControllerBase
     }
 
     /// <summary>تغییر رمز عبور فروشگاه (نیاز به JWT)</summary>
-    [Authorize(Roles = "Shop")]
+    [Authorize(Roles = Bodokado.Domain.Constants.RoleNames.Shop)]
     [HttpPost("change-password")]
     public async Task<IActionResult> ChangePassword(ChangePasswordRequestDto request, CancellationToken ct)
     {
@@ -125,7 +125,7 @@ public class ShopAuthController : ControllerBase
     }
 
     /// <summary>خروج و ابطال Refresh Token</summary>
-    [Authorize(Roles = "Shop")]
+    [Authorize(Roles = Bodokado.Domain.Constants.RoleNames.Shop)]
     [HttpPost("logout")]
     public async Task<IActionResult> Logout(RefreshTokenRequestDto request)
     {

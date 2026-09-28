@@ -6,6 +6,7 @@ using Bodokado.Application.Common.Auth.Interfaces;
 using Bodokado.Application.Common.Exceptions;
 using Bodokado.Application.Common.Localization;
 using Bodokado.Domain.Entities.Users;
+using Bodokado.Domain.Constants;
 
 namespace Bodokado.Application.Administrator.Auth.Services;
 
@@ -32,10 +33,10 @@ public class AdminLoginService : IAdminLoginService
         var validPassword = await _userManager.CheckPasswordAsync(admin, request.Password);
         if (!validPassword)
             throw new UnauthorizedAccessException(MessageKeys.InvalidCredentials);
-        var isAdmin = await _userManager.IsInRoleAsync(admin, "Admin");
+        var isAdmin = await _userManager.IsInRoleAsync(admin, RoleNames.Admin);
         if (!isAdmin)
             throw new UnauthorizedAccessException(MessageKeys.NoAccess);
-        var session = await _refreshTokenService.IssueAsync(admin.Id, "Admin");
+        var session = await _refreshTokenService.IssueAsync(admin.Id, RoleNames.Admin);
         var token = await _jwtService.GenerateAccessToken(admin, _userManager, session.SessionId);
         return new AdminAuthResultDto { AccessToken = token, ExpiresAt = _jwtService.GetAccessTokenExpiry() };
     }

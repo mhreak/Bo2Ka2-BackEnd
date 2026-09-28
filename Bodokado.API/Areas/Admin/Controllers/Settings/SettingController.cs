@@ -11,7 +11,7 @@ namespace Bodokado.API.Areas.Admin.Controllers;
 
 [ApiController]
 [Route(ApiRoutes.Admin.Settings)]
-[Authorize(Roles = "Admin")]
+[Authorize(Roles = Bodokado.Domain.Constants.RoleNames.Admin)]
 [Tags("Admin Settings")]
 public class SettingController : ControllerBase
 {

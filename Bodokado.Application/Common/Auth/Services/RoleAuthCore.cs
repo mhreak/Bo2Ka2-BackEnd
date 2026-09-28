@@ -5,6 +5,7 @@ using Bodokado.Application.Common.Exceptions;
 using Bodokado.Application.Common.Localization;
 using Bodokado.Application.Common.Otp;
 using Bodokado.Domain.Entities.Users;
+using Bodokado.Domain.Constants;
 using Bodokado.Domain.Enums;
 
 namespace Bodokado.Application.Common.Auth.Services;
@@ -131,7 +132,7 @@ public class RoleAuthCore
         var roles = await _userManager.GetRolesAsync(user);
         var revokeTasks = roles.Select(role => _refreshTokenService.RevokeAllByRoleAsync(userId, role, cancellationToken));
         await Task.WhenAll(revokeTasks);
-        var primaryRole = roles.FirstOrDefault() ?? "User";
+        var primaryRole = roles.FirstOrDefault() ?? RoleNames.Customer;
         return await IssueTokensAsync(user, primaryRole);
     }
 

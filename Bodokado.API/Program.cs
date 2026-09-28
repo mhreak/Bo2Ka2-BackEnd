@@ -33,7 +33,7 @@ app.UseSwaggerUI(options =>
 {
     options.SwaggerEndpoint("/swagger/shop/swagger.json", "Shop API");
     options.SwaggerEndpoint("/swagger/customer/swagger.json", "Customer API");
-    options.SwaggerEndpoint("/swagger/corporate/swagger.json", "Corporate API");
+    options.SwaggerEndpoint("/swagger/user-organization/swagger.json", "User Organization API");
     options.SwaggerEndpoint("/swagger/admin/swagger.json", "Admin API");
     options.RoutePrefix = "swagger";
 });

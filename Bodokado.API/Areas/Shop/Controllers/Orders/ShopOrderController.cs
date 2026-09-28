@@ -11,7 +11,7 @@ namespace Bodokado.API.Areas.Shop.Controllers;
 
 [ApiController]
 [Route(ApiRoutes.Shop.Orders)]
-[Authorize(Roles = "Shop")]
+[Authorize(Roles = Bodokado.Domain.Constants.RoleNames.Shop)]
 [Tags("Shop Orders")]
 public class ShopOrderController : ControllerBase
 {

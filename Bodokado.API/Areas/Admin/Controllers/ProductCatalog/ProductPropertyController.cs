@@ -10,7 +10,7 @@
 
 //[ApiController]
 //[Route(ApiRoutes.Admin.ProductProperties)]
-//[Authorize(Roles = "Admin")]
+//[Authorize(Roles = Bodokado.Domain.Constants.RoleNames.Admin)]
 //[Tags("Admin Product Properties")]
 //public class ProductPropertyController : ControllerBase
 //{
