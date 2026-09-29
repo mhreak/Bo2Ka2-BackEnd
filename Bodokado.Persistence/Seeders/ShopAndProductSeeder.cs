@@ -1,6 +1,7 @@
 // Persistence/Seeders/ShopAndProductSeeder.cs
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Bodokado.Application.Common.Helpers;
 using Bodokado.Domain.Entities.Products;
 using Bodokado.Domain.Entities.Shops;
 using Bodokado.Domain.Entities.Users;
@@ -137,6 +138,7 @@ public static class ShopAndProductSeeder
             {
                 Id = DeterministicGuid.Create($"ShopDemo_{shopIndex}"),
                 UserId = user.Id,
+                Apikey = ApiKeyGenerator.Create(),
                 FirstName = "فروشنده",
                 LastName = $"نمونه {shopIndex}",
                 ShopName = seed.Name,

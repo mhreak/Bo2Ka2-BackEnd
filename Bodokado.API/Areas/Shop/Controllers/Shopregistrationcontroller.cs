@@ -13,6 +13,7 @@ namespace Bodokado.API.Controllers.Shop;
 [Route(ApiRoutes.Shop.Registration)]
 [Authorize(Roles = Bodokado.Domain.Constants.RoleNames.Shop)]
 [Tags("Shop Registration")]
+[NonController]
 public class ShopRegistrationController : ControllerBase
 {
     private readonly IShopRegistrationService _registrationService;

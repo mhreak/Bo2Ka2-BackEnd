@@ -14,6 +14,7 @@ namespace Bodokado.API.Controllers.Shop;
 [ApiController]
 [Route(ApiRoutes.Shop.Auth)]
 [Tags("Shop Auth")]
+[NonController]
 public class ShopAuthController : ControllerBase
 {
     private readonly IShopAuthService _shopAuthService;

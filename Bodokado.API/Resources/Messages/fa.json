@@ -180,5 +180,8 @@
 "BannerTitleRequired": "عنوان بنر الزامی است.",
 "BannerTitleMaxLength": "عنوان بنر حداکثر ۲۰۰ کاراکتر است.",
 "BannerDescriptionMaxLength": "توضیحات بنر حداکثر ۱۰۰۰ کاراکتر است.",
-"BannerLinkMaxLength": "لینک بنر حداکثر ۵۰۰ کاراکتر است."
+"BannerLinkMaxLength": "لینک بنر حداکثر ۵۰۰ کاراکتر است." ,
+"PluginApiKeyRequired": "کلید API الزامی است.",
+"PluginApiKeyInvalid": "کلید API نامعتبر است.",
+"PluginTokenIssued": "توکن افزونه صادر شد."
 }
