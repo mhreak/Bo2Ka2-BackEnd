@@ -4,7 +4,11 @@ using Bodokado.Application.Common.Exceptions;
 using Bodokado.Application.Common.File.Interfaces;
 using Bodokado.Application.Common.Localization;
 using Bodokado.Domain.Entities.Shops;
+using Bodokado.Application.Common.Helpers;
 using Bodokado.Domain.Enums;
+using Bodokado.Application.Common.Auth.Interfaces;
+using Microsoft.AspNetCore.Identity;
+using Bodokado.Domain.Entities.Users;
 
 namespace Bodokado.Application.App.ShopModule.Registration.Services;
 
@@ -49,6 +53,7 @@ public class ShopRegistrationService : IShopRegistrationService
             {
                 Id = Guid.NewGuid(),
                 UserId = userId,
+                Apikey = ApiKeyGenerator.Create(),
                 CreatedAt = DateTime.UtcNow
             };
             await _shopRepository.AddAsync(shop);
@@ -227,4 +232,56 @@ public class ShopRegistrationService : IShopRegistrationService
         RejectionReason = shop.RejectionReason,
         SubmittedAt = shop.SubmittedAt
     };
+
+    public interface IPluginAuthService
+{
+    Task<PluginTokenResponseDto> IssueTokenAsync(PluginTokenRequestDto request, CancellationToken ct = default);
+}
+
+public class PluginAuthService : IPluginAuthService
+{
+    private readonly IShopRepository _shopRepository;
+    private readonly IJwtService _jwtService;
+    private readonly UserManager<User> _userManager;
+
+    public PluginAuthService(
+        IShopRepository shopRepository,
+        IJwtService jwtService,
+        UserManager<User> userManager)
+    {
+        _shopRepository = shopRepository;
+        _jwtService = jwtService;
+        _userManager = userManager;
+    }
+
+    public async Task<PluginTokenResponseDto> IssueTokenAsync(PluginTokenRequestDto request, CancellationToken ct = default)
+    {
+        if (string.IsNullOrWhiteSpace(request.ApiKey))
+            throw new BadRequestException(MessageKeys.PluginApiKeyRequired, "plugin_api_key_required");
+
+        var shop = await _shopRepository.GetByApiKeyAsync(request.ApiKey.Trim(), ct);
+        if (shop is null)
+            throw new UnauthorizedException(MessageKeys.PluginApiKeyInvalid, "plugin_api_key_invalid");
+
+        if (shop.VerificationStatus != ShopVerificationStatus.Approved)
+            throw new BadRequestException(MessageKeys.ShopNotApproved, "shop_not_approved");
+
+        var user = shop.User
+            ?? await _userManager.FindByIdAsync(shop.UserId.ToString())
+            ?? throw new UnauthorizedException(MessageKeys.UserNotFound, "user_not_found");
+
+        var sessionId = Guid.NewGuid();
+        var token = await _jwtService.GenerateAccessToken(user, _userManager, sessionId, activeRole: "Shop");
+        var expires = _jwtService.GetAccessTokenExpiry();
+
+        return new PluginTokenResponseDto
+        {
+            AccessToken = token,
+            ExpiresAt = expires,
+            ShopId = shop.Id,
+            ShopName = shop.ShopName
+        };
+    }
+}
+
 }

@@ -31,6 +31,7 @@ public static class ApiRoutes
         public const string Registration = $"{ShopBase}/registration";
         public const string Products = $"{ShopBase}/products";
         public const string Orders = $"{ShopBase}/orders";
+        public const string Plugin = $"{ShopBase}/Plugin";
         public const string Files = $"{ShopBase}/files";
         public const string Locations = $"{ShopBase}/locations";
         public const string Settings = $"{ShopBase}/settings";

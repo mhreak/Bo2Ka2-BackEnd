@@ -228,6 +228,9 @@ public const string ProductProductPropertyValueMaxLength = "ProductProductProper
     public const string BannerTitleMaxLength = "BannerTitleMaxLength";
     public const string BannerDescriptionMaxLength = "BannerDescriptionMaxLength";
     public const string BannerLinkMaxLength = "BannerLinkMaxLength";
+    public const string PluginApiKeyInvalid = "PluginApiKeyInvalid";
+    public const string PluginApiKeyRequired = "PluginApiKeyRequired";
+    public const string PluginTokenIssued = "PluginTokenIssued";
 
 
 }

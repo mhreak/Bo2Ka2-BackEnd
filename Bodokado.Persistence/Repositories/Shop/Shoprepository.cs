@@ -126,4 +126,9 @@ public class ShopRepository : BaseRepository<Shop>, IShopRepository
             .FirstOrDefaultAsync(s => s.Id == shopId && !s.IsDeleted &&
                 s.VerificationStatus == ShopVerificationStatus.Approved, ct);
     }
+
+    public Task<Shop?> GetByApiKeyAsync(string apiKey, CancellationToken ct = default)
+    => _context.Shops
+        .Include(s => s.User)
+        .FirstOrDefaultAsync(s => s.Apikey == apiKey && !s.IsDeleted, ct);
 }

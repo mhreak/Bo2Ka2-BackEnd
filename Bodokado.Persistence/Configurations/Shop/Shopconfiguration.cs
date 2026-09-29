@@ -61,6 +61,13 @@ public class ShopConfiguration : IEntityTypeConfiguration<Shop>
         .OnDelete(DeleteBehavior.Restrict)
         .IsRequired(false);
 
+        builder.Property(s => s.Apikey)
+            .HasMaxLength(64);
+
+        builder.HasIndex(s => s.Apikey)
+            .IsUnique()
+            .HasFilter("[ApiKey] IS NOT NULL");
+
         builder.HasIndex(s => s.ManagerUserId);
 
 

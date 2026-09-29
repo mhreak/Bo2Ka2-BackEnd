@@ -14,6 +14,7 @@ public interface IShopRepository : IGenericRepository<Shop>
     /// <summary>لیست فروشگاه‌های تأییدشده برای اپ مشتری با فیلترهای مختلف</summary>
     Task<PagedResult<Shop>> GetPagedForCustomerAsync(ShopListQuery query, CancellationToken ct = default);
 
+    Task<Shop?> GetByApiKeyAsync(string apiKey, CancellationToken ct = default);
     /// <summary>جزئیات یک فروشگاه تأییدشده برای اپ مشتری</summary>
     Task<Shop?> GetApprovedByIdWithDetailsAsync(Guid shopId, CancellationToken ct = default);
 }

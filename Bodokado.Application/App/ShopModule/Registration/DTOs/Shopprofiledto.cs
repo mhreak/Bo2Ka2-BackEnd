@@ -36,3 +36,34 @@ public class ShopProfileDto
     public string? RejectionReason { get; set; }
     public DateTime? SubmittedAt { get; set; }
 }
+
+public class PluginTokenRequestDto
+{
+    public string ApiKey { get; set; } = string.Empty;
+}
+
+public class PluginTokenResponseDto
+{
+    public string AccessToken { get; set; } = string.Empty;
+    public DateTime ExpiresAt { get; set; }
+    public Guid ShopId { get; set; }
+    public string? ShopName { get; set; }
+}
+
+public class PluginUpsertProductRequestDto
+{
+    public string Name { get; set; } = string.Empty;
+    public string? Description { get; set; }
+    public decimal BasePrice { get; set; }
+    public bool IsDiscountEnabled { get; set; }
+    public decimal? DiscountPrice { get; set; }
+    public int StockQuantity { get; set; }
+    public string? Brand { get; set; }
+    public bool Publish { get; set; } = true;
+
+    /// <summary>شناسه محصول در وردپرس — برای به‌روزرسانی بعدی</summary>
+    public string? ExternalId { get; set; }
+
+    public Guid? MainImageFileId { get; set; }
+    public List<Guid>? ImageFileIds { get; set; }
+}
