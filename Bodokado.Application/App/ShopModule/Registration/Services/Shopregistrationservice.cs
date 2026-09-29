@@ -261,14 +261,14 @@ public class PluginAuthService : IPluginAuthService
 
         var shop = await _shopRepository.GetByApiKeyAsync(request.ApiKey.Trim(), ct);
         if (shop is null)
-            throw new UnauthorizedException(MessageKeys.PluginApiKeyInvalid, "plugin_api_key_invalid");
+            throw new UnauthorizedAccessException(MessageKeys.PluginApiKeyInvalid);
 
         if (shop.VerificationStatus != ShopVerificationStatus.Approved)
             throw new BadRequestException(MessageKeys.ShopNotApproved, "shop_not_approved");
 
         var user = shop.User
             ?? await _userManager.FindByIdAsync(shop.UserId.ToString())
-            ?? throw new UnauthorizedException(MessageKeys.UserNotFound, "user_not_found");
+            ?? throw new UnauthorizedAccessException(MessageKeys.UserNotFound);
 
         var sessionId = Guid.NewGuid();
         var token = await _jwtService.GenerateAccessToken(user, _userManager, sessionId, activeRole: "Shop");
