@@ -13,6 +13,7 @@ namespace Bodokado.API.Controllers.Admin;
 [ApiController]
 [Route(ApiRoutes.Admin.Auth)]
 [Tags("Admin Auth")]
+[NonController]
 public class AdminAuthController : AdminBaseController
 {
     private readonly IAdminRegisterService _registerService;
