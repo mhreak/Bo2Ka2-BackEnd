@@ -44,6 +44,7 @@ using Bodokado.Application.Administrator.Banners.Interfaces;
 using Bodokado.Persistence.Repositories.Banners;
 using Bodokado.Application.Administrator.Banners.Services;
 using static Bodokado.Application.App.ShopModule.Registration.Services.ShopRegistrationService;
+using Bodokado.Infrastructure.Services.File;
 
 namespace Bodokado.API.DependencyInjection;
 
@@ -90,7 +91,7 @@ public static class CoreRepositoryDependencyInjection
         services.AddScoped<IBannerRepository, BannerRepository>();
         services.AddScoped<IBannerService, BannerService>();
         services.AddScoped<IPluginAuthService, PluginAuthService>();
-
+        services.AddScoped<IRemoteFileImportService, RemoteFileImportService>();
         return services;
     }
 }

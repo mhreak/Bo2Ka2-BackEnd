@@ -46,4 +46,6 @@ public class Product : BaseEntity
     public List<ProductProductAttribute> ProductAttributes { get; set; } = new();
 
     public bool IsActiveByAdmin { get; set; } = true;
+
+    public string? ExternalId { get; set; }
 }

@@ -17,6 +17,7 @@ public static class CoreDependencyInjection
         services.AddApiDependencies();
         services.AddSwaggerDependencies();
         services.AddLocalizationDependencies();
+        
         return services;
     }
 }

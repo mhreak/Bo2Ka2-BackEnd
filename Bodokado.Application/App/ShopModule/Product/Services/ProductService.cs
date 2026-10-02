@@ -1,3 +1,4 @@
+using Bodokado.Application.App.Plugin.DTOs;
 using Bodokado.Application.App.ShopModule.Products.DTOs;
 using Bodokado.Application.App.ShopModule.Products.Interfaces;
 using Bodokado.Application.App.ShopModule.Registration.Interfaces;
@@ -18,17 +19,20 @@ public class ProductService : IProductService
     private readonly IProductRepository _productRepository;
     private readonly IShopRepository _shopRepository;
     private readonly IFileAssetRepository _fileAssetRepository;
+    private readonly IRemoteFileImportService _remoteFileImport;
     private readonly IUnitOfWork _unitOfWork;
 
     public ProductService(
         IProductRepository productRepository,
         IShopRepository shopRepository,
         IFileAssetRepository fileAssetRepository,
+        IRemoteFileImportService remoteFileImport,
         IUnitOfWork unitOfWork)
     {
         _productRepository = productRepository;
         _shopRepository = shopRepository;
         _fileAssetRepository = fileAssetRepository;
+        _remoteFileImport = remoteFileImport;
         _unitOfWork = unitOfWork;
     }
 
@@ -368,5 +372,74 @@ public class ProductService : IProductService
             CreatedAt = p.CreatedAt,
             UpdatedAt = p.UpdatedAt
         };
+    }
+
+
+    public async Task<ProductDetailDto> CreateFromPluginAsync(
+    Guid userId,
+    PluginCreateProductRequestDto request,
+    CancellationToken ct = default)
+    {
+        var shop = await GetApprovedShopAsync(userId, ct);
+        ValidatePricing(request.IsDiscountEnabled, request.BasePrice, request.DiscountPrice);
+
+        Guid? mainImageId = null;
+        if (!string.IsNullOrWhiteSpace(request.MainImageUrl))
+            mainImageId = await _remoteFileImport.ImportFromUrlAsync(request.MainImageUrl, userId, ct);
+
+        var extraIds = new List<Guid>();
+        if (request.ImageUrls is { Count: > 0 })
+        {
+            foreach (var url in request.ImageUrls.Where(u => !string.IsNullOrWhiteSpace(u)).Distinct())
+            {
+                var id = await _remoteFileImport.ImportFromUrlAsync(url, userId, ct);
+                if (mainImageId.HasValue && id == mainImageId.Value)
+                    continue;
+                extraIds.Add(id);
+            }
+        }
+
+        var product = new Product
+        {
+            Id = Guid.NewGuid(),
+            ShopId = shop.Id,
+            Name = request.Name.Trim(),
+            Description = string.IsNullOrWhiteSpace(request.Description) ? null : request.Description.Trim(),
+            Brand = string.IsNullOrWhiteSpace(request.Brand) ? null : request.Brand.Trim(),
+            BasePrice = request.BasePrice,
+            IsDiscountEnabled = request.IsDiscountEnabled,
+            DiscountPrice = request.IsDiscountEnabled ? request.DiscountPrice : null,
+            StockQuantity = request.StockQuantity,
+            HasSpecialPackaging = request.HasSpecialPackaging,
+            IsSpecial = request.IsSpecial,
+            Status = request.Publish ? ProductStatus.Published : ProductStatus.Draft,
+            ProductType = ProductType.Simple,
+            MainImageFileId = mainImageId,
+            ExternalId = string.IsNullOrWhiteSpace(request.ExternalId) ? null : request.ExternalId.Trim(),
+            IsActiveByAdmin = true,
+            CreatedAt = DateTime.UtcNow
+        };
+
+        var sort = 0;
+        foreach (var fileId in extraIds)
+        {
+            product.Images.Add(new ShopProductImage
+            {
+                Id = Guid.NewGuid(),
+                ProductId = product.Id,
+                FileId = fileId,
+                SortOrder = sort++,
+                CreatedAt = DateTime.UtcNow
+            });
+        }
+
+        await _productRepository.AddAsync(product);
+        await _unitOfWork.SaveChangesAsync(ct);
+
+        var created = await _productRepository.GetByIdWithDetailsForShopAsync(product.Id, shop.Id, ct)
+            ?? throw new NotFoundException(MessageKeys.ProductNotFound, "product_not_found");
+
+        var fileMap = await LoadFileMapAsync(CollectImageFileIds(created));
+        return MapDetail(created, fileMap);
     }
 }

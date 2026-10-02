@@ -10,4 +10,12 @@ public interface IFileService
     Task<FileAsset?> GetByIdAsync(Guid id);
     Task<List<FileAsset>> GetByUploaderIdAsync(Guid uploaderId);
     Task<bool> DeleteAsync(Guid id, Guid currentUserId, bool isAdmin = false);
+   Task<FileAsset> SaveFromBytesAsync(
+    byte[] bytes,
+    string fileName,
+    string contentType,
+    Guid userId,
+    string userRole,
+    UploadFileType fileType,
+    CancellationToken cancellationToken = default);
 }

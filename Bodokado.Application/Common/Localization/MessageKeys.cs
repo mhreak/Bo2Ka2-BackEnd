@@ -231,6 +231,10 @@ public const string ProductProductPropertyValueMaxLength = "ProductProductProper
     public const string PluginApiKeyInvalid = "PluginApiKeyInvalid";
     public const string PluginApiKeyRequired = "PluginApiKeyRequired";
     public const string PluginTokenIssued = "PluginTokenIssued";
+    public const string InvalidImageUrl = "InvalidImageUrl";
+    public const string ImageDownloadFailed = "ImageDownloadFailed";
+    public const string InvalidImageContent = "InvalidImageContent";
+    public const string ImageTooLarge = "ImageTooLarge";
 
 
 }

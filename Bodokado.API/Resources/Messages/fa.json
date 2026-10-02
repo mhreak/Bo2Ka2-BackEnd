@@ -183,5 +183,9 @@
 "BannerLinkMaxLength": "لینک بنر حداکثر ۵۰۰ کاراکتر است." ,
 "PluginApiKeyRequired": "کلید API الزامی است.",
 "PluginApiKeyInvalid": "کلید API نامعتبر است.",
-"PluginTokenIssued": "توکن افزونه صادر شد."
+"PluginTokenIssued": "توکن افزونه صادر شد.",
+"InvalidImageUrl": "آدرس تصویر نامعتبر است.",
+"ImageDownloadFailed": "دانلود تصویر ناموفق بود.",
+"InvalidImageContent": "فایل دانلودشده تصویر نیست.",
+"ImageTooLarge": "حجم تصویر بیش از حد مجاز است."
 }

@@ -49,6 +49,9 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
 
         builder.HasIndex(x => x.IsActiveByAdmin);
 
+        builder.Property(p => p.ExternalId).HasMaxLength(100);
+        builder.HasIndex(p => new { p.ShopId, p.ExternalId });  
+
 
         builder.HasIndex(p => p.ShopId);
         builder.HasIndex(p => p.Status);
