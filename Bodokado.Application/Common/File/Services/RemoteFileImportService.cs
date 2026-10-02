@@ -1,5 +1,4 @@
 using System.Net.Http;
-using System.Net.Http.Headers;
 using Bodokado.Application.Common.Exceptions;
 using Bodokado.Application.Common.File.Interfaces;
 using Bodokado.Application.Common.Localization;
@@ -9,21 +8,12 @@ namespace Bodokado.Infrastructure.Services.File;
 
 public class RemoteFileImportService : IRemoteFileImportService
 {
-    private readonly HttpClient _httpClient;
+    private readonly IHttpClientFactory _httpClientFactory;
     private readonly IFileService _fileService;
 
-    private static readonly HashSet<string> AllowedImageTypes = new(StringComparer.OrdinalIgnoreCase)
+    public RemoteFileImportService(IHttpClientFactory httpClientFactory, IFileService fileService)
     {
-        "image/jpeg",
-        "image/jpg",
-        "image/png",
-        "image/webp",
-        "image/gif"
-    };
-
-    public RemoteFileImportService(HttpClient httpClient, IFileService fileService)
-    {
-        _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+        _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
         _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
     }
 
@@ -36,23 +26,38 @@ public class RemoteFileImportService : IRemoteFileImportService
             throw new BadRequestException(MessageKeys.InvalidImageUrl, "invalid_image_url");
         }
 
-        _httpClient.Timeout = TimeSpan.FromSeconds(30);
-
-        using var response = await _httpClient.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead, ct);
+        var client = _httpClientFactory.CreateClient("RemoteImage");
+        using var response = await client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead, ct);
         if (!response.IsSuccessStatusCode)
             throw new BadRequestException(MessageKeys.ImageDownloadFailed, "image_download_failed");
 
-        var contentType = response.Content.Headers.ContentType?.MediaType ?? "application/octet-stream";
-        if (!AllowedImageTypes.Contains(contentType))
+        var contentType = response.Content.Headers.ContentType?.MediaType;
+        if (string.IsNullOrWhiteSpace(contentType) ||
+            !contentType.StartsWith("image/", StringComparison.OrdinalIgnoreCase))
             throw new BadRequestException(MessageKeys.InvalidImageContent, "invalid_image_content");
 
-        var bytes = await response.Content.ReadAsByteArrayAsync(ct);
+        const int maxBytes = 10 * 1024 * 1024;
+        if (response.Content.Headers.ContentLength > maxBytes)
+            throw new BadRequestException(MessageKeys.ImageTooLarge, "image_too_large");
+
+        await using var source = await response.Content.ReadAsStreamAsync(ct);
+        using var contentBuffer = new MemoryStream();
+        var buffer = new byte[81920];
+        while (true)
+        {
+            var bytesRead = await source.ReadAsync(buffer.AsMemory(), ct);
+            if (bytesRead == 0)
+                break;
+
+            if (contentBuffer.Length + bytesRead > maxBytes)
+                throw new BadRequestException(MessageKeys.ImageTooLarge, "image_too_large");
+
+            await contentBuffer.WriteAsync(buffer.AsMemory(0, bytesRead), ct);
+        }
+
+        var bytes = contentBuffer.ToArray();
         if (bytes.Length == 0)
             throw new BadRequestException(MessageKeys.ImageDownloadFailed, "image_download_failed");
-
-        const int maxBytes = 10 * 1024 * 1024;
-        if (bytes.Length > maxBytes)
-            throw new BadRequestException(MessageKeys.ImageTooLarge, "image_too_large");
 
         var fileName = Path.GetFileName(uri.LocalPath);
         if (string.IsNullOrWhiteSpace(fileName) || fileName.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
@@ -65,9 +70,9 @@ public class RemoteFileImportService : IRemoteFileImportService
             fileName,
             contentType,
             uploaderUserId,
-            "Shop",
-            UploadFileType.ProductImage,
-            ct);
+            userRole: "Shop",
+            fileType: UploadFileType.ProductImage,
+            cancellationToken: ct);
         return fileAsset.Id;
     }
 

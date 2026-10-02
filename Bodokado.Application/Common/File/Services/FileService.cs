@@ -84,6 +84,9 @@ public class FileService : IFileService
         if (userRole == RoleNames.Admin)
             return;
 
+        if (userRole == "Shop" && fileType == UploadFileType.ProductImage)
+            return;
+
         if ((userRole == RoleNames.Customer || userRole == RoleNames.Shop)
             && (fileType == UploadFileType.Avatar || fileType == UploadFileType.Cover || fileType == UploadFileType.TicketAttachment))
         {

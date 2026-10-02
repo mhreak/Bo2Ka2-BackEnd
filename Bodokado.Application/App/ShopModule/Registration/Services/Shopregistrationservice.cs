@@ -7,6 +7,7 @@ using Bodokado.Domain.Entities.Shops;
 using Bodokado.Application.Common.Helpers;
 using Bodokado.Domain.Enums;
 using Bodokado.Application.Common.Auth.Interfaces;
+using Bodokado.Application.Common.Auth;
 using Microsoft.AspNetCore.Identity;
 using Bodokado.Domain.Entities.Users;
 
@@ -242,15 +243,18 @@ public class PluginAuthService : IPluginAuthService
 {
     private readonly IShopRepository _shopRepository;
     private readonly IJwtService _jwtService;
+    private readonly IRefreshTokenService _refreshTokenService;
     private readonly UserManager<User> _userManager;
 
     public PluginAuthService(
         IShopRepository shopRepository,
         IJwtService jwtService,
+        IRefreshTokenService refreshTokenService,
         UserManager<User> userManager)
     {
         _shopRepository = shopRepository;
         _jwtService = jwtService;
+        _refreshTokenService = refreshTokenService;
         _userManager = userManager;
     }
 
@@ -270,8 +274,8 @@ public class PluginAuthService : IPluginAuthService
             ?? await _userManager.FindByIdAsync(shop.UserId.ToString())
             ?? throw new UnauthorizedAccessException(MessageKeys.UserNotFound);
 
-        var sessionId = Guid.NewGuid();
-        var token = await _jwtService.GenerateAccessToken(user, _userManager, sessionId, activeRole: "Shop");
+        var session = await _refreshTokenService.IssueAsync(user.Id, "Shop", ct);
+        var token = await _jwtService.GenerateAccessToken(user, _userManager, session.SessionId, activeRole: "Shop");
         var expires = _jwtService.GetAccessTokenExpiry();
 
         return new PluginTokenResponseDto

@@ -7,7 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddEnvironmentVariables();
 
 builder.Services.AddCoreDependencies(builder.Configuration);
-builder.Services.AddHttpClient("RemoteImage");
+builder.Services.AddHttpClient("RemoteImage", client =>
+{
+    client.Timeout = TimeSpan.FromSeconds(30);
+});
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowLocalhost3000", policy =>
