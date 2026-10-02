@@ -1,4 +1,4 @@
-using Bodokado.Application.App.Plugin.DTOs;
+
 using Bodokado.Application.App.ShopModule.Products.DTOs;
 using Bodokado.Application.App.ShopModule.Products.Interfaces;
 using Bodokado.Application.App.ShopModule.Registration.Interfaces;
@@ -379,67 +379,239 @@ public class ProductService : IProductService
     Guid userId,
     PluginCreateProductRequestDto request,
     CancellationToken ct = default)
+{
+    var shop = await GetApprovedShopAsync(userId, ct);
+
+    if (string.IsNullOrWhiteSpace(request.Name))
+        throw new BadRequestException(MessageKeys.ProductNotFound, "product_name_required");
+        // اگر MessageKey نام محصول داری همان را بگذار
+
+    ValidatePricing(request.IsDiscountEnabled, request.BasePrice, request.DiscountPrice);
+
+    // تصویر اصلی از URL
+    Guid? mainImageId = null;
+    if (!string.IsNullOrWhiteSpace(request.MainImageUrl))
     {
-        var shop = await GetApprovedShopAsync(userId, ct);
-        ValidatePricing(request.IsDiscountEnabled, request.BasePrice, request.DiscountPrice);
+        mainImageId = await _remoteFileImport.ImportFromUrlAsync(
+            request.MainImageUrl.Trim(), userId, ct);
+    }
 
-        Guid? mainImageId = null;
-        if (!string.IsNullOrWhiteSpace(request.MainImageUrl))
-            mainImageId = await _remoteFileImport.ImportFromUrlAsync(request.MainImageUrl, userId, ct);
-
-        var extraIds = new List<Guid>();
-        if (request.ImageUrls is { Count: > 0 })
+    // گالری از URL
+    var extraImageIds = new List<Guid>();
+    if (request.ImageUrls is { Count: > 0 })
+    {
+        foreach (var url in request.ImageUrls.Where(u => !string.IsNullOrWhiteSpace(u)).Distinct())
         {
-            foreach (var url in request.ImageUrls.Where(u => !string.IsNullOrWhiteSpace(u)).Distinct())
+            var id = await _remoteFileImport.ImportFromUrlAsync(url.Trim(), userId, ct);
+            if (mainImageId.HasValue && id == mainImageId.Value)
+                continue;
+            if (!extraImageIds.Contains(id))
+                extraImageIds.Add(id);
+        }
+    }
+
+    var product = new Product
+    {
+        Id = Guid.NewGuid(),
+        ShopId = shop.Id,
+        Name = request.Name.Trim(),
+        Description = string.IsNullOrWhiteSpace(request.Description) ? null : request.Description.Trim(),
+        Brand = string.IsNullOrWhiteSpace(request.Brand) ? null : request.Brand.Trim(),
+        BasePrice = request.BasePrice,
+        IsDiscountEnabled = request.IsDiscountEnabled,
+        DiscountPrice = request.IsDiscountEnabled ? request.DiscountPrice : null,
+        StockQuantity = request.StockQuantity,
+        HasSpecialPackaging = request.HasSpecialPackaging,
+        IsSpecial = request.IsSpecial,
+        WeightGrams = request.WeightGrams,
+        LengthCm = request.LengthCm,
+        WidthCm = request.WidthCm,
+        HeightCm = request.HeightCm,
+        Status = request.Publish ? ProductStatus.Published : ProductStatus.Draft,
+        ProductType = ProductType.Simple,
+        MainImageFileId = mainImageId,
+        ExternalId = string.IsNullOrWhiteSpace(request.ExternalId) ? null : request.ExternalId.Trim(),
+        IsActiveByAdmin = true,
+        CreatedAt = DateTime.UtcNow
+    };
+
+    var sort = 0;
+    foreach (var fileId in extraImageIds)
+    {
+        product.Images.Add(new ShopProductImage
+        {
+            Id = Guid.NewGuid(),
+            ProductId = product.Id,
+            FileId = fileId,
+            SortOrder = sort++,
+            CreatedAt = DateTime.UtcNow
+        });
+    }
+
+    await _productRepository.AddAsync(product);
+    await _unitOfWork.SaveChangesAsync(ct);
+
+    var created = await _productRepository.GetByIdWithDetailsForShopAsync(product.Id, shop.Id, ct)
+        ?? throw new NotFoundException(MessageKeys.ProductNotFound, "product_not_found");
+
+    var fileMap = await LoadFileMapAsync(CollectImageFileIds(created));
+    return MapDetail(created, fileMap); // ✅ ProductDetailDto
+}
+
+    public async Task<PluginCreateProductsBatchResponseDto> CreateFromPluginBatchAsync(
+        Guid userId,
+        PluginCreateProductsBatchRequestDto request,
+        CancellationToken ct = default)
+    {
+        if (request.Products is null || request.Products.Count == 0)
+            throw new BadRequestException(MessageKeys.OrderItemsRequired, "products_required");
+
+        if (request.Products.Count > 50)
+            throw new BadRequestException(MessageKeys.ProductImagesMaxCount, "products_batch_max");
+
+        var response = new PluginCreateProductsBatchResponseDto
+        {
+            Total = request.Products.Count
+        };
+
+        foreach (var item in request.Products)
+        {
+            try
             {
-                var id = await _remoteFileImport.ImportFromUrlAsync(url, userId, ct);
-                if (mainImageId.HasValue && id == mainImageId.Value)
-                    continue;
-                extraIds.Add(id);
+                var created = await CreateFromPluginAsync(userId, item, ct);
+                response.Results.Add(new PluginCreateProductResultDto
+                {
+                    ExternalId = item.ExternalId,
+                    ProductId = created.Id,
+                    Success = true
+                });
+                response.Succeeded++;
+            }
+            catch (Exception ex)
+            {
+                response.Results.Add(new PluginCreateProductResultDto
+                {
+                    ExternalId = item.ExternalId,
+                    ProductId = null,
+                    Success = false,
+                    Error = ex.Message
+                });
+                response.Failed++;
             }
         }
 
-        var product = new Product
-        {
-            Id = Guid.NewGuid(),
-            ShopId = shop.Id,
-            Name = request.Name.Trim(),
-            Description = string.IsNullOrWhiteSpace(request.Description) ? null : request.Description.Trim(),
-            Brand = string.IsNullOrWhiteSpace(request.Brand) ? null : request.Brand.Trim(),
-            BasePrice = request.BasePrice,
-            IsDiscountEnabled = request.IsDiscountEnabled,
-            DiscountPrice = request.IsDiscountEnabled ? request.DiscountPrice : null,
-            StockQuantity = request.StockQuantity,
-            HasSpecialPackaging = request.HasSpecialPackaging,
-            IsSpecial = request.IsSpecial,
-            Status = request.Publish ? ProductStatus.Published : ProductStatus.Draft,
-            ProductType = ProductType.Simple,
-            MainImageFileId = mainImageId,
-            ExternalId = string.IsNullOrWhiteSpace(request.ExternalId) ? null : request.ExternalId.Trim(),
-            IsActiveByAdmin = true,
-            CreatedAt = DateTime.UtcNow
-        };
+        return response;
+    }
 
-        var sort = 0;
-        foreach (var fileId in extraIds)
+    private static string? GetStringValue(object? source, params string[] propertyNames)
+    {
+        if (source is null)
+            return null;
+
+        foreach (var name in propertyNames)
         {
-            product.Images.Add(new ShopProductImage
-            {
-                Id = Guid.NewGuid(),
-                ProductId = product.Id,
-                FileId = fileId,
-                SortOrder = sort++,
-                CreatedAt = DateTime.UtcNow
-            });
+            var prop = source.GetType().GetProperty(name, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+            if (prop is null)
+                continue;
+
+            var value = prop.GetValue(source);
+            if (value is null)
+                continue;
+
+            return value.ToString();
         }
 
-        await _productRepository.AddAsync(product);
-        await _unitOfWork.SaveChangesAsync(ct);
+        return null;
+    }
 
-        var created = await _productRepository.GetByIdWithDetailsForShopAsync(product.Id, shop.Id, ct)
-            ?? throw new NotFoundException(MessageKeys.ProductNotFound, "product_not_found");
+    private static decimal GetDecimalValue(object? source, params string[] propertyNames)
+    {
+        foreach (var name in propertyNames)
+        {
+            var prop = source?.GetType().GetProperty(name, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+            if (prop is null)
+                continue;
 
-        var fileMap = await LoadFileMapAsync(CollectImageFileIds(created));
-        return MapDetail(created, fileMap);
+            var value = prop.GetValue(source);
+            if (value is null)
+                continue;
+
+            return Convert.ToDecimal(value);
+        }
+
+        return 0m;
+    }
+
+    private static int GetIntValue(object? source, params string[] propertyNames)
+    {
+        foreach (var name in propertyNames)
+        {
+            var prop = source?.GetType().GetProperty(name, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+            if (prop is null)
+                continue;
+
+            var value = prop.GetValue(source);
+            if (value is null)
+                continue;
+
+            return Convert.ToInt32(value);
+        }
+
+        return 0;
+    }
+
+    private static Guid? GetNullableGuidValue(object? source, params string[] propertyNames)
+    {
+        foreach (var name in propertyNames)
+        {
+            var prop = source?.GetType().GetProperty(name, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+            if (prop is null)
+                continue;
+
+            var value = prop.GetValue(source);
+            if (value is null)
+                continue;
+
+            return value switch
+            {
+                Guid g => g,
+                string s when Guid.TryParse(s, out var g) => g,
+                _ => null
+            };
+        }
+
+        return null;
+    }
+
+    private static List<Guid> GetGuidListValue(object? source, params string[] propertyNames)
+    {
+        foreach (var name in propertyNames)
+        {
+            var prop = source?.GetType().GetProperty(name, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+            if (prop is null)
+                continue;
+
+            var value = prop.GetValue(source);
+            if (value is null)
+                continue;
+
+            if (value is IEnumerable<Guid> guids)
+                return guids.Distinct().ToList();
+
+            if (value is IEnumerable<object> objs)
+            {
+                var ids = new List<Guid>();
+                foreach (var item in objs)
+                {
+                    if (item is Guid g)
+                        ids.Add(g);
+                    else if (item is string s && Guid.TryParse(s, out var g2))
+                        ids.Add(g2);
+                }
+                return ids.Distinct().ToList();
+            }
+        }
+
+        return new List<Guid>();
     }
 }

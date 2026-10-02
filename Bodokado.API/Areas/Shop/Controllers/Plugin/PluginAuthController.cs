@@ -2,7 +2,6 @@
 using System.Security.Claims;
 using Bodokado.API.Constants;
 using Bodokado.API.Helpers;
-using Bodokado.Application.App.Plugin.DTOs;
 using Bodokado.Application.App.ShopModule.Products.DTOs;
 using Bodokado.Application.App.ShopModule.Products.Interfaces;
 using Bodokado.Application.App.ShopModule.Registration.DTOs;
@@ -43,13 +42,12 @@ public class PluginAuthController : ControllerBase
         var message = await _localizer.LocalizeAsync(MessageKeys.PluginTokenIssued);
         return Ok(ApiResult.Success(data, message));
     }
-    [Tags("Plugin Products")]
     [HttpPost]
-    public async Task<IActionResult> Create(
-        [FromBody] PluginCreateProductRequestDto request,
+    public async Task<IActionResult> CreateBatch(
+        [FromBody] PluginCreateProductsBatchRequestDto request,
         CancellationToken ct)
     {
-        var data = await _productService.CreateFromPluginAsync(GetUserId(), request, ct);
+        var data = await _productService.CreateFromPluginBatchAsync(GetUserId(), request, ct);
         var message = await _localizer.LocalizeAsync(MessageKeys.ProductCreated);
         return Ok(ApiResult.Success(data, message));
     }

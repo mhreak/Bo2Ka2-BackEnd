@@ -1,4 +1,4 @@
-using Bodokado.Application.App.Plugin.DTOs;
+
 using Bodokado.Application.App.ShopModule.Products.DTOs;
 using Bodokado.Application.Common.Pagination;
 
@@ -14,5 +14,10 @@ public interface IProductService
     Task<ProductDetailDto> CreateFromPluginAsync(
     Guid userId,
     PluginCreateProductRequestDto request,
+    CancellationToken ct = default);
+
+   Task<PluginCreateProductsBatchResponseDto> CreateFromPluginBatchAsync(
+    Guid userId,
+    PluginCreateProductsBatchRequestDto request,
     CancellationToken ct = default);
 }
