@@ -18,6 +18,8 @@ public class PluginCreateProductRequestDto
     public decimal? WidthCm { get; set; }
     public decimal? HeightCm { get; set; }
 
+    public List<Guid> ProductCategoryIds { get; set; } = new();
+
     public string? MainImageUrl { get; set; }
     public List<string>? ImageUrls { get; set; }
 }

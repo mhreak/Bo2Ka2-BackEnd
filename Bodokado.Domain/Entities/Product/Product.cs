@@ -44,6 +44,7 @@ public class Product : BaseEntity
 
 
     public List<ProductProductAttribute> ProductAttributes { get; set; } = new();
+    public List<ProductProductCategory> ProductCategories { get; set; } = new();
 
     public bool IsActiveByAdmin { get; set; } = true;
 

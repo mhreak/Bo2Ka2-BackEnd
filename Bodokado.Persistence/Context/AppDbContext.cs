@@ -53,6 +53,8 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 
     public DbSet<DeliveryServiceProvider> DeliveryServiceProviders => Set<DeliveryServiceProvider>();
 
+    public DbSet<ProductProductCategory> ProductProductCategories => Set<ProductProductCategory>();
+
     public DbSet<ShopOrderDeliveryRule> ShopOrderDeliveryRules => Set<ShopOrderDeliveryRule>();
 
     public DbSet<WalletTransactionLog> WalletTransactionLogs => Set<WalletTransactionLog>();

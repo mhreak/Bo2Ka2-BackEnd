@@ -5,6 +5,7 @@ using Bodokado.Application.App.ShopModule.Registration.Interfaces;
 using Bodokado.Application.Common.Exceptions;
 using Bodokado.Application.Common.File.Interfaces;
 using Bodokado.Application.Common.Interfaces;
+using Bodokado.Application.App.AdminModule.ProductCatalog.Interfaces;
 using Bodokado.Application.Common.Localization;
 using Bodokado.Application.Common.Pagination;
 using Bodokado.Domain.Entities;
@@ -20,6 +21,7 @@ public class ProductService : IProductService
     private readonly IShopRepository _shopRepository;
     private readonly IFileAssetRepository _fileAssetRepository;
     private readonly IRemoteFileImportService _remoteFileImport;
+    private readonly IProductCategoryRepository _categoryRepository;
     private readonly IUnitOfWork _unitOfWork;
 
     public ProductService(
@@ -27,6 +29,7 @@ public class ProductService : IProductService
         IShopRepository shopRepository,
         IFileAssetRepository fileAssetRepository,
         IRemoteFileImportService remoteFileImport,
+        IProductCategoryRepository categoryRepository,
         IUnitOfWork unitOfWork)
     {
         _productRepository = productRepository;
@@ -34,6 +37,7 @@ public class ProductService : IProductService
         _fileAssetRepository = fileAssetRepository;
         _remoteFileImport = remoteFileImport;
         _unitOfWork = unitOfWork;
+        _categoryRepository = categoryRepository;
     }
 
     public async Task<PagedResult<ProductListItemDto>> GetMyProductsAsync(
@@ -409,6 +413,18 @@ public class ProductService : IProductService
                 extraImageIds.Add(id);
         }
     }
+   if (request.ProductCategoryIds is null || request.ProductCategoryIds.Count == 0)
+    throw new BadRequestException(MessageKeys.ProductCategoryNotFound, "product_category_required");
+
+    var categoryIds = request.ProductCategoryIds.Distinct().ToList();
+
+    foreach (var categoryId in categoryIds)
+    {
+        var category = await _categoryRepository.GetByIdAsync(categoryId);
+        if (category is null || category.IsDeleted || !category.IsActive)
+            throw new BadRequestException(MessageKeys.ProductCategoryNotFound, "product_category_not_found");
+    }
+    
 
     var product = new Product
     {
@@ -434,7 +450,18 @@ public class ProductService : IProductService
         IsActiveByAdmin = true,
         CreatedAt = DateTime.UtcNow
     };
-
+  
+    foreach (var categoryId in categoryIds)
+    {
+        product.ProductCategories.Add(new ProductProductCategory
+        {
+            Id = Guid.NewGuid(),
+            ProductId = product.Id,
+            ProductCategoryId = categoryId,
+            CreatedAt = DateTime.UtcNow
+        });
+    }
+   
     var sort = 0;
     foreach (var fileId in extraImageIds)
     {
