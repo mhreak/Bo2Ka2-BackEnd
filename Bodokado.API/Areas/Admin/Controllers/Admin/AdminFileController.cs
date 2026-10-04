@@ -10,6 +10,7 @@ namespace Bodokado.API.Controllers.Admin;
 
 [Route(ApiRoutes.Admin.Files)]
 [Tags("Admin Files")]
+[NonController]
 public class AdminFileController : AdminBaseController
 {
     private readonly IFileService _fileService;
