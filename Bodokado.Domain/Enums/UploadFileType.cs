@@ -7,6 +7,7 @@ public enum UploadFileType
     Post = 3,
     Category = 4,
     TicketAttachment = 5,
-    ProductImage = 6
+    ProductImage = 6,
+    Story = 7
 
 }

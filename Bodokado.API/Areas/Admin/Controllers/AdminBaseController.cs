@@ -14,7 +14,8 @@ public abstract class AdminBaseController : ControllerBase
     protected Guid GetCurrentUserId()
     {
         var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
+        if (!Guid.TryParse(userIdClaim, out var userId)
+            && !Guid.TryParse(User.FindFirstValue("sub"), out userId))
             throw new UnauthorizedAccessException(MessageKeys.InvalidCredentials);
         return userId;
     }
