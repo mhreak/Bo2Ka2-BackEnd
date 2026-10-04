@@ -16,7 +16,6 @@ public static class DependencyInjection
         services.Configure<OtpSettings>(configuration.GetSection(OtpSettings.SectionName));
         AddRedisConnection(services, configuration);
         services.AddScoped<IOtpService, RedisOtpService>();
-        services.AddScoped<ISmsSender, FakeSmsSender>();
         services.AddScoped<IEmailSender, FakeEmailSender>();
         return services;
     }

@@ -1,5 +1,7 @@
 using Bodokado.Application.Administrator.Auth.Interfaces;
 using Bodokado.Application.Administrator.Auth.Services;
+using Bodokado.Application.App.CustomerModule.Auth.Interfaces;
+using Bodokado.Application.App.CustomerModule.Auth.Services;
 using Bodokado.Application.App.ShopModule.Auth.Interfaces;
 using Bodokado.Application.App.ShopModule.Auth.Services;
 using Bodokado.Application.App.UserOrganizationModule.Auth.Interfaces;
@@ -62,6 +64,7 @@ public static class CoreRepositoryDependencyInjection
 
         services.AddScoped<RoleAuthCore>();
         services.AddScoped<IRegisterSendOtpService, RegisterSendOtpService>();
+        services.AddScoped<ICustomerAuthService, CustomerAuthService>();
         services.AddScoped<IRefreshAccessTokenService, RefreshAccessTokenService>();
         services.AddScoped<IAdminRegisterService, AdminRegisterService>();
         services.AddScoped<IAdminLoginService, AdminLoginService>();

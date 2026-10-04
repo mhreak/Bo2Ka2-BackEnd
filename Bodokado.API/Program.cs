@@ -11,6 +11,7 @@ builder.Services.AddHttpClient("RemoteImage", client =>
 {
     client.Timeout = TimeSpan.FromSeconds(30);
 });
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowLocalhost3000", policy =>
