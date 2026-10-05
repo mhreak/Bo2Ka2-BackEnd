@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Http.Features;
 using Bodokado.API.DependencyInjection;
 using Bodokado.API.Middleware;
 using Bodokado.Infrastructure;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddEnvironmentVariables();
@@ -46,6 +47,17 @@ app.UseSwaggerUI(options =>
 
 
 app.MapOpenApi();
+
+var storageRoot = builder.Configuration["Storage:RootPath"];
+
+storageRoot = Path.GetFullPath(storageRoot);
+Directory.CreateDirectory(storageRoot);
+app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(storageRoot),
+    RequestPath = "/uploads"
+});
 
 await app.MigrateAndSeedDatabaseAsync();
 

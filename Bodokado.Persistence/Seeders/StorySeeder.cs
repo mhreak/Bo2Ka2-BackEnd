@@ -22,7 +22,7 @@ public static class StorySeeder
 
         var storageRoot = config["Storage:RootPath"];
         if (string.IsNullOrWhiteSpace(storageRoot))
-            storageRoot = Path.GetFullPath(Path.Combine(env.ContentRootPath, "..", "..", "uploads"));
+            storageRoot = Path.GetFullPath(Path.Combine(env.ContentRootPath, "..", "uploads"));
         storageRoot = Path.GetFullPath(storageRoot);
 
         var seedSourceDir = Path.Combine(env.ContentRootPath, "SeedData", "Stories");

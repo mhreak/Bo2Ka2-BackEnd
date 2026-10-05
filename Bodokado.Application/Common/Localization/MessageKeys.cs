@@ -35,6 +35,7 @@ public static class MessageKeys
     public const string FileDeleted = "FileDeleted";
     public const string FileUploaded = "FileUploaded";
     public const string AccessDenied = "AccessDenied";
+    public const string InvalidNationalCode = "InvalidNationalCode";
     public const string NoAccess = "NoAccess";
     public const string ValidationFailed = "ValidationFailed";
     public const string FirstNameRequired = "FirstNameRequired";

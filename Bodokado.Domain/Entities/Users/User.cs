@@ -1,3 +1,4 @@
+using Bodokado.Domain.Entities.Locations;
 using Bodokado.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using System.Reflection;
@@ -12,6 +13,14 @@ public class User : IdentityUser<Guid>
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? UpdatedAt { get; set; }
     public bool IsDeleted { get; set; }
+    public string? NationalCode { get; set; }
+    public string? Address { get; set; }
+    public Guid? CityId { get; set; }
+    public City? City { get; set; }
+    public decimal? Latitude { get; set; }
+    public decimal? Longitude { get; set; }
+    public Guid? AvatarFileId { get; set; }
+    public FileAsset? AvatarFile { get; set; }
 
     public DateTime? BirthDate { get; set; }
     public string? ShamsiBirthDate { get; set; }
