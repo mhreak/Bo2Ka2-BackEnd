@@ -51,6 +51,7 @@ public static class MessageKeys
     public const string PasswordDigitRequired = "PasswordDigitRequired";
     public const string PhoneNumberRequired = "PhoneNumberRequired";
     public const string PhoneNumberPattern = "PhoneNumberPattern";
+    public const string IranianMobileNationalPattern = "IranianMobileNationalPattern";
     public const string OtpCodeRequired = "OtpCodeRequired";
     public const string OtpCodeDigits = "OtpCodeDigits";
     public const string OtpSent = "OtpSent";

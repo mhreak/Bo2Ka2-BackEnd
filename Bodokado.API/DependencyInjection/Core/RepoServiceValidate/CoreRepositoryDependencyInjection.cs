@@ -63,6 +63,7 @@ public static class CoreRepositoryDependencyInjection
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services.AddScoped<RoleAuthCore>();
+        services.AddScoped<IGeneralOtpAuthService, GeneralOtpAuthService>();
         services.AddScoped<IRegisterSendOtpService, RegisterSendOtpService>();
         services.AddScoped<ICustomerAuthService, CustomerAuthService>();
         services.AddScoped<IRefreshAccessTokenService, RefreshAccessTokenService>();

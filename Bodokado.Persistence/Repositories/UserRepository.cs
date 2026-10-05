@@ -15,6 +15,18 @@ public class UserRepository : IUserRepository
         return await _context.Users.FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber && !u.IsDeleted);
     }
 
+    public async Task<IReadOnlyList<User>> GetByMobileAsync(string nationalMobile, CancellationToken cancellationToken = default)
+    {
+        var internationalMobile = $"+98{nationalMobile[1..]}";
+        return await _context.Users
+            .Where(user => user.Mobile == nationalMobile
+                || user.PhoneNumber == nationalMobile
+                || user.Mobile == internationalMobile
+                || user.PhoneNumber == internationalMobile)
+            .OrderBy(user => user.CreatedAt)
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task<User?> GetByEmailAsync(string email)
     {
         return await _context.Users.FirstOrDefaultAsync(u => u.Email == email && !u.IsDeleted);

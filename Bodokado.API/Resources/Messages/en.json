@@ -42,6 +42,7 @@
   "PasswordDigitRequired": "Password must contain at least one digit.",
   "PhoneNumberRequired": "Phone number is required.",
   "PhoneNumberPattern": "Phone number must start with +98 and be valid (e.g. +989123456789).",
+  "IranianMobileNationalPattern": "Mobile number must be 11 digits and start with 09 (e.g. 09123456789).",
   "OtpCodeRequired": "Verification code is required.",
   "OtpCodeDigits": "Verification code must be 5 digits.",
   "OtpSent": "OTP sent",

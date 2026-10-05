@@ -42,6 +42,7 @@
   "PasswordDigitRequired": "رمز عبور باید حداقل یک رقم داشته باشد.",
   "PhoneNumberRequired": "شماره موبایل الزامی است.",
   "PhoneNumberPattern": "شماره موبایل باید با +98 شروع شود و معتبر باشد (مثال: +989123456789).",
+  "IranianMobileNationalPattern": "شماره موبایل باید ۱۱ رقم باشد و با ۰۹ شروع شود (مثال: ۰۹۱۲۳۴۵۶۷۸۹).",
   "OtpCodeRequired": "کد تایید الزامی است.",
   "OtpCodeDigits": "کد تایید باید ۵ رقمی باشد.",
   "OtpSent": "کد ارسال شد",
