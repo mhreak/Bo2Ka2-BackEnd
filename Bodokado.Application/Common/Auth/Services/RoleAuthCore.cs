@@ -7,6 +7,7 @@ using Bodokado.Application.Common.Otp;
 using Bodokado.Domain.Entities.Users;
 using Bodokado.Domain.Constants;
 using Bodokado.Domain.Enums;
+using System.Security.Claims;
 
 namespace Bodokado.Application.Common.Auth.Services;
 
@@ -105,12 +106,14 @@ public class RoleAuthCore
     }
 
     public async Task<AuthResultDto> IssueTokensAsync(User user, string role)
+    => await IssueTokensAsync(user, role, null);
+
+    public async Task<AuthResultDto> IssueTokensAsync(User user, string role, IEnumerable<Claim>? extraClaims)
     {
         var session = await _refreshTokenService.IssueAsync(user.Id, role);
-        var accessToken = await _jwtService.GenerateAccessToken(user, _userManager, session.SessionId, role);
+        var accessToken = await _jwtService.GenerateAccessToken(user, _userManager, session.SessionId, role, extraClaims);
         return new AuthResultDto { AccessToken = accessToken, RefreshToken = session.RefreshToken, ExpiresAt = _jwtService.GetAccessTokenExpiry() };
     }
-
     private static void EnsureOtpValid(OtpVerificationResult verify)
     {
         switch (verify.Status)

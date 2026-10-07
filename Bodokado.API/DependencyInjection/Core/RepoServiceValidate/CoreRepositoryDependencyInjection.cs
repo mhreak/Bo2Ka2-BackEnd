@@ -49,6 +49,10 @@ using static Bodokado.Application.App.ShopModule.Registration.Services.ShopRegis
 using Bodokado.Infrastructure.Services.File;
 using Bodokado.Application.Administrator.Organizations.Interfaces;
 using Bodokado.Persistence.Repositories.Organizations;
+using Bodokado.Application.App.OrganizationAdminModule.Auth.Interfaces;
+using Bodokado.Application.App.OrganizationAdminModule.Auth.Services;
+using Bodokado.Application.App.OrganizationAdminModule.GiftCampaigns.Interfaces;
+using Bodokado.Application.App.OrganizationAdminModule.GiftCampaigns.Services;
 
 namespace Bodokado.API.DependencyInjection;
 
@@ -99,6 +103,9 @@ public static class CoreRepositoryDependencyInjection
         services.AddScoped<IPluginAuthService, PluginAuthService>();
         services.AddScoped<IRemoteFileImportService, RemoteFileImportService>();
         services.AddScoped<IOrganizationRepository, OrganizationRepository>();
+        services.AddScoped<IOrganizationAdminAuthService, OrganizationAdminAuthService>();
+        services.AddScoped<IGiftCampaignRepository, GiftCampaignRepository>();
+        services.AddScoped<IGiftCampaignService, GiftCampaignService>();
         return services;
     }
 }

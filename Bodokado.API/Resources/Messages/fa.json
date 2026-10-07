@@ -188,5 +188,15 @@
 "InvalidImageUrl": "آدرس تصویر نامعتبر است.",
 "ImageDownloadFailed": "دانلود تصویر ناموفق بود.",
 "InvalidImageContent": "فایل دانلودشده تصویر نیست.",
-"ImageTooLarge": "حجم تصویر بیش از حد مجاز است."
+"ImageTooLarge": "حجم تصویر بیش از حد مجاز است.",
+"GiftCampaignNotFound": "کمپین هدیه یافت نشد.",
+"GiftCampaignAlreadyIssued": "برای این کمپین قبلاً کد صادر شده و دیگر قابل ویرایش نیست.",
+"InvalidPersonnelCategory": "دسته‌ی پرسنلی انتخاب‌شده متعلق به این سازمان نیست.",
+"InvalidPriceLimit": "سقف قیمت باید عددی مثبت باشد.",
+"InvalidConstraintGuidList": "لیست شناسه‌های محدودیت نامعتبر است.",
+"GiftCampaignCreated": "کمپین هدیه با موفقیت ایجاد شد.",
+"GiftCampaignUpdated": "کمپین هدیه با موفقیت ویرایش شد.",
+"GiftCampaignDeleted": "کمپین هدیه با موفقیت حذف شد.",
+"GiftCampaignRetrieved": "اطلاعات کمپین با موفقیت دریافت شد.",
+"GiftCampaignsRetrieved": "لیست کمپین‌ها با موفقیت دریافت شد."
 }

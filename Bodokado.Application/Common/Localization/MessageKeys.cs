@@ -248,5 +248,16 @@ public const string ProductProductPropertyValueMaxLength = "ProductProductProper
     public const string OrganizationAdminCreated = "OrganizationAdminCreated";
     public const string OrganizationAdminsRetrieved = "OrganizationAdminsRetrieved";
 
+    public const string GiftCampaignNotFound = "GiftCampaignNotFound";
+public const string GiftCampaignAlreadyIssued = "GiftCampaignAlreadyIssued";
+public const string InvalidPersonnelCategory = "InvalidPersonnelCategory";
+public const string InvalidPriceLimit = "InvalidPriceLimit";
+public const string InvalidConstraintGuidList = "InvalidConstraintGuidList";
+public const string GiftCampaignCreated = "GiftCampaignCreated";
+public const string GiftCampaignUpdated = "GiftCampaignUpdated";
+public const string GiftCampaignDeleted = "GiftCampaignDeleted";
+public const string GiftCampaignRetrieved = "GiftCampaignRetrieved";
+public const string GiftCampaignsRetrieved = "GiftCampaignsRetrieved";
+
 
 }

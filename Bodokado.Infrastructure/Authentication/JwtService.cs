@@ -19,8 +19,7 @@ public class JwtService : IJwtService
         _settings = options.Value;
     }
 
-    public async Task<string> GenerateAccessToken(User user, UserManager<User> userManager, Guid sessionId, string? activeRole = null)
-    {
+    public async Task<string> GenerateAccessToken(User user, UserManager<User> userManager, Guid sessionId, string? activeRole = null, IEnumerable<Claim>? extraClaims = null){
         var claims = new List<Claim>
         {
             new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
@@ -31,9 +30,13 @@ public class JwtService : IJwtService
             claims.Add(new(ClaimTypes.MobilePhone, user.PhoneNumber));
         if (!string.IsNullOrWhiteSpace(user.UserName))
             claims.Add(new(ClaimTypes.Name, user.UserName));
-        var roles = activeRole is not null ? new[] { activeRole } : await userManager.GetRolesAsync(user);
+       var roles = activeRole is not null ? new[] { activeRole } : await userManager.GetRolesAsync(user);
         foreach (var role in roles)
             claims.Add(new(ClaimTypes.Role, role));
+
+        if (extraClaims != null)
+            claims.AddRange(extraClaims);
+
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_settings.SecretKey));
         var token = new JwtSecurityToken(
             issuer: _settings.Issuer,

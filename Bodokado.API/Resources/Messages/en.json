@@ -164,6 +164,16 @@
 "StoryUpdated": "Story updated successfully.",
 "StoryDeleted": "Story deleted successfully.",
 "StoryNotFound": "Story not found.",
-"StoryButtonTextMaxLength": "Story button text must not exceed 30 characters."
+"StoryButtonTextMaxLength": "Story button text must not exceed 30 characters.",
+"GiftCampaignNotFound": "Gift campaign not found.",
+"GiftCampaignAlreadyIssued": "Codes have already been issued for this campaign and it can no longer be edited.",
+"InvalidPersonnelCategory": "The selected personnel category does not belong to this organization.",
+"InvalidPriceLimit": "Price limit must be a positive number.",
+"InvalidConstraintGuidList": "The constraint id list is invalid.",
+"GiftCampaignCreated": "Gift campaign created successfully.",
+"GiftCampaignUpdated": "Gift campaign updated successfully.",
+"GiftCampaignDeleted": "Gift campaign deleted successfully.",
+"GiftCampaignRetrieved": "Gift campaign retrieved successfully.",
+"GiftCampaignsRetrieved": "Gift campaigns retrieved successfully."
 
 }

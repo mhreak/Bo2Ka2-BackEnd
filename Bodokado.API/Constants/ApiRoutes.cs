@@ -75,4 +75,12 @@ public static class ApiRoutes
         public const string Settings = $"{UserOrganizationBase}/settings";
         // سفارشات سازمانی و کاتالوگ هدیه بعداً اضافه می‌شود
     }
+
+    public static class OrganizationAdmin
+    {
+        public const string Base = "api/v1/organization-admin";
+        public const string Auth = $"{Base}/auth";
+
+        public const string GiftCampaigns = $"{Base}/gift-campaigns";
+    }
 }
