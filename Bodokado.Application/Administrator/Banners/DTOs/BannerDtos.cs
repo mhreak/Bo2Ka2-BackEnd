@@ -1,4 +1,6 @@
 // Application/Administrator/Banners/DTOs/BannerDtos.cs
+using Bodokado.Domain.Enums;
+
 namespace Bodokado.Application.Administrator.Banners.DTOs;
 
 public class BannerDto
@@ -11,6 +13,7 @@ public class BannerDto
     public string? Link { get; set; }
     public short ShowOrder { get; set; }
     public bool IsActive { get; set; }
+    public BannerShowPlace ShowPlace { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
 }
@@ -23,6 +26,8 @@ public class CreateBannerRequestDto
     public string? Link { get; set; }
     public short ShowOrder { get; set; }
     public bool IsActive { get; set; } = true;
+
+    public BannerShowPlace ShowPlace { get; set; }
 }
 
 public class UpdateBannerRequestDto : CreateBannerRequestDto { }

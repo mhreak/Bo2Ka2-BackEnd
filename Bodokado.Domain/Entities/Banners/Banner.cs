@@ -1,6 +1,7 @@
 // Domain/Entities/Banners/Banner.cs
 using Bodokado.Domain.Common;
 using Bodokado.Domain.Entities;
+using Bodokado.Domain.Enums;
 
 namespace Bodokado.Domain.Entities.Banners;
 
@@ -17,4 +18,5 @@ public class Banner : BaseEntity
 
     public short ShowOrder { get; set; }
     public bool IsActive { get; set; } = true;
+    public BannerShowPlace ShowPlace { get; set; } = BannerShowPlace.HomePage;
 }

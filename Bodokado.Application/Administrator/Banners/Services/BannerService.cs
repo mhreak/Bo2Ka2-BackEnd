@@ -6,6 +6,7 @@ using Bodokado.Application.Common.File.Interfaces;
 using Bodokado.Application.Common.Interfaces;
 using Bodokado.Application.Common.Localization;
 using Bodokado.Domain.Entities.Banners;
+using Bodokado.Domain.Enums;
 
 namespace Bodokado.Application.Administrator.Banners.Services;
 
@@ -23,18 +24,6 @@ public class BannerService : IBannerService
         _bannerRepository = bannerRepository;
         _fileAssetRepository = fileAssetRepository;
         _unitOfWork = unitOfWork;
-    }
-
-    public async Task<List<BannerDto>> GetActiveAsync(CancellationToken ct = default)
-    {
-        var list = await _bannerRepository.GetActiveOrderedAsync(ct);
-        return list.Select(Map).ToList();
-    }
-
-    public async Task<List<BannerDto>> GetAllAsync(CancellationToken ct = default)
-    {
-        var list = await _bannerRepository.GetAllOrderedAsync(ct);
-        return list.Select(Map).ToList();
     }
 
     public async Task<BannerDto> GetByIdAsync(Guid id, CancellationToken ct = default)
@@ -58,6 +47,7 @@ public class BannerService : IBannerService
             Link = NullIfWhite(request.Link),
             ShowOrder = request.ShowOrder,
             IsActive = request.IsActive,
+            ShowPlace = request.ShowPlace,
             CreatedAt = DateTime.UtcNow
         };
 
@@ -81,6 +71,7 @@ public class BannerService : IBannerService
         entity.Link = NullIfWhite(request.Link);
         entity.ShowOrder = request.ShowOrder;
         entity.IsActive = request.IsActive;
+        entity.ShowPlace = request.ShowPlace;
         entity.UpdatedAt = DateTime.UtcNow;
 
         _bannerRepository.Update(entity);
@@ -139,6 +130,18 @@ public class BannerService : IBannerService
         ShowOrder = b.ShowOrder,
         IsActive = b.IsActive,
         CreatedAt = b.CreatedAt,
-        UpdatedAt = b.UpdatedAt
+        UpdatedAt = b.UpdatedAt,
+        ShowPlace = b.ShowPlace
     };
+    public async Task<List<BannerDto>> GetActiveAsync(BannerShowPlace? showPlace = null, CancellationToken ct = default)
+    {
+        var list = await _bannerRepository.GetActiveOrderedAsync(showPlace, ct);
+        return list.Select(Map).ToList();
+    }
+
+    public async Task<List<BannerDto>> GetAllAsync(BannerShowPlace? showPlace = null, CancellationToken ct = default)
+    {
+        var list = await _bannerRepository.GetAllOrderedAsync(showPlace, ct);
+        return list.Select(Map).ToList();
+    }
 }

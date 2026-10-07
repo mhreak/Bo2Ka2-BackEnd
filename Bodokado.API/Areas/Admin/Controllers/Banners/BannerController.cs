@@ -6,6 +6,8 @@ using Bodokado.API.Helpers;
 using Bodokado.Application.Administrator.Banners.DTOs;
 using Bodokado.Application.Administrator.Banners.Interfaces;
 using Bodokado.Application.Common.Localization;
+using Bodokado.Domain.Enums;
+using Bodokado.Domain.Enums;
 
 namespace Bodokado.API.Areas.Admin.Controllers;
 
@@ -25,9 +27,9 @@ public class BannerController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll(CancellationToken ct)
+    public async Task<IActionResult> GetAll([FromQuery]BannerShowPlace? showPlace,CancellationToken ct)
     {
-        var data = await _bannerService.GetAllAsync(ct);
+        var data = await _bannerService.GetAllAsync(showPlace ,ct);
         var message = await _responseLocalizer.LocalizeAsync(MessageKeys.BannersRetrieved);
         return Ok(ApiResult.Success(data, message));
     }

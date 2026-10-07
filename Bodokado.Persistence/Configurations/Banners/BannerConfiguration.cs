@@ -28,5 +28,9 @@ public class BannerConfiguration : IEntityTypeConfiguration<Banner>
         builder.HasIndex(x => x.ShowOrder);
         builder.HasIndex(x => x.IsActive);
         builder.HasIndex(x => x.ImageId);
+
+        builder.Property(x => x.ShowPlace).IsRequired();
+        builder.HasIndex(x => x.ShowPlace);
+        builder.HasIndex(x => new { x.ShowPlace, x.IsActive, x.ShowOrder });
     }
 }

@@ -5,6 +5,7 @@ using Bodokado.API.Constants;
 using Bodokado.API.Helpers;
 using Bodokado.Application.Administrator.Banners.Interfaces;
 using Bodokado.Application.Common.Localization;
+using Bodokado.Domain.Enums;
 
 namespace Bodokado.API.Areas.Customer.Controllers;
 
@@ -25,9 +26,9 @@ public class BannerController : ControllerBase
 
     /// <summary>بنرهای فعال برای homepage / اپ</summary>
     [HttpGet]
-    public async Task<IActionResult> GetActive(CancellationToken ct)
+    public async Task<IActionResult> GetActive([FromQuery] BannerShowPlace? showPlace,CancellationToken ct)
     {
-        var data = await _bannerService.GetActiveAsync(ct);
+        var data = await _bannerService.GetActiveAsync(showPlace,ct);
         var message = await _responseLocalizer.LocalizeAsync(MessageKeys.BannersRetrieved);
         return Ok(ApiResult.Success(data, message));
     }

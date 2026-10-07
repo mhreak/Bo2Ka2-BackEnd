@@ -69,6 +69,8 @@ public class RoleAuthCore
         var validPassword = await _userManager.CheckPasswordAsync(user, password);
         if (!validPassword)
             throw new UnauthorizedAccessException(MessageKeys.InvalidCredentials);
+
+        
         if (!await _userManager.IsInRoleAsync(user, requiredRole))
             throw new UnauthorizedAccessException(MessageKeys.NoAccess);
         return await IssueTokensAsync(user, requiredRole);
