@@ -203,4 +203,80 @@ public class GiftCampaignService : IGiftCampaignService
             }).ToList()
         };
     }
+
+    public async Task<List<GiftCodeDto>> GenerateCodesAsync(
+    Guid organizationId,
+    Guid campaignId,
+    GenerateGiftCodesRequestDto request,
+    CancellationToken ct = default)
+{
+    if (request.Count < 1 || request.Count > 500)
+        throw new BadRequestException(MessageKeys.ValidationFailed, "invalid_code_count");
+
+    var campaign = await _repository.GetByIdForOrganizationAsync(organizationId, campaignId, ct)
+        ?? throw new NotFoundException(MessageKeys.GiftCampaignNotFound, "campaign_not_found");
+
+    if (!campaign.IsActiveByAdmin || campaign.IsDeleted)
+        throw new BadRequestException(MessageKeys.ValidationFailed, "campaign_inactive");
+
+    var list = new List<UserOrganizationalGiftCampaign>();
+    var attempts = 0;
+
+    while (list.Count < request.Count && attempts < request.Count * 5)
+    {
+        attempts++;
+        var code = GenerateCode10();
+        if (await _repository.GiftCodeExistsAsync(code, ct))
+            continue;
+        if (list.Any(x => x.GiftCode == code))
+            continue;
+
+        list.Add(new UserOrganizationalGiftCampaign
+        {
+            Id = Guid.NewGuid(),
+            OrganizationalGiftCampaignId = campaignId,
+            GiftCode = code,
+            UserId = null,
+            UsedAt = null,
+            CreatedAt = DateTime.UtcNow
+        });
+    }
+
+    if (list.Count < request.Count)
+        throw new BadRequestException(MessageKeys.ValidationFailed, "code_generation_failed");
+
+    await _repository.AddGiftCodesAsync(list, ct);
+    
+
+    return list.Select(MapCode).ToList();
+}
+
+    public async Task<List<GiftCodeDto>> GetCodesAsync(
+        Guid organizationId,
+        Guid campaignId,
+        bool? onlyUnused = null,
+        CancellationToken ct = default)
+    {
+        _ = await _repository.GetByIdForOrganizationAsync(organizationId, campaignId, ct)
+            ?? throw new NotFoundException(MessageKeys.GiftCampaignNotFound, "campaign_not_found");
+
+        var rows = await _repository.GetCodesAsync(campaignId, onlyUnused, ct);
+        return rows.Select(MapCode).ToList();
+    }
+
+    private static GiftCodeDto MapCode(UserOrganizationalGiftCampaign x) => new()
+    {
+        Id = x.Id,
+        Code = x.GiftCode,
+        IsUsed = x.UserId.HasValue || x.UsedAt.HasValue,
+        UsedByUserId = x.UserId,
+        UsedAt = x.UsedAt
+    };
+
+    private static string GenerateCode10()
+    {
+        const string chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+        var bytes = System.Security.Cryptography.RandomNumberGenerator.GetBytes(10);
+        return new string(bytes.Select(b => chars[b % chars.Length]).ToArray());
+    }
 }

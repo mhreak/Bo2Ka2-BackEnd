@@ -21,4 +21,9 @@ public interface IGiftCampaignRepository : IGenericRepository<OrganizationalGift
 
     /// <summary>آیا برای این کمپین تا الان کدی صادر شده (برای جلوگیری از ویرایش بعد از صدور کد)</summary>
     Task<bool> HasIssuedCodesAsync(Guid campaignId, CancellationToken ct = default);
+
+    Task AddGiftCodesAsync(IEnumerable<UserOrganizationalGiftCampaign> codes, CancellationToken ct = default);
+    Task<bool> GiftCodeExistsAsync(string code, CancellationToken ct = default);
+    Task<List<UserOrganizationalGiftCampaign>> GetCodesAsync(Guid campaignId, bool? onlyUnused, CancellationToken ct = default);
+        
 }

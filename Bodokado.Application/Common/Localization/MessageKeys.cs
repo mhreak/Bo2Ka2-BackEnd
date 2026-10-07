@@ -259,5 +259,8 @@ public const string GiftCampaignDeleted = "GiftCampaignDeleted";
 public const string GiftCampaignRetrieved = "GiftCampaignRetrieved";
 public const string GiftCampaignsRetrieved = "GiftCampaignsRetrieved";
 
+public const string GiftCodesGenerated = "GiftCodesGenerated";
+public const string GiftCodesRetrieved = "GiftCodesRetrieved";
+
 
 }

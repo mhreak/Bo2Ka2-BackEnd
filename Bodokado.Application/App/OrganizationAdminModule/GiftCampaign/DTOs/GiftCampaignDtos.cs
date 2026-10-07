@@ -82,3 +82,17 @@ public static class CreateGiftCampaignConstraintDtoExtensions
 {
     public static bool FinishBeforeStart(this CreateGiftCampaignConstraintDto c) => false; // placeholder، فعلاً استفاده نمی‌شود
 }
+
+public class GenerateGiftCodesRequestDto
+{
+    public int Count { get; set; } // 1..500
+}
+
+public class GiftCodeDto
+{
+    public Guid Id { get; set; }
+    public string Code { get; set; } = string.Empty;
+    public bool IsUsed { get; set; }
+    public Guid? UsedByUserId { get; set; } // fix: Guid?
+    public DateTime? UsedAt { get; set; }
+}

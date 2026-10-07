@@ -64,4 +64,23 @@ public class GiftCampaignRepository : BaseRepository<OrganizationalGiftCampaign>
         return await _context.Set<UserOrganizationalGiftCampaign>()
             .AnyAsync(x => x.OrganizationalGiftCampaignId == campaignId, ct);
     }
+        public async Task AddGiftCodesAsync(IEnumerable<UserOrganizationalGiftCampaign> codes, CancellationToken ct = default)
+        => await _context.Set<UserOrganizationalGiftCampaign>().AddRangeAsync(codes, ct);
+
+    public Task<bool> GiftCodeExistsAsync(string code, CancellationToken ct = default)
+        => _context.Set<UserOrganizationalGiftCampaign>().AnyAsync(x => x.GiftCode == code, ct);
+
+    public async Task<List<UserOrganizationalGiftCampaign>> GetCodesAsync(
+        Guid campaignId, bool? onlyUnused, CancellationToken ct = default)
+    {
+        var q = _context.Set<UserOrganizationalGiftCampaign>()
+            .Where(x => x.OrganizationalGiftCampaignId == campaignId);
+
+        if (onlyUnused == true)
+            q = q.Where(x => x.UserId == null && x.UsedAt == null);
+        else if (onlyUnused == false)
+            q = q.Where(x => x.UserId != null || x.UsedAt != null);
+
+        return await q.OrderByDescending(x => x.CreatedAt).ToListAsync(ct);
+    }
 }

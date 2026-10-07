@@ -18,4 +18,16 @@ public interface IGiftCampaignService
         Guid organizationId, Guid campaignId, UpdateGiftCampaignRequestDto request, CancellationToken ct = default);
 
     Task DeleteAsync(Guid organizationId, Guid campaignId, CancellationToken ct = default);
+
+    Task<List<GiftCodeDto>> GenerateCodesAsync(
+    Guid organizationId,
+    Guid campaignId,
+    GenerateGiftCodesRequestDto request,
+    CancellationToken ct = default);
+
+    Task<List<GiftCodeDto>> GetCodesAsync(
+        Guid organizationId,
+        Guid campaignId,
+        bool? onlyUnused = null,
+        CancellationToken ct = default);
 }
