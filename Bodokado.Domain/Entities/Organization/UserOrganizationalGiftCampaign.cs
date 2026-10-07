@@ -1,4 +1,4 @@
-﻿// Domain/Entities/Organization/UserOrganizationalGiftCampaign.cs
+// Domain/Entities/Organization/UserOrganizationalGiftCampaign.cs
 using Bodokado.Domain.Common;
 using Bodokado.Domain.Entities.Users;
 
@@ -7,7 +7,7 @@ namespace Bodokado.Domain.Entities.Organizations;
 public class UserOrganizationalGiftCampaign : BaseEntity
 {
     public Guid? UserId { get; set; }
-    public User User { get; set; } = null!;
+    public User? User { get; set; }
 
     public Guid OrganizationalGiftCampaignId { get; set; }
     public OrganizationalGiftCampaign OrganizationalGiftCampaign { get; set; } = null!;

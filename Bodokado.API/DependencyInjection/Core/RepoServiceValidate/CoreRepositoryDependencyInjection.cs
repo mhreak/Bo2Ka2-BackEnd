@@ -15,6 +15,8 @@ using Bodokado.Application.App.CustomerModule.Shops.Interfaces;
 using Bodokado.Application.App.CustomerModule.Shops.Services;
 using Bodokado.Application.App.CustomerModule.Products.Interfaces;
 using Bodokado.Application.App.CustomerModule.Products.Services;
+using Bodokado.Application.App.CustomerModule.OrganizationalGifts.Interfaces;
+using Bodokado.Application.App.CustomerModule.OrganizationalGifts.Services;
 using Bodokado.Application.App.ShopModule.Products.Services;
 using Bodokado.Application.App.ShopModule.Registration.Interfaces;
 using Bodokado.Application.App.ShopModule.Registration.Services;
@@ -106,6 +108,8 @@ public static class CoreRepositoryDependencyInjection
         services.AddScoped<IOrganizationAdminAuthService, OrganizationAdminAuthService>();
         services.AddScoped<IGiftCampaignRepository, GiftCampaignRepository>();
         services.AddScoped<IGiftCampaignService, GiftCampaignService>();
+        services.AddScoped<ICustomerOrganizationalGiftRepository, CustomerOrganizationalGiftRepository>();
+        services.AddScoped<ICustomerOrganizationalGiftService, CustomerOrganizationalGiftService>();
         return services;
     }
 }

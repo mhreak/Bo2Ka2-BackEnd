@@ -198,5 +198,11 @@
 "GiftCampaignUpdated": "کمپین هدیه با موفقیت ویرایش شد.",
 "GiftCampaignDeleted": "کمپین هدیه با موفقیت حذف شد.",
 "GiftCampaignRetrieved": "اطلاعات کمپین با موفقیت دریافت شد.",
-"GiftCampaignsRetrieved": "لیست کمپین‌ها با موفقیت دریافت شد."
+"GiftCampaignsRetrieved": "لیست کمپین‌ها با موفقیت دریافت شد.",
+"InvalidGiftCode": "کد هدیه نامعتبر است.",
+"GiftCodeNotFound": "کد هدیه یافت نشد.",
+"GiftCodeAlreadyUsed": "این کد هدیه قبلاً استفاده شده است.",
+"GiftCampaignInactive": "کمپین هدیه سازمانی غیرفعال است.",
+"GiftCampaignNotInPeriod": "مهلت استفاده از این کمپین هدیه به پایان رسیده یا هنوز آغاز نشده است.",
+"GiftCodeVerified": "کد هدیه با موفقیت تایید و ثبت شد."
 }

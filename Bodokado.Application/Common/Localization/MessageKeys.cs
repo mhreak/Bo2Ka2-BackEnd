@@ -262,5 +262,11 @@ public const string GiftCampaignsRetrieved = "GiftCampaignsRetrieved";
 public const string GiftCodesGenerated = "GiftCodesGenerated";
 public const string GiftCodesRetrieved = "GiftCodesRetrieved";
 
+public const string InvalidGiftCode = "InvalidGiftCode";
+public const string GiftCodeNotFound = "GiftCodeNotFound";
+public const string GiftCodeAlreadyUsed = "GiftCodeAlreadyUsed";
+public const string GiftCampaignInactive = "GiftCampaignInactive";
+public const string GiftCampaignNotInPeriod = "GiftCampaignNotInPeriod";
+public const string GiftCodeVerified = "GiftCodeVerified";
 
 }

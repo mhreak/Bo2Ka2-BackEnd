@@ -56,6 +56,8 @@ public static class ApiRoutes
         public const string Products = $"{CustomerBase}/products";
         public const string ProductCategories = $"{CustomerBase}/ProductCategories";
         public const string ProductProperties = $"{CustomerBase}/ProductProperties";
+       
+        public const string OrganizationalGifts = $"{CustomerBase}/organizational-gifts";
         public const string ProductPropertyValues = $"{CustomerBase}/ProductPropertyValues";
         public const string ProductProductProperties = $"{CustomerBase}/ProductProductProperties";
         public const string Stories = $"{CustomerBase}/stories";
