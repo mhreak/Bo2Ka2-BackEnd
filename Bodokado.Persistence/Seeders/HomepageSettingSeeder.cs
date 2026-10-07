@@ -18,14 +18,7 @@ public static class HomepageSettingSeeder
 
     public static async Task SeedAsync(AppDbContext context, CancellationToken ct = default)
     {
-        var exists = await context.Settings
-            .AnyAsync(x => x.Key == HomepageKey && !x.IsDeleted, ct);
-
-        if (exists)
-            return;
-
-        // ترتیب مطابق UI: استوری → بنر → دسته‌بندی → پرفروش → تازه‌ها → یادگاری → فروشگاه‌های معتبر
-        // سرچ و هدر ثابت در setting ذخیره نمی‌شوند
+        // ترتیب مطابق UI: استوری → بنر → دسته‌بندی → پرفروش → تازه‌ها → بنر → یادگاری → فروشگاه‌های معتبر
         var layout = new
         {
             sections = new object[]
@@ -86,8 +79,15 @@ public static class HomepageSettingSeeder
                 },
                 new
                 {
-                    type = "souvenirs",
+                    type = "banner",
                     order = 6,
+                    isVisible = true,
+                    title = (string?)null
+                },
+                new
+                {
+                    type = "souvenirs",
+                    order = 7,
                     isVisible = true,
                     title = "یادگاری‌ها",
                     style = new
@@ -101,7 +101,7 @@ public static class HomepageSettingSeeder
                 new
                 {
                     type = "trustedShops",
-                    order = 7,
+                    order = 8,
                     isVisible = true,
                     title = "فروشگاه‌های معتبر",
                     style = new
@@ -117,13 +117,24 @@ public static class HomepageSettingSeeder
 
         var json = JsonSerializer.Serialize(layout, JsonOptions);
 
-        context.Settings.Add(new Setting
+        var existing = await context.Settings
+            .FirstOrDefaultAsync(x => x.Key == HomepageKey && !x.IsDeleted, ct);
+
+        if (existing is not null)
         {
-            Id = Guid.NewGuid(),
-            Key = HomepageKey,
-            Value = json,
-            CreatedAt = DateTime.UtcNow
-        });
+            existing.Value = json;
+            existing.UpdatedAt = DateTime.UtcNow;
+        }
+        else
+        {
+            context.Settings.Add(new Setting
+            {
+                Id = DeterministicGuid.Create("Setting_Homepage"),
+                Key = HomepageKey,
+                Value = json,
+                CreatedAt = DateTime.UtcNow
+            });
+        }
 
         await context.SaveChangesAsync(ct);
     }

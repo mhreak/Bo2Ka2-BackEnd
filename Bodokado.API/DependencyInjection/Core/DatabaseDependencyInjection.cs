@@ -47,14 +47,11 @@ public static class DatabaseDependencyInjection
         await ShopCategorySeeder.SeedAsync(dbContext);
         await ProductCategorySeeder.SeedAsync(dbContext);
         await ProductAttributeSeeder.SeedAsync(dbContext);
-        await HomepageSettingSeeder.SeedAsync(dbContext);
-        await StorySeeder.SeedAsync(dbContext, app.Environment, app.Configuration);
-
-        
         await UserSeeder.SeedAsync(dbContext, userManager, roleManager);
         await ShopAndProductSeeder.SeedAsync(dbContext, userManager, roleManager);
-        
-
+        await OrganizationalGiftDemoSeeder.SeedAsync(dbContext, userManager, roleManager);
         await BannerSeeder.SeedAsync(dbContext);
+        await StorySeeder.SeedAsync(dbContext, app.Environment, app.Configuration);
+        await HomepageSettingSeeder.SeedAsync(dbContext);
     }
 }
