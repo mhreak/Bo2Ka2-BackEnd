@@ -6,7 +6,7 @@ namespace Bodokado.Persistence.Seeders;
 
 public static class RoleSeeder
 {
-    private static readonly string[] Roles = { RoleNames.Admin, RoleNames.Shop, RoleNames.Customer, RoleNames.UserOrganization };
+    private static readonly string[] Roles = { RoleNames.Admin, RoleNames.Shop, RoleNames.Customer, RoleNames.UserOrganization , RoleNames.AdminOrganization };
 
     public static async Task SeedAsync(RoleManager<IdentityRole<Guid>> roleManager)
     {

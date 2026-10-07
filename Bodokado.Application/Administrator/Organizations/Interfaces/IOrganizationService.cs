@@ -9,4 +9,12 @@ public interface IOrganizationService
     Task<OrganizationDto> GetByIdAsync(Guid id, CancellationToken ct = default);
     Task<List<OrganizationDto>> GetAllAsync(bool? onlyActive = null, CancellationToken ct = default);
     Task DeleteAsync(Guid id, CancellationToken ct = default);
+    Task<OrganizationAdminDto> CreateAdminAsync(
+        Guid organizationId,
+        CreateOrganizationAdminRequestDto request,
+        CancellationToken ct = default);
+
+    Task<List<OrganizationAdminDto>> GetAdminsAsync(
+        Guid organizationId,
+        CancellationToken ct = default);
 }

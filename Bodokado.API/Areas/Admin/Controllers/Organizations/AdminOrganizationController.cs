@@ -71,4 +71,24 @@ public class AdminOrganizationController : ControllerBase
         var message = await _responseLocalizer.LocalizeAsync(MessageKeys.OrganizationDeleted);
         return Ok(ApiResult.Success(message));
     }
+
+    [HttpPost("{organizationId:guid}/admins")]
+    public async Task<IActionResult> CreateAdmin(
+        Guid organizationId,
+        [FromBody] CreateOrganizationAdminRequestDto request,
+        CancellationToken ct)
+    {
+        var data = await _organizationService.CreateAdminAsync(organizationId, request, ct);
+        var message = await _responseLocalizer.LocalizeAsync(MessageKeys.OrganizationAdminCreated);
+        return Ok(ApiResult.Success(data, message));
+    }
+
+    /// <summary>لیست ادمین‌های یک سازمان</summary>
+    [HttpGet("{organizationId:guid}/admins")]
+    public async Task<IActionResult> GetAdmins(Guid organizationId, CancellationToken ct)
+    {
+        var data = await _organizationService.GetAdminsAsync(organizationId, ct);
+        var message = await _responseLocalizer.LocalizeAsync(MessageKeys.OrganizationAdminsRetrieved);
+        return Ok(ApiResult.Success(data, message));
+    }
 }

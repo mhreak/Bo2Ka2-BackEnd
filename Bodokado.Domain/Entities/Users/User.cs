@@ -1,4 +1,5 @@
 using Bodokado.Domain.Entities.Locations;
+using Bodokado.Domain.Entities.Organizations;
 using Bodokado.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using System.Reflection;
@@ -30,6 +31,8 @@ public class User : IdentityUser<Guid>
     /// <summary>موجودی کیف پول</summary>
     public long WalletCredit { get; set; }
 
+    public Guid? OrganizationId { get; set; }
+    public Organization? Organization { get; set; }
 
 
     public Bodokado.Domain.Entities.Shops.Shop? Shop { get; set; }

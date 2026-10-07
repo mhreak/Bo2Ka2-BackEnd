@@ -43,5 +43,11 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasIndex(u => u.Mobile);
         builder.HasIndex(u => u.IsActive);
         builder.HasIndex(u => u.IsDeleted);
+
+        builder.HasOne(u => u.Organization)
+            .WithMany()
+            .HasForeignKey(u => u.OrganizationId)
+            .OnDelete(DeleteBehavior.SetNull)
+            .IsRequired(false);
     }
 }
