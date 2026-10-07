@@ -245,5 +245,8 @@ public const string ProductProductPropertyValueMaxLength = "ProductProductProper
     public const string OrganizationUpdated = "OrganizationUpdated";
     public const string OrganizationDeleted = "OrganizationDeleted";
 
+    public const string OrganizationAdminCreated = "OrganizationAdminCreated";
+    public const string OrganizationAdminsRetrieved = "OrganizationAdminsRetrieved";
+
 
 }
