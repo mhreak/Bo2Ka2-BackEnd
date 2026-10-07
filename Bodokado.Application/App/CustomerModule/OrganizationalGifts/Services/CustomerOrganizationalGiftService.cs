@@ -84,10 +84,83 @@ public class CustomerOrganizationalGiftService : ICustomerOrganizationalGiftServ
 
         var maxBudget = resolvedMaxBudget.Value;
 
-        // 6) Parse AllowedShopIds / AllowedProductIds / AllowedCategoryIds from constraints ShopLimit / ProductLimit / CategoryLimit
+        // 6) Parse constraint GUIDs and load full nested entities (preserving order)
         var allowedShopIds = ParseGuidList(campaign.Constraints, GiftCampaignConstraintType.ShopLimit);
         var allowedProductIds = ParseGuidList(campaign.Constraints, GiftCampaignConstraintType.ProductLimit);
         var allowedCategoryIds = ParseGuidList(campaign.Constraints, GiftCampaignConstraintType.CategoryLimit);
+
+        var allowedShops = new List<AllowedShopDto>();
+        if (allowedShopIds.Count > 0)
+        {
+            var shops = await _repository.GetShopsByIdsAsync(allowedShopIds, ct);
+            var shopMap = shops.ToDictionary(s => s.Id);
+            foreach (var id in allowedShopIds)
+            {
+                if (shopMap.TryGetValue(id, out var shop))
+                {
+                    allowedShops.Add(new AllowedShopDto
+                    {
+                        Id = shop.Id,
+                        Name = shop.ShopName ?? string.Empty,
+                        LogoPath = shop.AvatarFile?.Path,
+                        Address = shop.TextAddress
+                    });
+                }
+            }
+        }
+
+        var allowedProducts = new List<AllowedProductDto>();
+        if (allowedProductIds.Count > 0)
+        {
+            var products = await _repository.GetProductsByIdsAsync(allowedProductIds, ct);
+            var productMap = products.ToDictionary(p => p.Id);
+            foreach (var id in allowedProductIds)
+            {
+                if (productMap.TryGetValue(id, out var p))
+                {
+                    var mainImg = p.MainImageFile?.Path
+                        ?? p.Images?.Where(i => !i.IsDeleted).OrderBy(i => i.SortOrder).FirstOrDefault()?.File?.Path;
+
+                    var effectivePrice = p.IsDiscountEnabled && p.DiscountPrice.HasValue
+                        ? p.DiscountPrice.Value
+                        : p.BasePrice;
+
+                    allowedProducts.Add(new AllowedProductDto
+                    {
+                        Id = p.Id,
+                        ShopId = p.ShopId,
+                        ShopName = p.Shop?.ShopName ?? string.Empty,
+                        Name = p.Name,
+                        Description = p.Description,
+                        BasePrice = p.BasePrice,
+                        DiscountPrice = p.DiscountPrice,
+                        EffectivePrice = effectivePrice,
+                        MainImagePath = mainImg,
+                        IsInStock = p.StockQuantity > 0
+                    });
+                }
+            }
+        }
+
+        var allowedCategories = new List<AllowedCategoryDto>();
+        if (allowedCategoryIds.Count > 0)
+        {
+            var categories = await _repository.GetCategoriesByIdsAsync(allowedCategoryIds, ct);
+            var categoryMap = categories.ToDictionary(c => c.Id);
+            foreach (var id in allowedCategoryIds)
+            {
+                if (categoryMap.TryGetValue(id, out var c))
+                {
+                    allowedCategories.Add(new AllowedCategoryDto
+                    {
+                        Id = c.Id,
+                        Name = c.Name,
+                        ImagePath = c.Image?.Path,
+                        ParentCategoryId = c.ParentCategoryId
+                    });
+                }
+            }
+        }
 
         // 7) Claim the code: set UserId = current customer user id, UsedAt = UtcNow, UpdatedAt = UtcNow, SaveChanges
         giftCodeEntity.UserId = customerUserId;
@@ -96,7 +169,7 @@ public class CustomerOrganizationalGiftService : ICustomerOrganizationalGiftServ
 
         await _repository.SaveChangesAsync(ct);
 
-        // 8) Return VerifyGiftCodeResponseDto with campaign info, budget, message, allowed id lists
+        // 8) Return VerifyGiftCodeResponseDto with campaign info, budget, message, allowed nested lists
         return new VerifyGiftCodeResponseDto
         {
             CampaignId = campaign.Id,
@@ -116,9 +189,9 @@ public class CustomerOrganizationalGiftService : ICustomerOrganizationalGiftServ
                 FileId = campaign.OrganizationalMessageFileId,
                 FilePath = campaign.OrganizationalMessageFile?.Path
             },
-            AllowedShopIds = allowedShopIds,
-            AllowedProductIds = allowedProductIds,
-            AllowedCategoryIds = allowedCategoryIds
+            AllowedShops = allowedShops,
+            AllowedProducts = allowedProducts,
+            AllowedCategories = allowedCategories
         };
     }
 

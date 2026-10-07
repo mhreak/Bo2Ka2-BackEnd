@@ -225,6 +225,26 @@ public static class OrganizationalGiftDemoSeeder
                 });
             }
 
+            // Optional: ProductLimit if products exist in DB
+            var demoProducts = await context.Products
+                .Where(p => !p.IsDeleted)
+                .Take(2)
+                .Select(p => p.Id)
+                .ToListAsync(ct);
+
+            if (demoProducts.Count > 0)
+            {
+                campaign.Constraints.Add(new OrganizationalGiftCampaignConstraint
+                {
+                    Id = DeterministicGuid.Create($"SeedConstraint_{campaignId}_ProductLimit"),
+                    OrganizationalGiftCampaignId = campaignId,
+                    ConstraintType = GiftCampaignConstraintType.ProductLimit,
+                    OrganizationPersonnelCategoryId = null,
+                    Constraint = string.Join(",", demoProducts),
+                    CreatedAt = now
+                });
+            }
+
             context.OrganizationalGiftCampaigns.Add(campaign);
             await context.SaveChangesAsync(ct);
         }
