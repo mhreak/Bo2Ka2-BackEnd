@@ -14,6 +14,7 @@ public static class ApiRoutes
     public static class Admin
     {
         public const string Auth = $"{AdminBase}/auth";
+        public const string Organizations = $"{AdminBase}/Organizations";
         public const string Files = $"{AdminBase}/files";
         public const string Locations = $"{AdminBase}/Locations";
         public const string ProductCategories = $"{AdminBase}/ProductCategories";

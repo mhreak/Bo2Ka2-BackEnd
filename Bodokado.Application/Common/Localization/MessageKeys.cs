@@ -3,6 +3,8 @@ namespace Bodokado.Application.Common.Localization;
 public static class MessageKeys
 {
     public const string Success = "Success";
+    public const string BadRequest = "BadRequest";
+    public const string NotFound = "NotFound";
     public const string PasswordSet = "PasswordSet";
     public const string PasswordAlreadySet = "PasswordAlreadySet";
     public const string LogoutSuccess = "LogoutSuccess";
@@ -237,6 +239,11 @@ public const string ProductProductPropertyValueMaxLength = "ProductProductProper
     public const string ImageDownloadFailed = "ImageDownloadFailed";
     public const string InvalidImageContent = "InvalidImageContent";
     public const string ImageTooLarge = "ImageTooLarge";
+    public const string OrganizationsRetrieved = "OrganizationsRetrieved";
+    public const string OrganizationRetrieved = "OrganizationRetrieved";
+    public const string OrganizationCreated = "OrganizationCreated";
+    public const string OrganizationUpdated = "OrganizationUpdated";
+    public const string OrganizationDeleted = "OrganizationDeleted";
 
 
 }
